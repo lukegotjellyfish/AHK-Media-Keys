@@ -117,7 +117,7 @@ else
 *Numpad4::
 {
     Send, {Media_Prev}
-    TempChangeFontColour("vprev")
+    TempChangeFontColour("prev")
     playing_status := 1
     GuiControl,, pauseplay, %playingstring%
     Sleep, 300
@@ -145,7 +145,7 @@ return
     else
     {
         Send, {Media_Play_Pause}
-        GuiControl, Move, pauseplay, x105
+        GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
         TempChangeFontColour("pauseplay")
         playing_status := 1
@@ -161,7 +161,7 @@ return
         playing_status := 1
     }
     GuiControl,, pauseplay, %playingstring%
-    TempChangeFontColour("vnext")
+    TempChangeFontColour("next")
     Sleep, 300
     if (Found)
     {
@@ -258,7 +258,7 @@ TempChangeFontColour(control_name)
     GuiControl, Font, %control_name%
     Gui, Show, NA NoActivate
 
-    Sleep, 1500
+    Sleep, 300
     
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, %control_name%
