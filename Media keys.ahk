@@ -8,9 +8,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 traytip, MediaKeys, Running in background!, 0.1, 16
 
 
-
-
-
 /*
 Efficient method's Theory:
 - Get WinTitles
@@ -18,6 +15,7 @@ Efficient method's Theory:
   it's the "Spotify.exe" that needs to be referenced and operated on by CheckSongName.
   (Changing the volume is exe-wide and doens't need to target a specific process of an exe)
 */
+
 
 ;##################################################################################
 ;Initial process for CheckSongName
