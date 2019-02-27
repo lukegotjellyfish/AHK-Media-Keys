@@ -1,8 +1,8 @@
 # Examples
 ## Example while Spotify is running
-https://imgur.com/a/aYgg6a4
+![alt text](https://imgur.com/a/aYgg6a4 "Ex.1")
 ## Example while Spotify is not running
-https://imgur.com/a/2CWTqsc
+![alt text](https://imgur.com/a/2CWTqsc "Ex.2")
 
 
 
