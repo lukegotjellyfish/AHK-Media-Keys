@@ -1,8 +1,17 @@
 # Examples
 ## Example while Spotify is running
-![alt text](https://i.imgur.com/RBa0vkm.png "Ex.1")
+<iframe width="560" height="315"
+src="https://youtu.be/lOCFe9lCqRI" 
+frameborder="0" 
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
+
 ## Example while Spotify is not running
-![alt text](https://i.imgur.com/rklwfmQ.png "Ex.2")
+<iframe width="560" height="315"
+src="https://youtu.be/H9BHAGh8GXI" 
+frameborder="0" 
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
 
 
 
