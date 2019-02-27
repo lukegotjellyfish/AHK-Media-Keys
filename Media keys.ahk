@@ -8,6 +8,21 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 traytip, MediaKeys, Running in background!, 0.1, 16
 
 
+/* 
+Notices:
+                    Made by:
+|Discord:           Lukegotjellyfish#0473|
+|MPGH.net:          BLURREDDOGE          |
+|Unkowncheats.me:   JELLYMAN123          |
+|Twitter:           @The_Blurred_Dog     |
+https://github.com/lukegotjellyfish/Media-Keys
+
+Copyright (C) 2019  Luke Roper
+*/
+
+
+
+
 /*
 Theory:
 If song on spotify is playing, we can InStr and RegMatch it to get the process ID 
