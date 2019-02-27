@@ -1,19 +1,9 @@
 # Examples
 ## Example while Spotify is running
-<iframe width="560" height="315"
-src="https://youtu.be/lOCFe9lCqRI" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen></iframe>
+https://youtu.be/lOCFe9lCqRI
 
 ## Example while Spotify is not running
-<iframe width="560" height="315"
-src="https://youtu.be/H9BHAGh8GXI" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen></iframe>
-
-
+https://youtu.be/H9BHAGh8GXI
 
 # Requirements
 ## AHK
