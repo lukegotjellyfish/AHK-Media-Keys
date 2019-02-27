@@ -41,7 +41,7 @@ if !Found
 }
 else
 {
-    pause_status := -1
+    playing_status := -1
     SetTimer, Ini_Playing, 1
     SetTimer, CheckSongName, 2000   ;Songs are minutes long
 }
@@ -51,9 +51,9 @@ else
 pauseplay := "||" ; Looks like a pause symbol when larger and bold
 prev := "⏮"
 next := "⏭" ; Skip symbol, trust me notepad++ users
-if (pause_status != -1)
+if (playing_status != -1)
 {
-    pause_status := 0
+    playing_status := 0
 }
 volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
@@ -109,7 +109,7 @@ Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume
 *Numpad4::
 {
     Send, {Media_Prev}
-    pause_status := 1
+    playing_status := 1
     GuiControl,, pauseplay, %pauseplay%
     Sleep, 300
     GoSub, CheckSongName
@@ -118,10 +118,13 @@ return
 
 *Numpad5::
 {
-    if (pause_status = 1)
+    if (playing_status = 1)
     {
         Send, {Media_Play_Pause}
-        pause_status := 0
+        if playing_status = 1
+        {
+            playing_status := 0
+        }
         GuiControl, Move, pauseplay, x100
         GuiControl,, pauseplay, ▶️
         Sleep, 200
@@ -131,7 +134,7 @@ return
         Send, {Media_Play_Pause}
         GuiControl, Move, pauseplay, x105
         GuiControl,, pauseplay, %pauseplay%
-        pause_status := 1
+        playing_status := 1
     }
 }
 return
@@ -139,7 +142,10 @@ return
 *Numpad6::
 {
     Send, {Media_Next}
-    pause_status := 1
+    if playing_status = 0
+    {
+        playing_status := 1
+    }
     GuiControl,, pauseplay, %pauseplay%
     Sleep, 300
     GoSub, CheckSongName
@@ -177,23 +183,23 @@ CheckSongName:
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %pauseplay%
         prev_SongName := SongName
-        pause_status  := 1
+        playing_status  := 1
     }
     ;for first run: if no song playing, set to paused
-    else if (pause_status != flag_last) and (pause_status = 0)  ;avoid repeats using flag_last
+    else if (playing_status != flag_last) and (playing_status = 0)  ;avoid repeats using flag_last
     {
         GuiControl,, pauseplay, ▶️
-        pause_status := 0
-        flag_last    := pause_status
+        playing_status := 0
+        flag_last    := playing_status
     }
 }
 return
 
-Ini_Playing:  ;pending pause_status "animation"
+Ini_Playing:  ;pending playing_status "animation"
 {
     Ini_Playing_Mod := "On"
     runnum := 1
-    While (pause_status = -1)
+    While (playing_status = -1)
     {
         if runnum = 1
         {
