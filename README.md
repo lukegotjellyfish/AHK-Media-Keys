@@ -1,17 +1,23 @@
-# Example while spotify is active
-https://imgur.com/a/aYgg6a4
-# Example while spotify is not active
-https://imgur.com/a/2CWTqsc
+# Examples
+## Example while Spotify is running
+![alt text](https://i.imgur.com/RBa0vkm.png "Ex.1")
+## Example while Spotify is not running
+![alt text](https://i.imgur.com/rklwfmQ.png "Ex.2")
 
-# Requirements: AHK
+
+
+# Requirements
+## AHK
 https://www.autohotkey.com/
-
-For spotify volume change:
+## For spotify volume change
 http://www.nirsoft.net/utils/nircmd.html
 # 
-F3 To reload the script
+
+
 
 # Info
+- F3 Reloads the script
+
 Requires NUMLOCK to be ENABLED:
 - NUMPAD4: Previous Song
 - NUMPAD5: Pause/Play

@@ -8,34 +8,22 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 traytip, MediaKeys, Running in background!, 0.1, 16
 
 
-/* 
-Notices:
-                    Made by:
-|Discord:           Lukegotjellyfish#0473|
-|MPGH.net:          BLURREDDOGE          |
-|Unkowncheats.me:   JELLYMAN123          |
-|Twitter:           @The_Blurred_Dog     |
-https://github.com/lukegotjellyfish/Media-Keys
-
-Copyright (C) 2019  Luke Roper
-*/
-
-
-
-
 /*
-Theory:
-If song on spotify is playing, we can InStr and RegMatch it to get the process ID 
-(spotify doesn't like) exe interaction or class or anything else (even PID)
-
-If no song is playing, the wintitle will be "Spotify" and it's unlikely that any other wintitle
-will be "Spotify" so we fetch the ID from this process
+Efficient method's Theory:
+- Get WinTitles
+- If the exe of said WinTitle is "Spotify.exe" (the only Spotify.exe that has a window)
+  it's the "Spotify.exe" that needs to be referenced and operated on by CheckSongName.
+  (Changing the volume is exe-wide and doens't need to target a specific process of an exe)
 */
 
+
+;##################################################################################
+;                       Initial process for CheckSongName
+;##################################################################################
 WinGet, win, List
 Loop, %win% 
 {
-	WinGetTitle, title, % "ahk_id" . win%A_Index%
+    WinGetTitle, title, % "ahk_id" . win%A_Index%
     WinGet, spot_name, ProcessName, %title%
     if (spot_name = "Spotify.exe") ;find window (not other spotify exes) from spotify.exe
     {
@@ -57,10 +45,9 @@ else
     SetTimer, Ini_Playing, 1
     SetTimer, CheckSongName, 2000   ;Songs are minutes long
 }
-
-
-
-;Media variables
+;##################################################################################
+;                               Media variables
+;##################################################################################
 pauseplay := "||" ; Looks like a pause symbol when larger and bold
 prev := "⏮"
 next := "⏭" ; Skip symbol, trust me notepad++ users
@@ -70,20 +57,25 @@ if (pause_status != -1)
 }
 volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
+<<<<<<< HEAD
 flag_paused := 1
 
 ;Get: http://www.nirsoft.net/utils/nircmd.html
+=======
+;##################################################################################
+;                Get: http://www.nirsoft.net/utils/nircmd.html
+;##################################################################################
+>>>>>>> 3be638a0875cface16508ac4f31b4d29f875197b
 nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
-
-;Dual option GUI variables
+;##################################################################################
+;                           Dual option GUI variables
+;##################################################################################
 counter_A := 0
 counter_B := 0
 recoil_status := "Disabled"
 auto_fire_status := "Disabled"
-
-
 ;##################################################################################
-;First part of GUI                                                                 
+;                              First part of GUI                                                                 
 ;##################################################################################
 Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
 Gui, Margin, 0, 0
@@ -112,7 +104,7 @@ else
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
-Run, %nircmd_dir% setappvolume Spotify.exe %volume%
+Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
 
 *Numpad4::
 {
@@ -176,7 +168,6 @@ return
 return
 
 
-; needs spotify to be minimized because reasons
 CheckSongName:
 {
     WinGetTitle, SongName, ahk_id %spotify%
@@ -231,8 +222,29 @@ Ini_Playing:  ;pending pause_status "animation"
 }
 return
 ;##################################################################################
-
 F3::
 {
     Reload
 }
+;##################################################################################
+;                                End of script
+;##################################################################################
+
+
+
+
+
+;##################################################################################
+;                                  Notices
+;##################################################################################
+/* 
+Notices:
+                    Made by:
+|Discord:           Lukegotjellyfish#0473|
+|MPGH.net:          BLURREDDOGE          |
+|Unkowncheats.me:   JELLYMAN123          |
+|Twitter:           @The_Blurred_Dog     |
+https://github.com/lukegotjellyfish/Media-Keys
+
+Copyright (C) 2019  Luke Roper
+*/
