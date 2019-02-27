@@ -155,7 +155,6 @@ return
 return
 
 
-; needs spotify to be minimized because reasons
 CheckSongName:
 {
     WinGetTitle, SongName, ahk_id %spotify%
