@@ -235,7 +235,10 @@ CheckSongName:
     WinGetTitle, SongName, ahk_id %spotify%
     if (SongName != prev_SongName) and (SongName != "Spotify")
     {
-        GuiControl,, songtitle, %SongName%
+        Array := StrSplit(SongName, " - ")
+        SongName_artist := Array[1]
+        SongName_name   := Array[2]
+        GuiControl,, songtitle, [%SongName_artist%]`n%SongName_name%
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
         SetTimer, ChangeAddedOff, -0
