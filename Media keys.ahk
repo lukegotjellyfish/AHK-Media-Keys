@@ -112,14 +112,16 @@ Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
 Gui, Font, s10 q4 bold, Arial
 if Found
 {
-    MsgBox, Found: %Found%
-    Gui, Add, Text, x005 y84, Now Playing:
-    Gui, Add, Text, x005 y100 w288 h40 vsongtitle, pending
+    Gui, Add, Text, x005 y95, Now Playing:
+    Gui, Add, Text, x005 y111 w288 h40 vsongtitle, pending
     WinSet, Transparent, 200
     Gui, Show, x0 y600 h150 w300 NA NoActivate
 }
-WinSet, Transparent, 200
-Gui, Show, x0 y600 h110 w300 NA NoActivate
+else
+{
+    WinSet, Transparent, 200
+    Gui, Show, x0 y600 h110 w300 NA NoActivate
+}
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
