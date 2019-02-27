@@ -46,17 +46,14 @@ Loop, %win%
     }
 }
 
-;Timers
-;##################################################################################
-SetTimer, CheckSongName, 2000 ;Songs are minutes long
-;##################################################################################
-
 if !Found
 {
     ;spotify not found, basic media keys
     initial_playing_status := "||"
-    SetTimer, CheckSongName, OFF
-    ;no need to check for spotify if it doesn't exist
+}
+else
+{
+    SetTimer, CheckSongName, 2000 ;Songs are minutes long
 }
 
 
