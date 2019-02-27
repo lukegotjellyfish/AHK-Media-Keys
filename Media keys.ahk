@@ -70,7 +70,7 @@ volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
 
 ;Get: http://www.nirsoft.net/utils/nircmd.html
-nircmd_dir := "C:\Users\Luke\Desktop\AHK\Media Keys\nircmd\nircmd.exe"
+nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
 
 ;Dual option GUI variables
 counter_A := 0
