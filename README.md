@@ -1,6 +1,6 @@
 # Examples
 ## Example while Spotify is running
-![alt text](https://i.imgur.com/rklwfmQ.png "Ex.1")
+![alt text](https://i.imgur.com/RBa0vkm.png "Ex.1")
 ## Example while Spotify is not running
 ![alt text](https://i.imgur.com/rklwfmQ.png "Ex.2")
 
