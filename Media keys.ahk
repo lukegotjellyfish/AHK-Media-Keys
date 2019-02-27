@@ -86,16 +86,25 @@ Gui, Color, Grey
 ;##################################################################################
 Gui, Font, cWhite s60 q4 bold, Arial
 Gui, Add, Text, x034 y00 w54 h80 vprev, %prev%
-Gui, Add, Text, x120 y00 w54 h100 vpauseplay, %initial_playing_status%
+if Found
+{
+    Gui, Add, Text, x120 y00 w54 h100 vpauseplay, %initial_playing_status%
+}
+else
+{
+    Gui, Add, Text, x107 y00 w54 h100 vpauseplay, %initial_playing_status%
+}
 Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
 
-Gui, Font, cWhite s14 q4 bold, Arial
-Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
-Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
+
 
 Gui, Font, s10 q4 bold, Arial
 if Found
 {
+    Gui, Font, cWhite s14 q4 bold, Arial
+    Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
+    Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
+    Gui, Font, s10 q4 bold, Arial
     Gui, Add, Text, x005 y95, Now Playing:
     Gui, Add, Text, x220 y95 vadded, [Not Added]
     Gui, Font, cFF69B4
