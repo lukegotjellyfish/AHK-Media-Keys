@@ -208,7 +208,7 @@ return
 *Numpad3::
 {
     WinGet window_state, MinMax, ahk_id %spotify%
-    IfEqual, window_state,0, WinRestore, ahk_id %spotify%
+    IfEqual, window_state,-1, WinRestore, ahk_id %spotify%
     Sleep, 100
     ControlClick, x16 y639, ahk_id %spotify%,, Right
     Sleep, 50
