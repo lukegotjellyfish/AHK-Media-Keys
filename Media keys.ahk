@@ -1,7 +1,7 @@
 ﻿#NoEnv
 #SingleInstance, Force
 #Persistent
-#MaxThreadsPerHotkey, 1
+#MaxThreadsPerHotkey, 2
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -21,6 +21,7 @@ Efficient method's Theory:
 ;                       Initial process for CheckSongName
 ;##################################################################################
 WinGet, win, List
+
 Loop, %win% 
 {
     WinGetTitle, title, % "ahk_id" . win%A_Index%
@@ -34,7 +35,7 @@ Loop, %win%
     }
 }
 
-if !Found
+if !(Found)
 {
     ;spotify not found, basic media keys
     initial_playing_status := "||"
@@ -43,30 +44,39 @@ else
 {
     playing_status := -1
     SetTimer, Ini_Playing, 1
-    SetTimer, CheckSongName, 2000   ;Songs are minutes long
+    SetTimer, CheckSongName, 2000
 }
 ;##################################################################################
 ;                               Media variables
 ;##################################################################################
-pauseplay := "||" ; Looks like a pause symbol when larger and bold
+;Get: http://www.nirsoft.net/utils/nircmd.html
+nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
+if FileExist(nircmd_dir)
+{
+    nircmd := 1
+    volume := 0.2  ;default to max volume on spotify vol mixer
+    if (Found)
+    {
+        Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
+    }
+}
+else
+{
+    Hotkey, *Numpad8, OFF
+    Hotkey, *Numpad2, OFF
+}
+
+playingstring := "||" ; Looks like a pause symbol when larger and bold
+pausedstring  := "▶️"
 prev := "⏮"
 next := "⏭" ; Skip symbol, trust me notepad++ users
 if (playing_status != -1)
 {
     playing_status := 0
 }
-volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
-<<<<<<< HEAD
-flag_paused := 1
 
-;Get: http://www.nirsoft.net/utils/nircmd.html
-=======
-;##################################################################################
-;                Get: http://www.nirsoft.net/utils/nircmd.html
-;##################################################################################
->>>>>>> 3be638a0875cface16508ac4f31b4d29f875197b
-nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
+
 ;##################################################################################
 ;                           Dual option GUI variables
 ;##################################################################################
@@ -104,15 +114,17 @@ else
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
-Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
-
 *Numpad4::
 {
     Send, {Media_Prev}
+    TempChangeFontColour("vprev")
     playing_status := 1
-    GuiControl,, pauseplay, %pauseplay%
+    GuiControl,, pauseplay, %playingstring%
     Sleep, 300
-    GoSub, CheckSongName
+    if (Found)
+    {
+        GoSub, CheckSongName
+    }
 }
 return
 
@@ -126,14 +138,16 @@ return
             playing_status := 0
         }
         GuiControl, Move, pauseplay, x100
-        GuiControl,, pauseplay, ▶️
+        GuiControl,, pauseplay, %pausedstring%
+        TempChangeFontColour("pauseplay")
         Sleep, 200
     }
     else
     {
         Send, {Media_Play_Pause}
         GuiControl, Move, pauseplay, x105
-        GuiControl,, pauseplay, %pauseplay%
+        GuiControl,, pauseplay, %playingstring%
+        TempChangeFontColour("pauseplay")
         playing_status := 1
     }
 }
@@ -146,9 +160,14 @@ return
     {
         playing_status := 1
     }
-    GuiControl,, pauseplay, %pauseplay%
+    GuiControl,, pauseplay, %playingstring%
+    TempChangeFontColour("vnext")
     Sleep, 300
-    GoSub, CheckSongName
+    if (Found)
+    {
+        GoSub, CheckSongName
+    }
+
 }
 return
 
@@ -181,14 +200,14 @@ CheckSongName:
     {
         GuiControl,, songtitle, %SongName%
         GuiControl, Move, pauseplay, x107
-        GuiControl,, pauseplay, %pauseplay%
+        GuiControl,, pauseplay, %playingstring%
         prev_SongName := SongName
         playing_status  := 1
     }
     ;for first run: if no song playing, set to paused
     else if (playing_status != flag_last) and (playing_status = 0)  ;avoid repeats using flag_last
     {
-        GuiControl,, pauseplay, ▶️
+        GuiControl,, pauseplay, %pausedstring%
         playing_status := 0
         flag_last    := playing_status
     }
@@ -199,6 +218,9 @@ Ini_Playing:  ;pending playing_status "animation"
 {
     Ini_Playing_Mod := "On"
     runnum := 1
+    Gui, Font, cFF69B4 s60 q4 bold
+    GuiControl, Font, pauseplay
+    Gui, Show, NA NoActivate
     While (playing_status = -1)
     {
         if runnum = 1
@@ -224,7 +246,23 @@ Ini_Playing:  ;pending playing_status "animation"
         GuiControl,, pauseplay, %initial_playing_status%
         Sleep, 200
     }
+    Gui, Font, cwhite
+    GuiControl, Font, pauseplay
     SetTimer, Ini_Playing, OFF
+}
+return
+
+TempChangeFontColour(control_name)
+{
+    Gui, Font, cFF69B4 s60 q4 bold
+    GuiControl, Font, %control_name%
+    Gui, Show, NA NoActivate
+
+    Sleep, 1500
+    
+    Gui, Font, cwhite s60 q4 bold
+    GuiControl, Font, %control_name%
+    Gui, Show, NA NoActivate
 }
 return
 ;##################################################################################
