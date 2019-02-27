@@ -61,7 +61,7 @@ else
 ;Media variables
 pauseplay := "||" ; Looks like a pause symbol when larger and bold
 prev := "⏮"
-next := "⏭" ; Skip symbol, trust me notepad users
+next := "⏭" ; Skip symbol, trust me notepad++ users
 pause_status := 0
 volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
