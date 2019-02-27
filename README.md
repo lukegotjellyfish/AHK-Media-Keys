@@ -12,6 +12,7 @@ http://www.nirsoft.net/utils/nircmd.html
 
 # Info
 - F3 Reloads the script
+
 Requires NUMLOCK to be ENABLED:
 - NUMPAD4: Previous Song
 - NUMPAD5: Pause/Play
