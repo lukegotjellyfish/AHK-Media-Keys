@@ -1,14 +1,14 @@
 # Examples
-## Example while Spotify is running
-https://youtu.be/lOCFe9lCqRI
+### Example while Spotify is running
+####https://youtu.be/lOCFe9lCqRI
 
-## Example while Spotify is not running
-https://youtu.be/H9BHAGh8GXI
+### Example while Spotify is not running
+####https://youtu.be/H9BHAGh8GXI
 
 # Requirements
-## AHK
-https://www.autohotkey.com/
-## For spotify volume change
+### AHK
+####https://www.autohotkey.com/
+### For spotify volume change
 #### http://www.nirsoft.net/utils/nircmd.html
 (change nircmd_dir in script)
 # 
