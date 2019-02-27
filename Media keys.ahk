@@ -199,8 +199,19 @@ return
     IfEqual, window_state,0, WinRestore, ahk_id %spotify%
     Sleep, 100
     ControlClick, x16 y639, ahk_id %spotify%,, Right
-    Sleep, 10
-    ControlSend,, {UP}{UP}{RIGHT}{DOWN}{ENTER}, ahk_id %spotify%
+    Sleep, 50
+    ControlSend,, {UP}, ahk_id %spotify%
+    Sleep, 50
+    ControlSend,, {UP}, ahk_id %spotify%
+    Sleep, 50
+    ControlSend,, {RIGHT}, ahk_id %spotify%
+    Sleep, 50
+    ControlSend,, {DOWN}, ahk_id %spotify%
+    Sleep, 50
+    ControlSend,, {ENTER}, ahk_id %spotify%
+    Sleep, 50
+    ControlSend,, {UP}, ahk_id %spotify%
+    Sleep, 50
     SetTimer, ChangeAdded, -0
 }
 return
@@ -221,13 +232,6 @@ CheckSongName:
     }
     else if (playing_status != flag_last) and (playing_status = 0)  ;avoid repeats using flag_last
     {
-        GuiControl,, pauseplay, %pausedstring%
-        playing_status := 0
-        flag_last      := playing_status
-    }
-    else if (title = "Spotify") and (playing_status != flag_last)
-    {
-        GuiControl, Move, pauseplay, x102
         GuiControl,, pauseplay, %pausedstring%
         playing_status := 0
         flag_last      := playing_status
