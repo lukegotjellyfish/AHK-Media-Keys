@@ -1,5 +1,3 @@
-# Media-Keys
-
 # Example while spotify is active:
 https://imgur.com/a/aYgg6a4
 # Example while spotify is not active:
