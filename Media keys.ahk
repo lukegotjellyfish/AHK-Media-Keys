@@ -20,44 +20,9 @@ will be "Spotify" so we fetch the ID from this process
 WinGet, win, List
 Loop, %win% {
 	WinGetTitle, title, % "ahk_id" . win%A_Index%
-
-    if (title = "Spotify")
+    WinGet, spot_name, ProcessName, %title%
+    if (spot_name = "Spotify.exe")
     {
-        WinGetClass, spot_class, %title%
-        if (spot_class != "ahk_class Chrome_WidgetWin_1")
-        {
-            initial_playing_status := "||"
-            WinGet, spotify, ID, %title%
-            Found := 1
-            break
-        }
-        continue
-    }
-
-    if InStr(title, "Spotify") ;Won't actually be spotify, above will be
-    {
-        continue
-    }
-
-	if InStr(title, " - ")
-    {
-        if InStr(title, "Volume Mixer")
-        {
-            continue
-        }
-        if InStr(title, "Autohotkey")
-        {
-            continue
-        }
-        if InStr(title, "ahk")
-        {
-            continue
-        }
-        FoundPos := RegExMatch(title, "*-*-*")
-        if (FoundPos)
-        {
-            continue
-        }
         initial_playing_status := "||"
         WinGet, spotify, ID, %title%
         Found := 1
@@ -88,6 +53,9 @@ pause_status := 0
 volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
 
+;Get: http://www.nirsoft.net/utils/nircmd.html
+nircmd_dir := "C:\Users\Luke\Desktop\AHK\Media Keys\nircmd\nircmd.exe"
+
 ;Dual option GUI variables
 counter_A := 0
 counter_B := 0
@@ -113,9 +81,10 @@ Gui, Font, s10 q4 bold, Arial
 if Found
 {
     Gui, Add, Text, x005 y95, Now Playing:
-    Gui, Add, Text, x005 y111 w288 h40 vsongtitle, pending
+    Gui, Font, cRed
+    Gui, Add, Text, x005 y111 w288 h50 vsongtitle, pending
     WinSet, Transparent, 200
-    Gui, Show, x0 y600 h150 w300 NA NoActivate
+    Gui, Show, x0 y600 h160 w300 NA NoActivate
 }
 else
 {
@@ -125,7 +94,7 @@ else
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
-Run, C:\Users\Luke\Desktop\AHK\Media Keys\nircmd\nircmd.exe setappvolume Spotify.exe %volume%
+Run, %nircmd_dir% setappvolume Spotify.exe %volume%
 
 *Numpad4::
 {
@@ -170,7 +139,7 @@ return
     if (volume != 1)
     {
         volume += 0.05
-        Run, C:\Users\Luke\Desktop\AHK\Media Keys\nircmd\nircmd.exe setappvolume Spotify.exe %volume%
+        Run, %nircmd_dir% setappvolume Spotify.exe %volume%
     }
     
 }
@@ -181,7 +150,7 @@ return
     if (volume != 0)
     {
         volume -= 0.05
-        Run, C:\Users\Luke\Desktop\AHK\Media Keys\nircmd\nircmd.exe setappvolume Spotify.exe %volume%
+        Run, %nircmd_dir% setappvolume Spotify.exe %volume%
     }
 }
 return
