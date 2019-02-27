@@ -8,18 +8,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 traytip, MediaKeys, Running in background!, 0.1, 16
 
 
-/* 
-Notices:
-                    Made by:
-|Discord:           Lukegotjellyfish#0473|
-|MPGH.net:          BLURREDDOGE          |
-|Unkowncheats.me:   JELLYMAN123          |
-|Twitter:           @The_Blurred_Dog     |
-https://github.com/lukegotjellyfish/Media-Keys
-
-Copyright (C) 2019  Luke Roper
-*/
-
 
 
 
@@ -31,6 +19,9 @@ Efficient method's Theory:
   (Changing the volume is exe-wide and doens't need to target a specific process of an exe)
 */
 
+;##################################################################################
+;Initial process for CheckSongName
+;##################################################################################
 WinGet, win, List
 Loop, %win% 
 {
@@ -54,29 +45,28 @@ else
 {
     SetTimer, CheckSongName, 2000 ;Songs are minutes long
 }
-
-
-
-;Media variables
+;##################################################################################
+;                               Media variables
+;##################################################################################
 pauseplay := "||" ; Looks like a pause symbol when larger and bold
 prev := "⏮"
 next := "⏭" ; Skip symbol, trust me notepad++ users
 pause_status := 0
 volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
-
-;Get: http://www.nirsoft.net/utils/nircmd.html
+;##################################################################################
+;                Get: http://www.nirsoft.net/utils/nircmd.html
+;##################################################################################
 nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
-
-;Dual option GUI variables
+;##################################################################################
+;                           Dual option GUI variables
+;##################################################################################
 counter_A := 0
 counter_B := 0
 recoil_status := "Disabled"
 auto_fire_status := "Disabled"
-
-
 ;##################################################################################
-;First part of GUI                                                                 
+;                              First part of GUI                                                                 
 ;##################################################################################
 Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
 Gui, Margin, 0, 0
@@ -105,7 +95,7 @@ else
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
-Run, %nircmd_dir% setappvolume Spotify.exe %volume%
+Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
 
 *Numpad4::
 {
@@ -184,3 +174,17 @@ F3::
 {
     Reload
 }
+
+
+
+/* 
+Notices:
+                    Made by:
+|Discord:           Lukegotjellyfish#0473|
+|MPGH.net:          BLURREDDOGE          |
+|Unkowncheats.me:   JELLYMAN123          |
+|Twitter:           @The_Blurred_Dog     |
+https://github.com/lukegotjellyfish/Media-Keys
+
+Copyright (C) 2019  Luke Roper
+*/
