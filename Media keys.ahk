@@ -18,10 +18,11 @@ will be "Spotify" so we fetch the ID from this process
 */
 
 WinGet, win, List
-Loop, %win% {
+Loop, %win% 
+{
 	WinGetTitle, title, % "ahk_id" . win%A_Index%
     WinGet, spot_name, ProcessName, %title%
-    if (spot_name = "Spotify.exe")
+    if (spot_name = "Spotify.exe") ;find window (not other spotify exes) from spotify.exe
     {
         initial_playing_status := "||"
         WinGet, spotify, ID, %title%
