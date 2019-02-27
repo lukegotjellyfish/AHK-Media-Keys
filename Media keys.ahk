@@ -33,7 +33,7 @@ if !(Found)
 else
 {
     playing_status := -1
-    SetTimer, Ini_Playing, 1
+    SetTimer, Ini_Playing, -0
     SetTimer, CheckSongName, 2000
 }
 ;##################################################################################
@@ -108,9 +108,11 @@ else
     WinSet, Transparent, 200
     Gui, Show, x0 y600 h110 w300 NA NoActivate
 }
+return
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
+
 *Numpad4::
 {
     Send, {Media_Prev}
@@ -195,9 +197,9 @@ return
 {
     WinGet window_state, MinMax, ahk_id %spotify%
     IfEqual, window_state,0, WinRestore, ahk_id %spotify%
-    Sleep, 10
+    Sleep, 100
     ControlClick, x16 y639, ahk_id %spotify%,, Right
-    Sleep, 1
+    Sleep, 10
     ControlSend,, {UP}{UP}{RIGHT}{DOWN}{ENTER}, ahk_id %spotify%
     SetTimer, ChangeAdded, -0
 }
@@ -210,11 +212,10 @@ CheckSongName:
     WinGetTitle, SongName, ahk_id %spotify%
     if (SongName != prev_SongName) and (SongName != "Spotify")
     {
-        added_current_song := 0
-        GuiControl,, added, [Not Added]
         GuiControl,, songtitle, %SongName%
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
+        SetTimer, ChangeAddedOff, -0
         prev_SongName := SongName
         playing_status  := 1
     }
@@ -260,7 +261,7 @@ Ini_Playing:  ;pending playing_status "animation"
         GuiControl,, pauseplay, %initial_playing_status%
         Sleep, 200
     }
-    Gui, Font, cwhite
+    Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, pauseplay
     SetTimer, Ini_Playing, OFF
 }
@@ -340,14 +341,21 @@ return
 
 ChangeAdded:
 {
-    if (added_current_song != 1)
-    {
-        Gui, Font, cFF69B4 s10 q4 bold
-        GuiControl,, added, [Added]
-        GuiControl, Font, added
-        Gui, Show, NA NoActivate
-        added_current_song := 1
-    }
+    Gui, Font, cFF69B4 s10 q4 bold
+    GuiControl, Move, added, x245
+    GuiControl,, added, [Added]
+    GuiControl, Font, added
+    Gui, Show, NA NoActivate
+}
+return
+
+ChangeAddedOff:
+{
+    Gui, Font, cwhite s10 q4 bold
+    GuiControl, Move, added, x220
+    GuiControl,, added, [Not Added]
+    GuiControl, Font, added
+    Gui, Show, NA NoActivate
 }
 return
 ;##################################################################################
