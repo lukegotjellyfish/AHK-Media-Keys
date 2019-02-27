@@ -216,15 +216,21 @@ CheckSongName:
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
         SetTimer, ChangeAddedOff, -0
-        prev_SongName := SongName
-        playing_status  := 1
+        prev_SongName  := SongName
+        playing_status := 1
     }
-    ;for first run: if no song playing, set to paused
     else if (playing_status != flag_last) and (playing_status = 0)  ;avoid repeats using flag_last
     {
         GuiControl,, pauseplay, %pausedstring%
         playing_status := 0
-        flag_last    := playing_status
+        flag_last      := playing_status
+    }
+    else if (title = "Spotify") and (playing_status != flag_last)
+    {
+        GuiControl, Move, pauseplay, x102
+        GuiControl,, pauseplay, %pausedstring%
+        playing_status := 0
+        flag_last      := playing_status
     }
 }
 return
