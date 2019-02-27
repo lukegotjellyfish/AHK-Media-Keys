@@ -117,7 +117,7 @@ else
 *Numpad4::
 {
     Send, {Media_Prev}
-    TempChangeFontColour("prev")
+    SetTimer, ChangePrev, -10
     playing_status := 1
     GuiControl,, pauseplay, %playingstring%
     Sleep, 300
@@ -137,9 +137,9 @@ return
         {
             playing_status := 0
         }
-        GuiControl, Move, pauseplay, x100
+        GuiControl, Move, pauseplay, x102
         GuiControl,, pauseplay, %pausedstring%
-        TempChangeFontColour("pauseplay")
+        SetTimer, ChangePause, -10
         Sleep, 200
     }
     else
@@ -147,7 +147,7 @@ return
         Send, {Media_Play_Pause}
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
-        TempChangeFontColour("pauseplay")
+        SetTimer, ChangePause, -10
         playing_status := 1
     }
 }
@@ -161,7 +161,7 @@ return
         playing_status := 1
     }
     GuiControl,, pauseplay, %playingstring%
-    TempChangeFontColour("next")
+    SetTimer, ChangeNext, -10
     Sleep, 300
     if (Found)
     {
@@ -252,16 +252,44 @@ Ini_Playing:  ;pending playing_status "animation"
 }
 return
 
-TempChangeFontColour(control_name)
+ChangePrev:
 {
     Gui, Font, cFF69B4 s60 q4 bold
-    GuiControl, Font, %control_name%
+    GuiControl, Font, prev
     Gui, Show, NA NoActivate
 
     Sleep, 300
     
     Gui, Font, cwhite s60 q4 bold
-    GuiControl, Font, %control_name%
+    GuiControl, Font, prev
+    Gui, Show, NA NoActivate
+}
+return
+
+ChangePause:
+{
+    Gui, Font, cFF69B4 s60 q4 bold
+    GuiControl, Font, pauseplay
+    Gui, Show, NA NoActivate
+
+    Sleep, 300
+    
+    Gui, Font, cwhite s60 q4 bold
+    GuiControl, Font, pauseplay
+    Gui, Show, NA NoActivate
+}
+return
+
+ChangeNext:
+{    
+    Gui, Font, cFF69B4 s60 q4 bold
+    GuiControl, Font, next
+    Gui, Show, NA NoActivate
+
+    Sleep, 300
+    
+    Gui, Font, cwhite s60 q4 bold
+    GuiControl, Font, next
     Gui, Show, NA NoActivate
 }
 return
