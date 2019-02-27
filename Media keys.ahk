@@ -7,16 +7,6 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 traytip, MediaKeys, Running in background!, 0.1, 16
 
-
-/*
-Efficient method's Theory:
-- Get WinTitles
-- If the exe of said WinTitle is "Spotify.exe" (the only Spotify.exe that has a window)
-  it's the "Spotify.exe" that needs to be referenced and operated on by CheckSongName.
-  (Changing the volume is exe-wide and doens't need to target a specific process of an exe)
-*/
-
-
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
@@ -55,6 +45,7 @@ if FileExist(nircmd_dir)
 {
     nircmd := 1
     volume := 0.2  ;default to max volume on spotify vol mixer
+    volume_increment := 0.02
     if (Found)
     {
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
@@ -97,6 +88,11 @@ Gui, Font, cWhite s60 q4 bold, Arial
 Gui, Add, Text, x034 y00 w54 h80 vprev, %prev%
 Gui, Add, Text, x120 y00 w54 h100 vpauseplay, %initial_playing_status%
 Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
+
+Gui, Font, cWhite s14 q4 bold, Arial
+Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
+Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
+
 Gui, Font, s10 q4 bold, Arial
 if Found
 {
@@ -123,7 +119,7 @@ else
     Sleep, 300
     if (Found)
     {
-        GoSub, CheckSongName
+        SetTimer, CheckSongName, -0
     }
 }
 return
@@ -161,11 +157,11 @@ return
         playing_status := 1
     }
     GuiControl,, pauseplay, %playingstring%
-    SetTimer, ChangeNext, 0
+    SetTimer, ChangeNext, -0
     Sleep, 300
     if (Found)
     {
-        GoSub, CheckSongName
+        SetTimer, CheckSongName, -0
     }
 
 }
@@ -175,8 +171,9 @@ return
 {
     if (volume != 1)
     {
-        volume += 0.05
+        volume += %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
+        SetTimer, ChangeVolUp, -0
     }
     
 }
@@ -186,13 +183,16 @@ return
 {
     if (volume != 0)
     {
-        volume -= 0.05
+        volume -= %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
+        SetTimer, ChangeVolDown, -0
     }
 }
 return
 
-
+;##################################################################################
+;                                       Subs                                       
+;##################################################################################
 CheckSongName:
 {
     WinGetTitle, SongName, ahk_id %spotify%
@@ -291,6 +291,36 @@ ChangeNext:
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, next
     Gui, Show, NA NoActivate
+}
+return
+
+ChangeVolUp:
+{
+    Gui, Font, cFF69B4 s14 q4 bold
+    GuiControl, Font, vol_up
+    Gui, Show, NA NoActivate
+
+    Sleep, 300
+    
+    Gui, Font, cwhite s14 q4 bold
+    GuiControl, Font, vol_up
+    Gui, Show, NA NoActivate
+    Gui, Font, cwhite s60 q4 bold ;incase changes other items
+}
+return
+
+ChangeVolDown:
+{
+    Gui, Font, cFF69B4 s14 q4 bold
+    GuiControl, Font, vol_down
+    Gui, Show, NA NoActivate
+
+    Sleep, 300
+    
+    Gui, Font, cwhite s14 q4 bold
+    GuiControl, Font, vol_down
+    Gui, Show, NA NoActivate
+    Gui, Font, cwhite s60 q4 bold ;incase changes other items
 }
 return
 ;##################################################################################
