@@ -53,7 +53,9 @@ if !Found
 }
 else
 {
-    SetTimer, CheckSongName, 2000 ;Songs are minutes long
+    pause_status := -1
+    SetTimer, Ini_Playing, 1
+    SetTimer, CheckSongName, 2000   ;Songs are minutes long
 }
 
 
@@ -62,9 +64,13 @@ else
 pauseplay := "||" ; Looks like a pause symbol when larger and bold
 prev := "⏮"
 next := "⏭" ; Skip symbol, trust me notepad++ users
-pause_status := 0
+if (pause_status != -1)
+{
+    pause_status := 0
+}
 volume := 0.5  ;default to max volume on spotify vol mixer
 prev_SongName := ""
+flag_paused := 1
 
 ;Get: http://www.nirsoft.net/utils/nircmd.html
 nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
@@ -87,7 +93,7 @@ Gui, Color, Grey
 ;##################################################################################
 Gui, Font, cWhite s60 q4 bold, Arial
 Gui, Add, Text, x034 y00 w54 h80 vprev, %prev%
-Gui, Add, Text, x105 y00 w54 h100 vpauseplay, %initial_playing_status%
+Gui, Add, Text, x120 y00 w54 h100 vpauseplay, %initial_playing_status%
 Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
 Gui, Font, s10 q4 bold, Arial
 if Found
@@ -120,16 +126,18 @@ return
 
 *Numpad5::
 {
-    if (pause_status == 1)
+    if (pause_status = 1)
     {
         Send, {Media_Play_Pause}
-        pause_status -= 1
+        pause_status := 0
+        GuiControl, Move, pauseplay, x100
         GuiControl,, pauseplay, ▶️
-        Sleep, 20
+        Sleep, 200
     }
     else
     {
         Send, {Media_Play_Pause}
+        GuiControl, Move, pauseplay, x105
         GuiControl,, pauseplay, %pauseplay%
         pause_status := 1
     }
@@ -175,8 +183,51 @@ CheckSongName:
     if (SongName != prev_SongName) and (SongName != "Spotify")
     {
         GuiControl,, songtitle, %SongName%
+        GuiControl, Move, pauseplay, x107
+        GuiControl,, pauseplay, %pauseplay%
         prev_SongName := SongName
+        pause_status  := 1
     }
+    ;for first run: if no song playing, set to paused
+    else if (pause_status != flag_last) and (pause_status = 0)  ;avoid repeats using flag_last
+    {
+        GuiControl,, pauseplay, ▶️
+        pause_status := 0
+        flag_last    := pause_status
+    }
+}
+return
+
+Ini_Playing:  ;pending pause_status "animation"
+{
+    Ini_Playing_Mod := "On"
+    runnum := 1
+    While (pause_status = -1)
+    {
+        if runnum = 1
+        {
+            initial_playing_status := "|"
+            runnum += 1
+        }
+        else if runnum = 2
+        {
+            initial_playing_status := "/"
+            runnum += 1
+        }
+        else if runnum = 3
+        {
+            initial_playing_status := "-"
+            runnum += 1
+        }
+        else
+        {
+            initial_playing_status := "\"
+            runnum := 1 ;return to start
+        }
+        GuiControl,, pauseplay, %initial_playing_status%
+        Sleep, 200
+    }
+    SetTimer, Ini_Playing, OFF
 }
 return
 ;##################################################################################
