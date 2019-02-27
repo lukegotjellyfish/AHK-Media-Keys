@@ -5,6 +5,7 @@ https://imgur.com/a/2CWTqsc
 
 # Requirements: AHK
 https://www.autohotkey.com/
+
 For spotify volume change:
 http://www.nirsoft.net/utils/nircmd.html
 # 
