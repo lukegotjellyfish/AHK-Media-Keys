@@ -1,12 +1,13 @@
-# Example while Spotify is running
+# Examples
+## Example while Spotify is running
 https://imgur.com/a/aYgg6a4
-# Example while Spotify is not running
+## Example while Spotify is not running
 https://imgur.com/a/2CWTqsc
 
-# Requirements: AHK
+# Requirements
+## AHK
 https://www.autohotkey.com/
-
-# Requirements: For spotify volume change
+## For spotify volume change
 http://www.nirsoft.net/utils/nircmd.html
 # 
 
