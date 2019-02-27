@@ -4,12 +4,16 @@ https://imgur.com/a/aYgg6a4
 ## Example while Spotify is not running
 https://imgur.com/a/2CWTqsc
 
+
+
 # Requirements
 ## AHK
 https://www.autohotkey.com/
 ## For spotify volume change
 http://www.nirsoft.net/utils/nircmd.html
 # 
+
+
 
 # Info
 - F3 Reloads the script
