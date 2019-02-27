@@ -1,6 +1,6 @@
-# Example while spotify is active
+# Example while Spotify is running
 https://imgur.com/a/aYgg6a4
-# Example while spotify is not active
+# Example while Spotify is not running
 https://imgur.com/a/2CWTqsc
 
 # Requirements: AHK
