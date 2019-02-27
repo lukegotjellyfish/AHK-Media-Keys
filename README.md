@@ -1,9 +1,16 @@
 # Media-Keys
-Requirements: AHK
+
+# Example while spotify is active:
+https://imgur.com/a/aYgg6a4
+# Example while spotify is not active:
+https://imgur.com/a/2CWTqsc
+
+# Requirements: AHK
 https://www.autohotkey.com/
 
 F3 To reload the script
 
+# Info
 Requires NUMLOCK to be ENABLED:
 - NUMPAD4: Previous Song
 - NUMPAD5: Pause/Play
