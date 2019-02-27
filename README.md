@@ -1,10 +1,9 @@
 # Examples
 ## Example while Spotify is running
-![alt text](https://i.imgur.com/RBa0vkm.png "Ex.1")
+https://youtu.be/lOCFe9lCqRI
+
 ## Example while Spotify is not running
-![alt text](https://i.imgur.com/rklwfmQ.png "Ex.2")
-
-
+https://youtu.be/H9BHAGh8GXI
 
 # Requirements
 ## AHK
