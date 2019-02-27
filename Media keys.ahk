@@ -69,7 +69,6 @@ auto_fire_status := "Disabled"
 Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
 Gui, Margin, 0, 0
 Gui, Color, Grey
-Gui, Font, cRed s30 bold, Arial
 ;##################################################################################
 ;                          Second part of GUI (Media)                              
 ;##################################################################################
@@ -81,7 +80,7 @@ Gui, Font, s10 q4 bold, Arial
 if Found
 {
     Gui, Add, Text, x005 y95, Now Playing:
-    Gui, Font, cRed
+    Gui, Font, cFF69B4
     Gui, Add, Text, x005 y111 w288 h50 vsongtitle, pending
     WinSet, Transparent, 200
     Gui, Show, x0 y600 h160 w300 NA NoActivate
