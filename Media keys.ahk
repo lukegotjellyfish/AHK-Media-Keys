@@ -6,7 +6,7 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 traytip, MediaKeys, Running in background!, 0.1, 16
-
+CoordMode, Mouse, Client
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
@@ -97,6 +97,7 @@ Gui, Font, s10 q4 bold, Arial
 if Found
 {
     Gui, Add, Text, x005 y95, Now Playing:
+    Gui, Add, Text, x220 y95 vadded, [Not Added]
     Gui, Font, cFF69B4
     Gui, Add, Text, x005 y111 w288 h50 vsongtitle, pending
     WinSet, Transparent, 200
@@ -190,6 +191,17 @@ return
 }
 return
 
+*Numpad3::
+{
+    WinGet window_state, MinMax, ahk_id %spotify%
+    IfEqual, window_state,0, WinRestore, ahk_id %spotify%
+    Sleep, 10
+    ControlClick, x16 y639, ahk_id %spotify%,, Right
+    Sleep, 1
+    ControlSend,, {UP}{UP}{RIGHT}{DOWN}{ENTER}, ahk_id %spotify%
+    SetTimer, ChangeAdded, -0
+}
+return
 ;##################################################################################
 ;                                       Subs                                       
 ;##################################################################################
@@ -198,6 +210,8 @@ CheckSongName:
     WinGetTitle, SongName, ahk_id %spotify%
     if (SongName != prev_SongName) and (SongName != "Spotify")
     {
+        added_current_song := 0
+        GuiControl,, added, [Not Added]
         GuiControl,, songtitle, %SongName%
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
@@ -321,6 +335,19 @@ ChangeVolDown:
     GuiControl, Font, vol_down
     Gui, Show, NA NoActivate
     Gui, Font, cwhite s60 q4 bold ;incase changes other items
+}
+return
+
+ChangeAdded:
+{
+    if (added_current_song != 1)
+    {
+        Gui, Font, cFF69B4 s10 q4 bold
+        GuiControl,, added, [Added]
+        GuiControl, Font, added
+        Gui, Show, NA NoActivate
+        added_current_song := 1
+    }
 }
 return
 ;##################################################################################
