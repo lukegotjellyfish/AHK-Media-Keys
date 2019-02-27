@@ -2,7 +2,7 @@
 ## Example while Spotify is running
 ![alt text](https://i.imgur.com/rklwfmQ.png "Ex.1")
 ## Example while Spotify is not running
-![alt text](https://i.imgur.com/rklwfmQg.png "Ex.1")
+![alt text](https://i.imgur.com/rklwfmQ.png "Ex.2")
 
 
 
