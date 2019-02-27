@@ -1,11 +1,11 @@
-# Example while spotify is active:
+# Example while spotify is active
 https://imgur.com/a/aYgg6a4
-# Example while spotify is not active:
+# Example while spotify is not active
 https://imgur.com/a/2CWTqsc
 
 # Requirements: AHK
 https://www.autohotkey.com/
-
+# 
 F3 To reload the script
 
 # Info
