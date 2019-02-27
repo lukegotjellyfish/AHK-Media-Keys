@@ -1,4 +1,9 @@
 # Media-Keys
+Requirements: AHK
+https://www.autohotkey.com/
+
+F3 To reload the script
+
 Requires NUMLOCK to be ENABLED:
 - NUMPAD4: Previous Song
 - NUMPAD5: Pause/Play
