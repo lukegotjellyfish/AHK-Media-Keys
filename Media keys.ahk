@@ -24,18 +24,17 @@ Copyright (C) 2019  Luke Roper
 
 
 /*
-Theory:
-If song on spotify is playing, we can InStr and RegMatch it to get the process ID 
-(spotify doesn't like) exe interaction or class or anything else (even PID)
-
-If no song is playing, the wintitle will be "Spotify" and it's unlikely that any other wintitle
-will be "Spotify" so we fetch the ID from this process
+Efficient method's Theory:
+- Get WinTitles
+- If the exe of said WinTitle is "Spotify.exe" (the only Spotify.exe that has a window)
+  it's the "Spotify.exe" that needs to be referenced and operated on by CheckSongName.
+  (Changing the volume is exe-wide and doens't need to target a specific process of an exe)
 */
 
 WinGet, win, List
 Loop, %win% 
 {
-	WinGetTitle, title, % "ahk_id" . win%A_Index%
+    WinGetTitle, title, % "ahk_id" . win%A_Index%
     WinGet, spot_name, ProcessName, %title%
     if (spot_name = "Spotify.exe") ;find window (not other spotify exes) from spotify.exe
     {
