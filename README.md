@@ -9,9 +9,9 @@ https://www.autohotkey.com/
 # Requirements: For spotify volume change
 http://www.nirsoft.net/utils/nircmd.html
 # 
-F3 To reload the script
 
 # Info
+- F3 Reloads the script
 Requires NUMLOCK to be ENABLED:
 - NUMPAD4: Previous Song
 - NUMPAD5: Pause/Play
