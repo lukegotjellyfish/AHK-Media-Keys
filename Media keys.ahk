@@ -117,7 +117,7 @@ else
 *Numpad4::
 {
     Send, {Media_Prev}
-    SetTimer, ChangePrev, -10
+    SetTimer, ChangePrev, -0
     playing_status := 1
     GuiControl,, pauseplay, %playingstring%
     Sleep, 300
@@ -139,7 +139,7 @@ return
         }
         GuiControl, Move, pauseplay, x102
         GuiControl,, pauseplay, %pausedstring%
-        SetTimer, ChangePause, -10
+        SetTimer, ChangePause, -0
         Sleep, 200
     }
     else
@@ -147,7 +147,7 @@ return
         Send, {Media_Play_Pause}
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
-        SetTimer, ChangePause, -10
+        SetTimer, ChangePause, -0
         playing_status := 1
     }
 }
@@ -161,7 +161,7 @@ return
         playing_status := 1
     }
     GuiControl,, pauseplay, %playingstring%
-    SetTimer, ChangeNext, -10
+    SetTimer, ChangeNext, 0
     Sleep, 300
     if (Found)
     {
