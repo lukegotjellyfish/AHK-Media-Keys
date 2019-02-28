@@ -34,6 +34,7 @@ else
 {
     playing_status := -1
     SetTimer, Ini_Playing, -0
+    #Persistent
     SetTimer, CheckSongName, 2000
 }
 ;##################################################################################
@@ -134,7 +135,7 @@ return
     Sleep, 300
     if (Found)
     {
-        SetTimer, CheckSongName, -0
+        SetTimer, CheckSongName, 2000
     }
 }
 return
@@ -176,7 +177,7 @@ return
     Sleep, 300
     if (Found)
     {
-        SetTimer, CheckSongName, -0
+        SetTimer, CheckSongName, 2000
     }
 
 }
@@ -385,6 +386,7 @@ F3::
 {
     Reload
 }
+return
 ;##################################################################################
 ;                                End of script
 ;##################################################################################
