@@ -2,11 +2,11 @@
 #SingleInstance, Force
 #Persistent
 #MaxThreadsPerHotkey, 2
-; #Warn  ; Enable warnings to assist with detecting common errors.
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-traytip, MediaKeys, Running in background!, 0.1, 16
+Process, Priority,, High
+SendMode Input
+SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
+traytip, MediaKeys, Running in background!, 0.1, 16
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
