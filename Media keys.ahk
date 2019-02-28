@@ -46,7 +46,7 @@ if FileExist(nircmd_dir)
 {
     nircmd := 1
     volume := 0.2  ;default to max volume on spotify vol mixer
-    volume_increment := 0.02
+    volume_increment := 0.05
     if (Found)
     {
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
