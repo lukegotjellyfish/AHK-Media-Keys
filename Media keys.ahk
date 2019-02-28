@@ -132,10 +132,9 @@ return
     SetTimer, ChangePrev, -0
     playing_status := 1
     GuiControl,, pauseplay, %playingstring%
-    Sleep, 400
     if (Found)
     {
-        SetTimer, CheckSongName, 2000
+        GoSub, CheckSongName
     }
 }
 return
@@ -174,10 +173,9 @@ return
     }
     GuiControl,, pauseplay, %playingstring%
     SetTimer, ChangeNext, -0
-    Sleep, 400
     if (Found)
     {
-        SetTimer, CheckSongName, 2000
+        GoSub, CheckSongName
     }
 
 }
@@ -233,6 +231,7 @@ return
 ;##################################################################################
 CheckSongName:
 {
+    Sleep, 200
     WinGetTitle, SongName, ahk_id %spotify%
     if (SongName != prev_SongName) and (SongName != "Spotify")
     {
