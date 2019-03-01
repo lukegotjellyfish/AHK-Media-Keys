@@ -98,62 +98,62 @@
 				"label": "█ Check song name                          "
 			},
 			{
-				"line": 254,
+				"line": 255,
 				"column": 18,
 				"label": "█ Pending check song                          "
 			},
 			{
-				"line": 294,
+				"line": 295,
 				"column": 1,
 				"label": "▃▃▃ Change Item Colour ▃▃▃    "
 			},
 			{
-				"line": 296,
+				"line": 297,
 				"column": 11,
 				"label": "█ Change ⏮ colour                          "
 			},
 			{
-				"line": 310,
+				"line": 311,
 				"column": 9,
 				"label": "█ Change ▶️ colour                          "
 			},
 			{
-				"line": 325,
+				"line": 326,
 				"column": 10,
 				"label": "█ Change ⏭ colour                          "
 			},
 			{
-				"line": 340,
+				"line": 341,
 				"column": 11,
 				"label": "█ Change 🔊 Up colour                          "
 			},
 			{
-				"line": 363,
+				"line": 364,
 				"column": 7,
 				"label": "█ Change 🔊(max) colour                          "
 			},
 			{
-				"line": 373,
+				"line": 374,
 				"column": 8,
 				"label": "█ Change 🔊Down colour               "
 			},
 			{
-				"line": 396,
+				"line": 397,
 				"column": 11,
 				"label": "█ Change 🔊(min) colour                          "
 			},
 			{
-				"line": 406,
+				"line": 407,
 				"column": 12,
 				"label": "█ Change ➕(on) colour, text                          "
 			},
 			{
-				"line": 416,
+				"line": 417,
 				"column": 10,
 				"label": "█ Change ➕(off) colour, text                          "
 			},
 			{
-				"line": 427,
+				"line": 428,
 				"column": 3,
 				"label": "█████████ Notices █████████"
 			}

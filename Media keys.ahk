@@ -235,6 +235,7 @@ CheckSongName:
         playing_status := 0
         GuiControl, Move, pauseplay, x102
         GuiControl,, pauseplay, %pausedstring%
+        GuiControl,, songtitle, %prev_SongName% [PAUSED]
         prev_SongName  := SongName
         SetTimer, ChangePause, -0
     }
