@@ -119,7 +119,7 @@ if Found
 else
 {
     WinSet, Transparent, 200
-    Gui, Show, x0 y600 h110 w300 NA NoActivate
+    Gui, Show, x0 y600 h110 w300 NoActivate
 }
 return
 ;##################################################################################
