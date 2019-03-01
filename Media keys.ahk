@@ -15,6 +15,7 @@ playingstring       := "||"
 pausedstring        := "▶️"
 prev                := "⏮"
 next                := "⏭"
+nircmd_dir          := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 
 ;##################################################################################
 ;                       Initial process for CheckSongName
@@ -49,8 +50,7 @@ else
 ;##################################################################################
 ;                               Setup
 ;##################################################################################
-;Get: http://www.nirsoft.net/utils/nircmd.html
-nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
+
 if FileExist(nircmd_dir)
 {
     nircmd := 1
@@ -426,18 +426,10 @@ return
 
 
 /* 
-
-##################################################################################
-                                End of script                                     
-##################################################################################
 ##################################################################################
                                   Notices                                         
 ##################################################################################
-Notices:
-                   Made by:
-|Discord         : Lukegotjellyfish#0473   |
-https://github.com/lukegotjellyfish/Media-Keys
-
+My Discord: Lukegotjellyfish#0473
+GitHub rep: https://github.com/lukegotjellyfish/Media-Keys
 Copyright (C) 2019  Luke Roper
-
 */

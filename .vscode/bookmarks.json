@@ -43,6 +43,11 @@
 				"label": "next string                                         "
 			},
 			{
+				"line": 17,
+				"column": 5,
+				"label": "nircmd directory                                "
+			},
+			{
 				"line": 117,
 				"column": 0,
 				"label": "▃▃▃▃▃▃ Hotkeys ▃▃▃▃▃   "
@@ -80,7 +85,7 @@
 			{
 				"line": 221,
 				"column": 4,
-				"label": "[F3]  ↻                                               "
+				"label": "[F3]    ↻                                               "
 			},
 			{
 				"line": 228,
@@ -90,12 +95,12 @@
 			{
 				"line": 229,
 				"column": 14,
-				"label": "█ Check song name"
+				"label": "█ Check song name                          "
 			},
 			{
 				"line": 254,
 				"column": 18,
-				"label": "█ Pending check song"
+				"label": "█ Pending check song                          "
 			},
 			{
 				"line": 294,
@@ -105,47 +110,52 @@
 			{
 				"line": 296,
 				"column": 11,
-				"label": "█ Change ⏮ colour"
+				"label": "█ Change ⏮ colour                          "
 			},
 			{
 				"line": 310,
 				"column": 9,
-				"label": "█ Change ▶️ colour"
+				"label": "█ Change ▶️ colour                          "
 			},
 			{
 				"line": 325,
 				"column": 10,
-				"label": "█ Change ⏭ colour"
+				"label": "█ Change ⏭ colour                          "
 			},
 			{
 				"line": 340,
 				"column": 11,
-				"label": "█ Change 🔊 Up colour"
+				"label": "█ Change 🔊 Up colour                          "
 			},
 			{
 				"line": 363,
 				"column": 7,
-				"label": "█ Change 🔊(max) colour"
+				"label": "█ Change 🔊(max) colour                          "
 			},
 			{
 				"line": 373,
 				"column": 8,
-				"label": "█ Change 🔊Down colour"
+				"label": "█ Change 🔊Down colour               "
 			},
 			{
 				"line": 396,
 				"column": 11,
-				"label": "█ Change 🔊(min) colour"
+				"label": "█ Change 🔊(min) colour                          "
 			},
 			{
 				"line": 406,
 				"column": 12,
-				"label": "█ Change ➕(on) colour, text"
+				"label": "█ Change ➕(on) colour, text                          "
 			},
 			{
 				"line": 416,
 				"column": 10,
-				"label": "█ Change ➕(off) colour, text"
+				"label": "█ Change ➕(off) colour, text                          "
+			},
+			{
+				"line": 427,
+				"column": 3,
+				"label": "█████████ Notices █████████"
 			}
 		]
 	}
