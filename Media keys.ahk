@@ -7,6 +7,14 @@ SendMode Input
 SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
 traytip, MediaKeys, Running in background!, 0.1, 16
+
+
+colour_change_delay := 300
+control_send_sleep  := 50 
+
+
+
+
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
@@ -132,14 +140,10 @@ return
     if (playing_status = 1)
     {
         Send, {Media_Play_Pause}
-        if playing_status = 1
-        {
-            playing_status := 0
-        }
+        playing_status := 0
         GuiControl, Move, pauseplay, x102
         GuiControl,, pauseplay, %pausedstring%
         SetTimer, ChangePause, -0
-        Sleep, 200
     }
     else
     {
@@ -165,13 +169,12 @@ return
     {
         GoSub, CheckSongName
     }
-
 }
 return
 
 *Numpad8::
 {
-    if (volume != 1)
+    if (volume <= 1)
     {
         volume += %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
@@ -186,7 +189,7 @@ return
 
 *Numpad2::
 {
-    if (volume != 0)
+    if (volume >= 0)
     {
         volume -= %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
@@ -205,19 +208,19 @@ return
     IfEqual, window_state,-1, WinRestore, ahk_id %spotify%
     Sleep, 100
     ControlClick, x16 y639, ahk_id %spotify%,, Right
-    Sleep, 50
+    Sleep, %control_send_sleep%
     ControlSend,, {UP}, ahk_id %spotify%
-    Sleep, 50
+    Sleep, %control_send_sleep%
     ControlSend,, {UP}, ahk_id %spotify%
-    Sleep, 50
+    Sleep, %control_send_sleep%
     ControlSend,, {RIGHT}, ahk_id %spotify%
-    Sleep, 50
+    Sleep, %control_send_sleep%
     ControlSend,, {DOWN}, ahk_id %spotify%
-    Sleep, 50
+    Sleep, %control_send_sleep%
     ControlSend,, {ENTER}, ahk_id %spotify%
-    Sleep, 50
+    Sleep, %control_send_sleep%
     ControlSend,, {UP}, ahk_id %spotify%
-    Sleep, 50
+    Sleep, %control_send_sleep%
     SetTimer, ChangeAdded, -0
 }
 return
@@ -300,7 +303,7 @@ ChangePrev:
     GuiControl, Font, prev
     Gui, Show, NoActivate
 
-    Sleep, 300
+    Sleep, %colour_change_delay%
     
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, prev
@@ -314,7 +317,7 @@ ChangePause:
     GuiControl, Font, pauseplay
     Gui, Show, NoActivate
 
-    Sleep, 300
+    Sleep, %colour_change_delay%
     
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, pauseplay
@@ -329,7 +332,7 @@ ChangeNext:
     GuiControl, Font, next
     Gui, Show, NoActivate
 
-    Sleep, 300
+    Sleep, %colour_change_delay%
     
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, next
@@ -344,7 +347,15 @@ ChangeVolUp:
     GuiControl, Font, vol_up
     Gui, Show, NoActivate
 
-    Sleep, 300
+    if (volume_min = True)
+    {
+        Gui, Font, cwhite s14 q4 bold
+        GuiControl, Font, vol_down
+        volume_min := False
+        Gui, Show, NoActivate
+    }
+
+    Sleep, %colour_change_delay%
     
     Gui, Font, cwhite s14 q4 bold
     GuiControl, Font, vol_up
@@ -358,6 +369,7 @@ ChangeVolUpMaxed:
     Gui, Font, c808080 s14 q4 bold
     GuiControl, Font, vol_up
     Gui, Show, NoActivate
+    volume_maxed := True
 }
 return
 
@@ -368,7 +380,15 @@ ChangeVolDown:
     GuiControl, Font, vol_down
     Gui, Show, NoActivate
 
-    Sleep, 300
+    if (volume_maxed = True)
+    {
+        Gui, Font, cwhite s14 q4 bold
+        GuiControl, Font, vol_up
+        volume_maxed := False
+        Gui, Show, NoActivate
+    }
+
+    Sleep, %colour_change_delay%
     
     Gui, Font, cwhite s14 q4 bold
     GuiControl, Font, vol_down
@@ -382,6 +402,7 @@ ChangeVolDownMaxed:
     Gui, Font, c808080 s14 q4 bold
     GuiControl, Font, vol_down
     Gui, Show, NoActivate
+    volume_min := True
 }
 return
 
