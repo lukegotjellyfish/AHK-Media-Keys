@@ -9,7 +9,12 @@ CoordMode, Mouse, Client
 traytip, MediaKeys, Running in background!, 0.1, 16
 
 colour_change_delay := 300
-control_send_sleep  := 50 
+control_send_sleep  := 50
+song_check_timer    := 200
+playingstring       := "||"
+pausedstring        := "▶️"
+prev                := "⏮"
+next                := "⏭"
 
 ;##################################################################################
 ;                       Initial process for CheckSongName
@@ -39,10 +44,10 @@ else
     playing_status := -1
     SetTimer, Ini_Playing, -0
     #Persistent
-    SetTimer, CheckSongName, 2000
+    SetTimer, CheckSongName, %song_check_timer%
 }
 ;##################################################################################
-;                               Media variables
+;                               Setup
 ;##################################################################################
 ;Get: http://www.nirsoft.net/utils/nircmd.html
 nircmd_dir := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"
@@ -62,10 +67,6 @@ else
     Hotkey, *Numpad2, OFF
 }
 
-playingstring := "||" ; Looks like a pause symbol when larger and bold
-pausedstring  := "▶️"
-prev := "⏮"
-next := "⏭" ; Skip symbol, trust me notepad++ users
 if (playing_status != -1)
 {
     playing_status := 0
@@ -88,9 +89,6 @@ else
     Gui, Add, Text, x107 y00 w54 h100 vpauseplay, %initial_playing_status%
 }
 Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
-
-
-
 Gui, Font, s10 q4 bold, Arial
 if Found
 {
@@ -233,20 +231,23 @@ CheckSongName:
 {
     Sleep, 200
     WinGetTitle, SongName, ahk_id %spotify%
-    if (SongName != prev_SongName) and (SongName != "Spotify")
+    if (SongName != prev_SongName) and (SongName = "Spotify")
+    {
+        playing_status := 0
+        GuiControl, Move, pauseplay, x102
+        GuiControl,, pauseplay, %pausedstring%
+        prev_SongName  := SongName
+        SetTimer, ChangePause, -0
+    }
+    else if (SongName != prev_SongName) and (SongName != "Spotify")
     {
         GuiControl,, songtitle, %SongName%
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
         SetTimer, ChangeAddedOff, -0
+        SetTimer, ChangePause, -0
         prev_SongName  := SongName
         playing_status := 1
-    }
-    else if (playing_status != flag_last) and (playing_status = 0)  ;avoid repeats using flag_last
-    {
-        GuiControl,, pauseplay, %pausedstring%
-        playing_status := 0
-        flag_last      := playing_status
     }
 }
 return
@@ -422,25 +423,21 @@ ChangeAddedOff:
     Gui, Show, NoActivate
 }
 return
-;##################################################################################
-;                                End of script
-;##################################################################################
 
 
-
-
-
-;##################################################################################
-;                                  Notices
-;##################################################################################
 /* 
+
+##################################################################################
+                                End of script                                     
+##################################################################################
+##################################################################################
+                                  Notices                                         
+##################################################################################
 Notices:
-                    Made by:
-|Discord:           Lukegotjellyfish#0473|
-|MPGH.net:          BLURREDDOGE          |
-|Unkowncheats.me:   JELLYMAN123          |
-|Twitter:           @The_Blurred_Dog     |
+                   Made by:
+|Discord         : Lukegotjellyfish#0473   |
 https://github.com/lukegotjellyfish/Media-Keys
 
 Copyright (C) 2019  Luke Roper
+
 */

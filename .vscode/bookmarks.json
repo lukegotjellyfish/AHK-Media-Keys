@@ -3,94 +3,149 @@
 		"path": "$ROOTPATH$\\Media keys.ahk",
 		"bookmarks": [
 			{
-				"line": 120,
-				"column": 5,
-				"label": "[KP4] Previous                                   "
+				"line": 9,
+				"column": 0,
+				"label": "▃▃▃▃▃ Variables ▃▃▃▃▃▃  "
 			},
 			{
-				"line": 133,
-				"column": 10,
-				"label": "[KP5] Pause/Play                                   "
+				"line": 10,
+				"column": 13,
+				"label": "colour change delay                            "
 			},
 			{
-				"line": 154,
-				"column": 10,
-				"label": "[KP6] Next                                         "
-			},
-			{
-				"line": 170,
-				"column": 10,
-				"label": "[KP8] Volume Up                                   "
-			},
-			{
-				"line": 185,
-				"column": 10,
-				"label": "[KP2] Volume Down"
-			},
-			{
-				"line": 200,
-				"column": 10,
-				"label": "[KP3] Reload Script"
-			},
-			{
-				"line": 223,
-				"column": 4,
-				"label": ""
-			},
-			{
-				"line": 231,
-				"column": 14,
-				"label": ""
-			},
-			{
-				"line": 253,
-				"column": 12,
-				"label": ""
-			},
-			{
-				"line": 295,
-				"column": 11,
-				"label": ""
-			},
-			{
-				"line": 309,
-				"column": 12,
-				"label": ""
-			},
-			{
-				"line": 324,
-				"column": 11,
-				"label": ""
-			},
-			{
-				"line": 339,
-				"column": 12,
-				"label": ""
-			},
-			{
-				"line": 362,
-				"column": 15,
-				"label": ""
-			},
-			{
-				"line": 372,
-				"column": 14,
-				"label": ""
-			},
-			{
-				"line": 395,
-				"column": 16,
-				"label": ""
-			},
-			{
-				"line": 405,
-				"column": 12,
-				"label": ""
-			},
-			{
-				"line": 415,
+				"line": 11,
 				"column": 9,
-				"label": ""
+				"label": "controlsend sleep                             "
+			},
+			{
+				"line": 12,
+				"column": 9,
+				"label": "song check timer                              "
+			},
+			{
+				"line": 13,
+				"column": 10,
+				"label": "playing string                                    "
+			},
+			{
+				"line": 14,
+				"column": 12,
+				"label": "paused string                                    "
+			},
+			{
+				"line": 15,
+				"column": 7,
+				"label": "previous string                                  "
+			},
+			{
+				"line": 16,
+				"column": 5,
+				"label": "next string                                         "
+			},
+			{
+				"line": 117,
+				"column": 0,
+				"label": "▃▃▃▃▃▃ Hotkeys ▃▃▃▃▃   "
+			},
+			{
+				"line": 118,
+				"column": 5,
+				"label": "[KP4] ⏮                                           "
+			},
+			{
+				"line": 131,
+				"column": 10,
+				"label": "[KP5] ▶️                                           "
+			},
+			{
+				"line": 152,
+				"column": 10,
+				"label": "[KP6] ⏭                                           "
+			},
+			{
+				"line": 168,
+				"column": 10,
+				"label": "[KP8] 🔊Up                                       "
+			},
+			{
+				"line": 183,
+				"column": 10,
+				"label": "[KP2] 🔊Down                                  "
+			},
+			{
+				"line": 198,
+				"column": 10,
+				"label": "[KP3] ➕                                              "
+			},
+			{
+				"line": 221,
+				"column": 4,
+				"label": "[F3]  ↻                                               "
+			},
+			{
+				"line": 228,
+				"column": 3,
+				"label": "▃▃▃▃▃▃ Labels ▃▃▃▃▃▃  "
+			},
+			{
+				"line": 229,
+				"column": 14,
+				"label": "█ Check song name"
+			},
+			{
+				"line": 254,
+				"column": 18,
+				"label": "█ Pending check song"
+			},
+			{
+				"line": 294,
+				"column": 1,
+				"label": "▃▃▃ Change Item Colour ▃▃▃    "
+			},
+			{
+				"line": 296,
+				"column": 11,
+				"label": "█ Change ⏮ colour"
+			},
+			{
+				"line": 310,
+				"column": 9,
+				"label": "█ Change ▶️ colour"
+			},
+			{
+				"line": 325,
+				"column": 10,
+				"label": "█ Change ⏭ colour"
+			},
+			{
+				"line": 340,
+				"column": 11,
+				"label": "█ Change 🔊 Up colour"
+			},
+			{
+				"line": 363,
+				"column": 7,
+				"label": "█ Change 🔊(max) colour"
+			},
+			{
+				"line": 373,
+				"column": 8,
+				"label": "█ Change 🔊Down colour"
+			},
+			{
+				"line": 396,
+				"column": 11,
+				"label": "█ Change 🔊(min) colour"
+			},
+			{
+				"line": 406,
+				"column": 12,
+				"label": "█ Change ➕(on) colour, text"
+			},
+			{
+				"line": 416,
+				"column": 10,
+				"label": "█ Change ➕(off) colour, text"
 			}
 		]
 	}
