@@ -8,12 +8,8 @@ SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
 traytip, MediaKeys, Running in background!, 0.1, 16
 
-
 colour_change_delay := 300
 control_send_sleep  := 50 
-
-
-
 
 ;##################################################################################
 ;                       Initial process for CheckSongName

@@ -1,0 +1,97 @@
+[
+	{
+		"path": "$ROOTPATH$\\Media keys.ahk",
+		"bookmarks": [
+			{
+				"line": 120,
+				"column": 5,
+				"label": "[KP4] Previous                                   "
+			},
+			{
+				"line": 133,
+				"column": 10,
+				"label": "[KP5] Pause/Play                                   "
+			},
+			{
+				"line": 154,
+				"column": 10,
+				"label": "[KP6] Next                                         "
+			},
+			{
+				"line": 170,
+				"column": 10,
+				"label": "[KP8] Volume Up                                   "
+			},
+			{
+				"line": 185,
+				"column": 10,
+				"label": "[KP2] Volume Down"
+			},
+			{
+				"line": 200,
+				"column": 10,
+				"label": "[KP3] Reload Script"
+			},
+			{
+				"line": 223,
+				"column": 4,
+				"label": ""
+			},
+			{
+				"line": 231,
+				"column": 14,
+				"label": ""
+			},
+			{
+				"line": 253,
+				"column": 12,
+				"label": ""
+			},
+			{
+				"line": 295,
+				"column": 11,
+				"label": ""
+			},
+			{
+				"line": 309,
+				"column": 12,
+				"label": ""
+			},
+			{
+				"line": 324,
+				"column": 11,
+				"label": ""
+			},
+			{
+				"line": 339,
+				"column": 12,
+				"label": ""
+			},
+			{
+				"line": 362,
+				"column": 15,
+				"label": ""
+			},
+			{
+				"line": 372,
+				"column": 14,
+				"label": ""
+			},
+			{
+				"line": 395,
+				"column": 16,
+				"label": ""
+			},
+			{
+				"line": 405,
+				"column": 12,
+				"label": ""
+			},
+			{
+				"line": 415,
+				"column": 9,
+				"label": ""
+			}
+		]
+	}
+]
