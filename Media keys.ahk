@@ -67,24 +67,12 @@ if (playing_status != -1)
     playing_status := 0
 }
 prev_SongName := ""
-
-
 ;##################################################################################
-;                           Dual option GUI variables
-;##################################################################################
-counter_A := 0
-counter_B := 0
-recoil_status := "Disabled"
-auto_fire_status := "Disabled"
-;##################################################################################
-;                              First part of GUI                                                                 
+;                                    GUI                                           
 ;##################################################################################
 Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
 Gui, Margin, 0, 0
 Gui, Color, Grey
-;##################################################################################
-;                          Second part of GUI (Media)                              
-;##################################################################################
 Gui, Font, cWhite s60 q4 bold, Arial
 Gui, Add, Text, x034 y00 w54 h80 vprev, %prev%
 if Found
@@ -189,7 +177,10 @@ return
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolUp, -0
     }
-    
+    else
+    {
+        SetTimer, ChangeVolUpMaxed, -0
+    }
 }
 return
 
@@ -200,6 +191,10 @@ return
         volume -= %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolDown, -0
+    }
+    else
+    {
+        SetTimer, ChangeVolDownMaxed, -0
     }
 }
 return
@@ -224,6 +219,12 @@ return
     ControlSend,, {UP}, ahk_id %spotify%
     Sleep, 50
     SetTimer, ChangeAdded, -0
+}
+return
+
+F3::
+{
+    Reload
 }
 return
 ;##################################################################################
@@ -257,7 +258,7 @@ Ini_Playing:  ;pending playing_status "animation"
     runnum := 1
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, pauseplay
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
     While (playing_status = -1)
     {
         if runnum = 1
@@ -289,17 +290,21 @@ Ini_Playing:  ;pending playing_status "animation"
 }
 return
 
+;
+;
+;
+
 ChangePrev:
 {
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, prev
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 
     Sleep, 300
     
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, prev
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 }
 return
 
@@ -307,67 +312,87 @@ ChangePause:
 {
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, pauseplay
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 
     Sleep, 300
     
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, pauseplay
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 }
 return
 
+;Skip colour label
 ChangeNext:
 {    
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, next
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 
     Sleep, 300
     
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, next
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 }
 return
 
+;Volume up colour labels
 ChangeVolUp:
 {
     Gui, Font, cFF69B4 s14 q4 bold
     GuiControl, Font, vol_up
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 
     Sleep, 300
     
     Gui, Font, cwhite s14 q4 bold
     GuiControl, Font, vol_up
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
     Gui, Font, cwhite s60 q4 bold ;incase changes other items
 }
 return
 
+ChangeVolUpMaxed:
+{
+    Gui, Font, c808080 s14 q4 bold
+    GuiControl, Font, vol_up
+    Gui, Show, NoActivate
+}
+return
+
+;Volume down colour labels
 ChangeVolDown:
 {
     Gui, Font, cFF69B4 s14 q4 bold
     GuiControl, Font, vol_down
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 
     Sleep, 300
     
     Gui, Font, cwhite s14 q4 bold
     GuiControl, Font, vol_down
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
     Gui, Font, cwhite s60 q4 bold ;incase changes other items
 }
 return
 
+ChangeVolDownMaxed:
+{
+    Gui, Font, c808080 s14 q4 bold
+    GuiControl, Font, vol_down
+    Gui, Show, NoActivate
+}
+return
+
+;Add to playlist colour labels
 ChangeAdded:
 {
     Gui, Font, cFF69B4 s10 q4 bold
     GuiControl, Move, added, x245
     GuiControl,, added, [Added]
     GuiControl, Font, added
-    Gui, Show, NA NoActivate
+    Gui, Show, NoActivate
 }
 return
 
@@ -377,13 +402,7 @@ ChangeAddedOff:
     GuiControl, Move, added, x220
     GuiControl,, added, [Not Added]
     GuiControl, Font, added
-    Gui, Show, NA NoActivate
-}
-return
-;##################################################################################
-F3::
-{
-    Reload
+    Gui, Show, NoActivate
 }
 return
 ;##################################################################################
