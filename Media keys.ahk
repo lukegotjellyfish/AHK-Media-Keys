@@ -16,6 +16,7 @@ pausedstring        := "▶️"
 prev                := "⏮"
 next                := "⏭"
 nircmd_dir          := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
+paused_delay        := 35
 
 ;##################################################################################
 ;                       Initial process for CheckSongName
@@ -226,32 +227,6 @@ return
 ;##################################################################################
 ;                                       Subs                                       
 ;##################################################################################
-CheckSongName:
-{
-    Sleep, 200
-    WinGetTitle, SongName, ahk_id %spotify%
-    if (SongName != prev_SongName) and (SongName = "Spotify")
-    {
-        playing_status := 0
-        GuiControl, Move, pauseplay, x102
-        GuiControl,, pauseplay, %pausedstring%
-        GuiControl,, songtitle, %prev_SongName% [PAUSED]
-        prev_SongName  := SongName
-        SetTimer, ChangePause, -0
-    }
-    else if (SongName != prev_SongName) and (SongName != "Spotify")
-    {
-        GuiControl,, songtitle, %SongName%
-        GuiControl, Move, pauseplay, x107
-        GuiControl,, pauseplay, %playingstring%
-        SetTimer, ChangeAddedOff, -0
-        SetTimer, ChangePause, -0
-        prev_SongName  := SongName
-        playing_status := 1
-    }
-}
-return
-
 Ini_Playing:  ;pending playing_status "animation"
 {
     Ini_Playing_Mod := "On"
@@ -290,6 +265,79 @@ Ini_Playing:  ;pending playing_status "animation"
 }
 return
 
+CheckSongName:
+{
+    Sleep, 200
+    WinGetTitle, SongName, ahk_id %spotify%
+    if (SongName != prev_SongName) and (SongName = "Spotify")
+    {
+        playing_status := 0
+        GuiControl, Move, pauseplay, x102
+        GuiControl,, pauseplay, %pausedstring%
+        SetTimer, toggle_paused, -0
+        Sleep, 10
+        prev_SongName  := SongName
+        SetTimer, ChangePause, -0
+    }
+    else if (SongName != prev_SongName) and (SongName != "Spotify")
+    {
+        GuiControl,, songtitle, %SongName%
+        GuiControl, Move, pauseplay, x107
+        GuiControl,, pauseplay, %playingstring%
+        if (was_paused = 1)
+        {
+            SetTimer, toggle_paused_off, -0
+            Sleep, 10
+            was_paused = 0
+        }
+        SetTimer, ChangeAddedOff, -0
+        SetTimer, ChangePause, -0
+        prev_SongName  := SongName
+        playing_status := 1
+    }
+}
+return
+
+toggle_paused:
+{
+    GuiControl,, songtitle, %prev_SongName% [
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %prev_SongName% [P
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %prev_SongName% [PA
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %prev_SongName% [PAU
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %prev_SongName% [PAUS
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %prev_SongName% [PAUSE
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %prev_SongName% [PAUSED
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %prev_SongName% [PAUSED]
+    was_paused := 1
+}
+return
+
+toggle_paused_off:
+{
+    GuiControl,, songtitle, %SongName% [PAUSED
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %SongName% [PAUSE
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %SongName% [PAUS
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %SongName% [PAU
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %SongName% [PA
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %SongName% [P
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %SongName% [
+    Sleep, %paused_delay%
+    GuiControl,, songtitle, %SongName%
+}
+return
 ;
 ;
 ;

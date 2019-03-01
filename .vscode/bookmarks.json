@@ -48,112 +48,112 @@
 				"label": "nircmd directory                                "
 			},
 			{
-				"line": 117,
+				"line": 118,
 				"column": 0,
 				"label": "▃▃▃▃▃▃ Hotkeys ▃▃▃▃▃   "
 			},
 			{
-				"line": 118,
+				"line": 119,
 				"column": 5,
 				"label": "[KP4] ⏮                                           "
 			},
 			{
-				"line": 131,
+				"line": 132,
 				"column": 10,
 				"label": "[KP5] ▶️                                           "
 			},
 			{
-				"line": 152,
+				"line": 153,
 				"column": 10,
 				"label": "[KP6] ⏭                                           "
 			},
 			{
-				"line": 168,
+				"line": 169,
 				"column": 10,
 				"label": "[KP8] 🔊Up                                       "
 			},
 			{
-				"line": 183,
+				"line": 184,
 				"column": 10,
 				"label": "[KP2] 🔊Down                                  "
 			},
 			{
-				"line": 198,
+				"line": 199,
 				"column": 10,
 				"label": "[KP3] ➕                                              "
 			},
 			{
-				"line": 221,
+				"line": 222,
 				"column": 4,
 				"label": "[F3]    ↻                                               "
 			},
 			{
 				"line": 228,
-				"column": 3,
+				"column": 10,
 				"label": "▃▃▃▃▃▃ Labels ▃▃▃▃▃▃  "
 			},
 			{
 				"line": 229,
-				"column": 14,
-				"label": "█ Check song name                          "
+				"column": 5,
+				"label": "█ Pend check song name                                         "
 			},
 			{
-				"line": 255,
-				"column": 18,
-				"label": "█ Pending check song                          "
+				"line": 267,
+				"column": 13,
+				"label": "█ Check song name                                         "
 			},
 			{
-				"line": 295,
+				"line": 344,
 				"column": 1,
 				"label": "▃▃▃ Change Item Colour ▃▃▃    "
 			},
 			{
-				"line": 297,
+				"line": 346,
 				"column": 11,
 				"label": "█ Change ⏮ colour                          "
 			},
 			{
-				"line": 311,
+				"line": 360,
 				"column": 9,
 				"label": "█ Change ▶️ colour                          "
 			},
 			{
-				"line": 326,
+				"line": 375,
 				"column": 10,
 				"label": "█ Change ⏭ colour                          "
 			},
 			{
-				"line": 341,
+				"line": 390,
 				"column": 11,
 				"label": "█ Change 🔊 Up colour                          "
 			},
 			{
-				"line": 364,
+				"line": 413,
 				"column": 7,
 				"label": "█ Change 🔊(max) colour                          "
 			},
 			{
-				"line": 374,
+				"line": 423,
 				"column": 8,
 				"label": "█ Change 🔊Down colour               "
 			},
 			{
-				"line": 397,
+				"line": 446,
 				"column": 11,
 				"label": "█ Change 🔊(min) colour                          "
 			},
 			{
-				"line": 407,
+				"line": 456,
 				"column": 12,
 				"label": "█ Change ➕(on) colour, text                          "
 			},
 			{
-				"line": 417,
+				"line": 466,
 				"column": 10,
 				"label": "█ Change ➕(off) colour, text                          "
 			},
 			{
-				"line": 428,
+				"line": 477,
 				"column": 3,
 				"label": "█████████ Notices █████████"
 			}
