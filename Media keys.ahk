@@ -44,7 +44,6 @@ else
 {
     playing_status := -1
     SetTimer, Ini_Playing, -0
-    #Persistent
     SetTimer, CheckSongName, %song_check_timer%
 }
 ;##################################################################################
