@@ -117,6 +117,7 @@ return
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
+*NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
 {
     Send, {Media_Prev}
@@ -130,6 +131,7 @@ return
 }
 return
 
+*NumpadClear::
 *Numpad5::  ;//ANCHOR Numpad5
 {
     if (playing_status = 1)
@@ -151,6 +153,7 @@ return
 }
 return
 
+*NumpadRight::
 *Numpad6::  ;//ANCHOR Numpad6
 {
     Send, {Media_Next}
@@ -167,6 +170,7 @@ return
 }
 return
 
+*NumpadUp::
 *Numpad8::  ;//ANCHOR Numpad8
 {
     favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
@@ -189,6 +193,7 @@ return
 }
 return
 
+*NumpadDown::
 *Numpad2::  ;//ANCHOR Numpad2
 {
     favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
@@ -210,6 +215,7 @@ return
 }
 return
 
+*NumpadPGDN::
 *Numpad3::  ;//ANCHOR Numpad3
 {
     WinGet window_state, MinMax, ahk_id %spotify%
