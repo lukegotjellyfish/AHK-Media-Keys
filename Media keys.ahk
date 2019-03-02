@@ -1,14 +1,14 @@
 ﻿#NoEnv
 #SingleInstance, Force
 #Persistent
-#MaxThreadsPerHotkey, 2
+#MaxThreadsPerHotkey, 1
 Process, Priority,, High
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
 traytip, MediaKeys, Running in background!, 0.1, 16
 
-colour_change_delay := 300
+colour_change_delay := 100
 control_send_sleep  := 50
 song_check_timer    := 200
 playingstring       := "||"
@@ -164,16 +164,20 @@ return
 }
 return
 
+one = 1.000000
 *Numpad8::
 {
-    if (volume <= 1)
+    favolume := "" . volume
+    if (favolume > 1)
     {
-        volume += %volume_increment%
+        volume = 1
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolUp, -0
     }
     else
-    {
+    {   
+        volume += %volume_increment%
+        Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolUpMaxed, -0
     }
 }
@@ -181,7 +185,8 @@ return
 
 *Numpad2::
 {
-    if (volume >= 0)
+    favolume := "" . volume
+    if (favolume > 0)
     {
         volume -= %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
@@ -398,18 +403,14 @@ ChangeVolUp:
         volume_min := False
         Gui, Show, NoActivate
     }
-
     Sleep, %colour_change_delay%
-    
-    Gui, Font, cwhite s14 q4 bold
-    GuiControl, Font, vol_up
-    Gui, Show, NoActivate
-    Gui, Font, cwhite s60 q4 bold ;incase changes other items
+    ResetVol("vol_up")
 }
 return
 
 ChangeVolUpMaxed:
 {
+    SetTimer, ChangeVolUp, Off
     Gui, Font, c808080 s14 q4 bold
     GuiControl, Font, vol_up
     Gui, Show, NoActivate
@@ -431,22 +432,27 @@ ChangeVolDown:
         volume_maxed := False
         Gui, Show, NoActivate
     }
-
     Sleep, %colour_change_delay%
-    
-    Gui, Font, cwhite s14 q4 bold
-    GuiControl, Font, vol_down
-    Gui, Show, NoActivate
-    Gui, Font, cwhite s60 q4 bold ;incase changes other items
+    ResetVol("vol_down")
 }
 return
 
 ChangeVolDownMaxed:
 {
+    SetTimer, ChangeVolDown, Off
     Gui, Font, c808080 s14 q4 bold
     GuiControl, Font, vol_down
     Gui, Show, NoActivate
     volume_min := True
+}
+return
+
+ResetVol(x)
+{
+    Gui, Font, cwhite s14 q4 bold
+    GuiControl, Font, %x%
+    Gui, Show, NoActivate
+    Gui, Font, cwhite s60 q4 bold ;incase changes other items
 }
 return
 
