@@ -1,6 +1,6 @@
 # Examples
 ### Example while Spotify is running
-#### https://youtu.be/lOCFe9lCqRI
+#### https://youtu.be/whSEENEBa6E
 
 ### Example while Spotify is not running
 #### https://youtu.be/H9BHAGh8GXI
