@@ -150,6 +150,7 @@ return
         SetTimer, ChangePause, -0
         playing_status := 1
     }
+    Sleep, 10  ;prevents the wrong symbol being displayed
 }
 return
 
@@ -288,8 +289,11 @@ return
 
 CheckSongName:  ;//ANCHOR CheckSongName
 {
-    Sleep, 200
     WinGetTitle, SongName, ahk_id %spotify%
+    if InStr(SongName, "&")
+    {
+        SongName := RegExReplace(SongName, "&/", "and/")
+    }
     if (SongName != prev_SongName) and (SongName = "Spotify")
     {
         playing_status := 0
