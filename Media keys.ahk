@@ -16,7 +16,7 @@ pausedstring        := "▶️"
 prev                := "⏮"
 next                := "⏭"
 nircmd_dir          := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
-paused_delay        := 35
+paused_delay        := 35  ;[PAUSED] animation delay
 
 ;##################################################################################
 ;                       Initial process for CheckSongName
@@ -50,7 +50,6 @@ else
 ;##################################################################################
 ;                               Setup
 ;##################################################################################
-
 if FileExist(nircmd_dir)
 {
     nircmd := 1
@@ -115,7 +114,6 @@ return
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
-
 *Numpad4::
 {
     Send, {Media_Prev}
@@ -338,6 +336,7 @@ toggle_paused_off:
     GuiControl,, songtitle, %SongName%
 }
 return
+
 ;
 ;
 ;
@@ -372,7 +371,7 @@ return
 
 ;Skip colour label
 ChangeNext:
-{    
+{   
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, next
     Gui, Show, NoActivate
@@ -462,6 +461,7 @@ ChangeAdded:
 }
 return
 
+
 ChangeAddedOff:
 {
     Gui, Font, cwhite s10 q4 bold
@@ -474,10 +474,11 @@ return
 
 
 /* 
-##################################################################################
-                                  Notices                                         
-##################################################################################
-My Discord: Lukegotjellyfish#0473
-GitHub rep: https://github.com/lukegotjellyfish/Media-Keys
-Copyright (C) 2019  Luke Roper
+╔════════════════════════════════════════════════════════════════════════════════╗
+║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╱Notices╲╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
+╠════════════════════════════════════════════════════════════════════════════════╣
+║    My Discord: Lukegotjellyfish#0473                                           ║
+║    GitHub rep: https://github.com/lukegotjellyfish/Media-Keys                  ║
+║    Copyright (C) 2019  Luke Roper                                              ║
+╚════════════════════════════════════════════════════════════════════════════════╝
 */
