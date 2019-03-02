@@ -53,117 +53,127 @@
 				"label": "pause delay                                       "
 			},
 			{
-				"line": 116,
+				"line": 118,
 				"column": 0,
 				"label": "▃▃▃▃▃▃ Hotkeys ▃▃▃▃▃   "
 			},
 			{
-				"line": 117,
+				"line": 119,
 				"column": 5,
 				"label": "[KP4] ⏮                                           "
 			},
 			{
-				"line": 130,
+				"line": 132,
 				"column": 10,
 				"label": "[KP5] ▶️                                           "
 			},
 			{
-				"line": 151,
+				"line": 153,
 				"column": 10,
 				"label": "[KP6] ⏭                                           "
 			},
 			{
-				"line": 167,
+				"line": 169,
 				"column": 10,
 				"label": "[KP8] 🔊Up                                       "
 			},
 			{
-				"line": 186,
+				"line": 190,
 				"column": 10,
 				"label": "[KP2] 🔊Down                                  "
 			},
 			{
-				"line": 204,
+				"line": 210,
 				"column": 10,
 				"label": "[KP3] ➕                                              "
 			},
 			{
-				"line": 227,
+				"line": 233,
 				"column": 4,
 				"label": "[F3]    ↻                                               "
 			},
 			{
-				"line": 233,
+				"line": 239,
 				"column": 10,
 				"label": "▃▃▃▃▃▃ Labels ▃▃▃▃▃▃  "
 			},
 			{
-				"line": 234,
+				"line": 240,
 				"column": 5,
 				"label": "█ Pend check song name                                         "
 			},
 			{
-				"line": 272,
+				"line": 278,
 				"column": 13,
 				"label": "█ Check song name                                         "
 			},
 			{
-				"line": 305,
+				"line": 311,
 				"column": 0,
 				"label": "█ Toggle display [PAUSED]                  "
 			},
 			{
-				"line": 326,
+				"line": 332,
 				"column": 9,
 				"label": "█ Toggle strip [PAUSED]                  "
 			},
 			{
-				"line": 347,
+				"line": 353,
 				"column": 1,
 				"label": "▃▃▃ Change Item Colour ▃▃▃    "
 			},
 			{
-				"line": 350,
+				"line": 356,
 				"column": 1,
 				"label": "█ Change ⏮ colour                          "
 			},
 			{
-				"line": 364,
+				"line": 370,
 				"column": 1,
 				"label": "█ Change ▶️ colour                          "
 			},
 			{
-				"line": 379,
+				"line": 385,
 				"column": 1,
 				"label": "█ Change ⏭ colour                          "
 			},
 			{
-				"line": 394,
+				"line": 400,
 				"column": 1,
 				"label": "█ Change 🔊 Up colour                          "
 			},
 			{
-				"line": 412,
+				"line": 418,
 				"column": 1,
 				"label": "█ Change 🔊(max) colour                          "
 			},
 			{
-				"line": 423,
+				"line": 429,
 				"column": 1,
 				"label": "█ Change 🔊Down colour               "
 			},
 			{
-				"line": 441,
+				"line": 447,
 				"column": 1,
 				"label": "█ Change 🔊(min) colour                          "
 			},
 			{
-				"line": 461,
+				"line": 457,
+				"column": 6,
+				"label": ""
+			},
+			{
+				"line": 485,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 495,
 				"column": 1,
 				"label": "█ Change ➕(on) colour, text                          "
 			},
 			{
-				"line": 472,
+				"line": 506,
 				"column": 1,
 				"label": "█ Change ➕(off) colour, text                          "
 			}

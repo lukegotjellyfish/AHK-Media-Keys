@@ -96,6 +96,8 @@ if Found
         Gui, Font, cWhite s14 q4 bold, Arial
         Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
         Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
+        Gui, Font, cWhite s10 q4 bold, Arial
+        Gui, Add, Text, x205 y06 w90 vvolume, Volume: 20`%
     }
     Gui, Font, s10 q4 bold, Arial
     Gui, Add, Text, x005 y95, Now Playing:
@@ -166,17 +168,19 @@ return
 
 *Numpad8::
 {
-    favolume := "" . volume
-    if (favolume > 0.94)
+    favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
+    if (favolume = 0.95)
     {
         volume = 1
+        SetTimer, SetVolume, -0
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolUpMaxed, -0
         
     }
-    else
+    else if !(favolume = 1)
     {   
         volume += %volume_increment%
+        SetTimer, SetVolume, -0
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolUp, -0
     }
@@ -185,16 +189,18 @@ return
 
 *Numpad2::
 {
-    favolume := "" . volume
-    if (favolume < 0.06)
+    favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
+    if (favolume = 0.05)
     {
         volume = 0
+        SetTimer, SetVolume, -0
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolDownMaxed, -0
     }
-    else
+    else if !(favolume = 0)
     {
         volume -= %volume_increment%
+        SetTimer, SetVolume, -0
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolDown, -0
     }
@@ -446,6 +452,14 @@ ChangeVolDownMaxed:
     GuiControl, Font, vol_down
     Gui, Show, NoActivate
     volume_min := True
+}
+return
+
+SetVolume:
+{
+    num := (volume) * 100
+    num := RegExReplace(RegExReplace(num,"(\.\d*?)0*$","$1"),"\.$")
+    GuiControl,, volume, Volume: %num%`%
 }
 return
 
