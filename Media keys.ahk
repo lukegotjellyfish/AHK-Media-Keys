@@ -164,21 +164,21 @@ return
 }
 return
 
-one = 1.000000
 *Numpad8::
 {
     favolume := "" . volume
-    if (favolume > 1)
+    if (favolume > 0.94)
     {
         volume = 1
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
-        SetTimer, ChangeVolUp, -0
+        SetTimer, ChangeVolUpMaxed, -0
+        
     }
     else
     {   
         volume += %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
-        SetTimer, ChangeVolUpMaxed, -0
+        SetTimer, ChangeVolUp, -0
     }
 }
 return
@@ -186,15 +186,17 @@ return
 *Numpad2::
 {
     favolume := "" . volume
-    if (favolume > 0)
+    if (favolume < 0.06)
+    {
+        volume = 0
+        Run, %nircmd_dir% setappvolume Spotify.exe %volume%
+        SetTimer, ChangeVolDownMaxed, -0
+    }
+    else
     {
         volume -= %volume_increment%
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolDown, -0
-    }
-    else
-    {
-        SetTimer, ChangeVolDownMaxed, -0
     }
 }
 return

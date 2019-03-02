@@ -73,7 +73,7 @@
 				"label": "[KP6] ⏭                                           "
 			},
 			{
-				"line": 168,
+				"line": 167,
 				"column": 10,
 				"label": "[KP8] 🔊Up                                       "
 			},
@@ -83,87 +83,87 @@
 				"label": "[KP2] 🔊Down                                  "
 			},
 			{
-				"line": 202,
+				"line": 204,
 				"column": 10,
 				"label": "[KP3] ➕                                              "
 			},
 			{
-				"line": 225,
+				"line": 227,
 				"column": 4,
 				"label": "[F3]    ↻                                               "
 			},
 			{
-				"line": 231,
+				"line": 233,
 				"column": 10,
 				"label": "▃▃▃▃▃▃ Labels ▃▃▃▃▃▃  "
 			},
 			{
-				"line": 232,
+				"line": 234,
 				"column": 5,
 				"label": "█ Pend check song name                                         "
 			},
 			{
-				"line": 270,
+				"line": 272,
 				"column": 13,
 				"label": "█ Check song name                                         "
 			},
 			{
-				"line": 303,
+				"line": 305,
 				"column": 0,
 				"label": "█ Toggle display [PAUSED]                  "
 			},
 			{
-				"line": 324,
+				"line": 326,
 				"column": 9,
 				"label": "█ Toggle strip [PAUSED]                  "
 			},
 			{
-				"line": 345,
+				"line": 347,
 				"column": 1,
 				"label": "▃▃▃ Change Item Colour ▃▃▃    "
 			},
 			{
-				"line": 348,
+				"line": 350,
 				"column": 1,
 				"label": "█ Change ⏮ colour                          "
 			},
 			{
-				"line": 362,
+				"line": 364,
 				"column": 1,
 				"label": "█ Change ▶️ colour                          "
 			},
 			{
-				"line": 377,
+				"line": 379,
 				"column": 1,
 				"label": "█ Change ⏭ colour                          "
 			},
 			{
-				"line": 392,
+				"line": 394,
 				"column": 1,
 				"label": "█ Change 🔊 Up colour                          "
 			},
 			{
-				"line": 410,
+				"line": 412,
 				"column": 1,
 				"label": "█ Change 🔊(max) colour                          "
 			},
 			{
-				"line": 421,
+				"line": 423,
 				"column": 1,
 				"label": "█ Change 🔊Down colour               "
 			},
 			{
-				"line": 439,
+				"line": 441,
 				"column": 1,
 				"label": "█ Change 🔊(min) colour                          "
 			},
 			{
-				"line": 459,
+				"line": 461,
 				"column": 1,
 				"label": "█ Change ➕(on) colour, text                          "
 			},
 			{
-				"line": 470,
+				"line": 472,
 				"column": 1,
 				"label": "█ Change ➕(off) colour, text                          "
 			}
