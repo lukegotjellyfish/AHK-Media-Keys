@@ -8,6 +8,7 @@ SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
 traytip, MediaKeys, Running in background!, 0.1, 16
 
+;//ANCHOR Vars
 colour_change_delay := 100
 control_send_sleep  := 50
 song_check_timer    := 200
@@ -72,7 +73,7 @@ if (playing_status != -1)
 }
 prev_SongName := ""
 ;##################################################################################
-;                                    GUI                                           
+;                                    GUI                              ;//ANCHOR GUI                                   
 ;##################################################################################
 Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
 Gui, Margin, 0, 0
@@ -96,10 +97,10 @@ if Found
         Gui, Font, cWhite s14 q4 bold, Arial
         Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
         Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
-        Gui, Font, cWhite s10 q4 bold, Arial
-        Gui, Add, Text, x205 y06 w90 vvolume, Volume: 20`%
+        Gui, Font, cFF69B4 s8 q4 bold, Arial
+        Gui, Add, Text, x224 y10 w90 vvolume, Volume: 20`%
     }
-    Gui, Font, s10 q4 bold, Arial
+    Gui, Font, s10 q4 cWhite bold, Arial
     Gui, Add, Text, x005 y95, Now Playing:
     Gui, Add, Text, x220 y95 vadded, [Not Added]
     Gui, Font, cFF69B4
@@ -116,7 +117,7 @@ return
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
-*Numpad4::
+*Numpad4::  ;//ANCHOR Numpad4
 {
     Send, {Media_Prev}
     SetTimer, ChangePrev, -0
@@ -129,7 +130,7 @@ return
 }
 return
 
-*Numpad5::
+*Numpad5::  ;//ANCHOR Numpad5
 {
     if (playing_status = 1)
     {
@@ -150,7 +151,7 @@ return
 }
 return
 
-*Numpad6::
+*Numpad6::  ;//ANCHOR Numpad6
 {
     Send, {Media_Next}
     if playing_status = 0
@@ -166,7 +167,7 @@ return
 }
 return
 
-*Numpad8::
+*Numpad8::  ;//ANCHOR Numpad8
 {
     favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
     if (favolume = 0.95)
@@ -187,7 +188,7 @@ return
 }
 return
 
-*Numpad2::
+*Numpad2::  ;//ANCHOR Numpad2
 {
     favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
     if (favolume = 0.05)
@@ -207,7 +208,7 @@ return
 }
 return
 
-*Numpad3::
+*Numpad3::  ;//ANCHOR Numpad3
 {
     WinGet window_state, MinMax, ahk_id %spotify%
     IfEqual, window_state,-1, WinRestore, ahk_id %spotify%
@@ -230,7 +231,7 @@ return
 }
 return
 
-F3::
+F3::  ;//ANCHOR F3
 {
     Reload
 }
@@ -238,7 +239,8 @@ return
 ;##################################################################################
 ;                                       Subs                                       
 ;##################################################################################
-Ini_Playing:  ;pending playing_status "animation"
+;//SECTION Labels/Subs, Functions 
+Ini_Playing:  ;//ANCHOR Ini_Playing
 {
     Ini_Playing_Mod := "On"
     runnum := 1
@@ -276,7 +278,7 @@ Ini_Playing:  ;pending playing_status "animation"
 }
 return
 
-CheckSongName:
+CheckSongName:  ;//ANCHOR CheckSongName
 {
     Sleep, 200
     WinGetTitle, SongName, ahk_id %spotify%
@@ -309,7 +311,7 @@ CheckSongName:
 }
 return
 
-toggle_paused:
+toggle_paused:  ;//ANCHOR toggle_paused
 {
     GuiControl,, songtitle, %prev_SongName% [
     Sleep, %paused_delay%
@@ -330,7 +332,7 @@ toggle_paused:
 }
 return
 
-toggle_paused_off:
+toggle_paused_off:  ;//ANCHOR toggle_paused_off
 {
     GuiControl,, songtitle, %SongName% [PAUSED
     Sleep, %paused_delay%
@@ -350,11 +352,7 @@ toggle_paused_off:
 }
 return
 
-;
-;
-;
-
-ChangePrev:
+ChangePrev:  ;//ANCHOR ChangePrev
 {
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, prev
@@ -368,7 +366,7 @@ ChangePrev:
 }
 return
 
-ChangePause:
+ChangePause:  ;//ANCHOR ChangePause
 {
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, pauseplay
@@ -383,7 +381,7 @@ ChangePause:
 return
 
 ;Skip colour label
-ChangeNext:
+ChangeNext:  ;//ANCHOR ChangeNext
 {   
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, next
@@ -398,7 +396,7 @@ ChangeNext:
 return
 
 ;Volume up colour labels
-ChangeVolUp:
+ChangeVolUp:  ;//ANCHOR ChangeVolUp
 {
     Gui, Font, cFF69B4 s14 q4 bold
     GuiControl, Font, vol_up
@@ -416,7 +414,7 @@ ChangeVolUp:
 }
 return
 
-ChangeVolUpMaxed:
+ChangeVolUpMaxed:  ;//ANCHOR ChangeVolUpMaxed
 {
     SetTimer, ChangeVolUp, Off
     Gui, Font, c808080 s14 q4 bold
@@ -427,7 +425,7 @@ ChangeVolUpMaxed:
 return
 
 ;Volume down colour labels
-ChangeVolDown:
+ChangeVolDown:  ;//ANCHOR ChangeVolDown
 {
     Gui, Font, cFF69B4 s14 q4 bold
     GuiControl, Font, vol_down
@@ -445,7 +443,7 @@ ChangeVolDown:
 }
 return
 
-ChangeVolDownMaxed:
+ChangeVolDownMaxed:  ;//ANCHOR ChangeVolDownMaxed
 {
     SetTimer, ChangeVolDown, Off
     Gui, Font, c808080 s14 q4 bold
@@ -455,7 +453,7 @@ ChangeVolDownMaxed:
 }
 return
 
-SetVolume:
+SetVolume:  ;//ANCHOR SetVolume
 {
     num := (volume) * 100
     num := RegExReplace(RegExReplace(num,"(\.\d*?)0*$","$1"),"\.$")
@@ -463,7 +461,7 @@ SetVolume:
 }
 return
 
-ResetVol(x)
+ResetVol(x)  ;//ANCHOR ResetVol(x)
 {
     Gui, Font, cwhite s14 q4 bold
     GuiControl, Font, %x%
@@ -473,7 +471,7 @@ ResetVol(x)
 return
 
 ;Add to playlist colour labels
-ChangeAdded:
+ChangeAdded:  ;//ANCHOR ChangeAdded
 {
     Gui, Font, cFF69B4 s10 q4 bold
     GuiControl, Move, added, x245
@@ -483,8 +481,7 @@ ChangeAdded:
 }
 return
 
-
-ChangeAddedOff:
+ChangeAddedOff:  ;//ANCHOR ChangeAddedOff
 {
     Gui, Font, cwhite s10 q4 bold
     GuiControl, Move, added, x220
@@ -493,11 +490,10 @@ ChangeAddedOff:
     Gui, Show, NoActivate
 }
 return
-
-
-/* 
+  ;//SECTION End
+/* //NOTE Notices
 ╔════════════════════════════════════════════════════════════════════════════════╗
-║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╱Notices╲╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
+║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
 ╠════════════════════════════════════════════════════════════════════════════════╣
 ║    My Discord: Lukegotjellyfish#0473                                           ║
 ║    GitHub rep: https://github.com/lukegotjellyfish/Media-Keys                  ║
