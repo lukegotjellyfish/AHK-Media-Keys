@@ -185,6 +185,7 @@ return
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolUp, -0
     }
+    Sleep, 50
 }
 return
 
@@ -205,6 +206,7 @@ return
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolDown, -0
     }
+    Sleep, 50  ;avoid overflow or conflict in font
 }
 return
 
