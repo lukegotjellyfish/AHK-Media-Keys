@@ -101,7 +101,7 @@ if Found
         Gui, Font, cFF69B4 s8 q4 bold, Arial
         Gui, Add, Text, x224 y10 w90 vvolume, Volume: 20`%
         Gui, Font, cWhite s8 q4 bold, Arial
-        Gui, Add, Text, x236 y80 w50 vtimer, Time: 0
+        Gui, Add, Text, x236 y80 w64 vtimer, Time: 0
     }
     Gui, Font, s10 q4 cWhite bold, Arial
     Gui, Add, Text, x005 y105, Now Playing:
