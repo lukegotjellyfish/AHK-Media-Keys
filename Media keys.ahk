@@ -12,6 +12,7 @@ traytip, MediaKeys, Running in background!, 0.1, 16
 colour_change_delay := 100
 control_send_sleep  := 50
 song_check_timer    := 200
+song_time_passed    := 0
 playingstring       := "||"
 pausedstring        := "▶️"
 prev                := "⏮"
@@ -99,14 +100,16 @@ if Found
         Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
         Gui, Font, cFF69B4 s8 q4 bold, Arial
         Gui, Add, Text, x224 y10 w90 vvolume, Volume: 20`%
+        Gui, Font, cWhite s8 q4 bold, Arial
+        Gui, Add, Text, x236 y80 w50 vtimer, Time: 0
     }
     Gui, Font, s10 q4 cWhite bold, Arial
-    Gui, Add, Text, x005 y95, Now Playing:
-    Gui, Add, Text, x220 y95 vadded, [Not Added]
+    Gui, Add, Text, x005 y105, Now Playing:
+    Gui, Add, Text, x220 y105 vadded, [Not Added]
     Gui, Font, cFF69B4
-    Gui, Add, Text, x005 y111 w288 h50 vsongtitle, pending
+    Gui, Add, Text, x005 y121 w288 h50 vsongtitle, pending
     WinSet, Transparent, 200
-    Gui, Show, x0 y600 h160 w300 NA NoActivate
+    Gui, Show, x0 y600 h170 w300 NoActivate
 }
 else
 {
@@ -128,6 +131,7 @@ return
     {
         GoSub, CheckSongName
     }
+    song_time_passed := 0
 }
 return
 
@@ -168,6 +172,7 @@ return
     {
         GoSub, CheckSongName
     }
+    song_time_passed := 0
 }
 return
 
@@ -279,7 +284,7 @@ Ini_Playing:  ;//ANCHOR Ini_Playing
             runnum := 1 ;return to start
         }
         GuiControl,, pauseplay, %initial_playing_status%
-        Sleep, 200
+        Sleep, 125
     }
     Gui, Font, cwhite s60 q4 bold
     GuiControl, Font, pauseplay
@@ -292,7 +297,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
     WinGetTitle, SongName, ahk_id %spotify%
     if InStr(SongName, "&")
     {
-        SongName := RegExReplace(SongName, "&/", "and/")
+        SongName := RegExReplace(SongName, "&", "and")
     }
     if (SongName != prev_SongName) and (SongName = "Spotify")
     {
@@ -319,6 +324,22 @@ CheckSongName:  ;//ANCHOR CheckSongName
         SetTimer, ChangePause, -0
         prev_SongName  := SongName
         playing_status := 1
+
+        if (last_song != SongName)
+        {
+            song_time_passed := 0
+            GuiControl,, timer, Time: %song_time_passed%
+        }
+    }
+    else if (SongName = prev_SongName) and (SongName != "Spotify")
+    {
+        if (Mod(song_time_passed, 5) = 0)
+        {
+            song_time_passed_t := RegExReplace(RegExReplace(song_time_passed / 5,"(\.\d*?)0*$","$1"),"\.$")
+        }
+        last_song      := SongName
+        song_time_passed += 1
+        GuiControl,, timer, Time: %song_time_passed_t%
     }
 }
 return
