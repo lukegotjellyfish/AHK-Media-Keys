@@ -56,7 +56,7 @@ if FileExist(nircmd_dir)
 {
     volume = 0.2  ;default to max volume on spotify vol mixer
     volume_increment = 0.05
-    if (Found = True)
+    if (Found)
     {
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
     }
@@ -80,7 +80,7 @@ Gui, Margin, 0, 0
 Gui, Color, Grey
 Gui, Font, cWhite s60 q4 bold, Arial
 Gui, Add, Text, x034 y00 w54 h80 vprev, %prev%
-if (Found = True)
+if (Found)
 {
     Gui, Add, Text, x120 y00 w54 h100 vpauseplay, %initial_playing_status%
 }
@@ -90,15 +90,15 @@ else
 }
 Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
 Gui, Font, s10 q4 bold, Arial
-if (Found = True)
+if (Found)
 {
     if FileExist(nircmd_dir)
     {
         Gui, Font, cWhite s14 q4 bold, Arial
         Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
         Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
-        Gui, Font, cFF69B4 s10 q4 bold, Arial
-        Gui, Add, Text, x210 y10 w90 vvolume, Volume: 20`%
+        Gui, Font, cFF69B4 s12 q4 bold, Arial
+        Gui, Add, Text, x252 y10 w90 vvolume, 20`%
         Gui, Font, cWhite s8 q4 bold, Arial
         Gui, Add, Text, x236 y80 w64 vtimer, Time: 0
     }
@@ -488,7 +488,7 @@ SetVolume:  ;//ANCHOR SetVolume
 {
     num := (volume) * 100
     num := RegExReplace(RegExReplace(num,"(\.\d*?)0*$","$1"),"\.$")
-    GuiControl,, volume, Volume: %num%`%
+    GuiControl,, volume, %num%`%
 }
 return
 
