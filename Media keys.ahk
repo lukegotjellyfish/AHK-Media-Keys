@@ -98,8 +98,8 @@ if Found
         Gui, Font, cWhite s14 q4 bold, Arial
         Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
         Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
-        Gui, Font, cFF69B4 s8 q4 bold, Arial
-        Gui, Add, Text, x224 y10 w90 vvolume, Volume: 20`%
+        Gui, Font, cFF69B4 s10 q4 bold, Arial
+        Gui, Add, Text, x210 y10 w90 vvolume, Volume: 20`%
         Gui, Font, cWhite s8 q4 bold, Arial
         Gui, Add, Text, x236 y80 w64 vtimer, Time: 0
     }
@@ -256,7 +256,6 @@ return
 ;//SECTION Labels/Subs, Functions 
 Ini_Playing:  ;//ANCHOR Ini_Playing
 {
-    Ini_Playing_Mod := "On"
     runnum := 1
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, pauseplay
@@ -281,7 +280,7 @@ Ini_Playing:  ;//ANCHOR Ini_Playing
         else
         {
             initial_playing_status := "\"
-            runnum := 1 ;return to start
+            runnum = 1 ;return to start
         }
         GuiControl,, pauseplay, %initial_playing_status%
         Sleep, 125
