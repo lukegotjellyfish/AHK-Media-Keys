@@ -9,16 +9,16 @@ CoordMode, Mouse, Client
 traytip, MediaKeys, Running in background!, 0.1, 16
 
 ;//ANCHOR Vars
-colour_change_delay := 100
-control_send_sleep  := 50
-song_check_timer    := 200
-song_time_passed    := 0
+colour_change_delay  = 100
+control_send_sleep   = 50
+song_check_timer     = 200
+song_time_passed     = 0
 playingstring       := "||"
 pausedstring        := "▶️"
 prev                := "⏮"
 next                := "⏭"
 nircmd_dir          := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
-paused_delay        := 35  ;[PAUSED] animation delay
+paused_delay         = 35  ;[PAUSED] animation delay
 
 ;##################################################################################
 ;                       Initial process for CheckSongName
@@ -33,19 +33,19 @@ Loop, %win%
     {
         initial_playing_status := "||"
         WinGet, spotify, ID, %title%
-        Found := 1
+        Found = True
         break
     }
 }
 
 if !(Found)
 {
-    ;spotify not found, basic media keys
+    ;spotify not found, basic bitch alpha ver media keys
     initial_playing_status := "||"
 }
 else
 {
-    playing_status := -1
+    playing_status = -1
     SetTimer, Ini_Playing, -0
     SetTimer, CheckSongName, %song_check_timer%
 }
@@ -54,10 +54,9 @@ else
 ;##################################################################################
 if FileExist(nircmd_dir)
 {
-    nircmd := 1
-    volume := 0.2  ;default to max volume on spotify vol mixer
-    volume_increment := 0.05
-    if (Found)
+    volume = 0.2  ;default to max volume on spotify vol mixer
+    volume_increment = 0.05
+    if (Found = True)
     {
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
     }
@@ -70,7 +69,7 @@ else
 
 if (playing_status != -1)
 {
-    playing_status := 0
+    playing_status = 0
 }
 prev_SongName := ""
 ;##################################################################################
@@ -81,7 +80,7 @@ Gui, Margin, 0, 0
 Gui, Color, Grey
 Gui, Font, cWhite s60 q4 bold, Arial
 Gui, Add, Text, x034 y00 w54 h80 vprev, %prev%
-if Found
+if (Found = True)
 {
     Gui, Add, Text, x120 y00 w54 h100 vpauseplay, %initial_playing_status%
 }
@@ -91,7 +90,7 @@ else
 }
 Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
 Gui, Font, s10 q4 bold, Arial
-if Found
+if (Found = True)
 {
     if FileExist(nircmd_dir)
     {
@@ -125,13 +124,13 @@ return
 {
     Send, {Media_Prev}
     SetTimer, ChangePrev, -0
-    playing_status := 1
+    playing_status = 1
     GuiControl,, pauseplay, %playingstring%
     if (Found)
     {
         GoSub, CheckSongName
     }
-    song_time_passed := 0
+    song_time_passed = 0
 }
 return
 
@@ -141,7 +140,7 @@ return
     if (playing_status = 1)
     {
         Send, {Media_Play_Pause}
-        playing_status := 0
+        playing_status = 0
         GuiControl, Move, pauseplay, x102
         GuiControl,, pauseplay, %pausedstring%
         SetTimer, ChangePause, -0
@@ -152,7 +151,7 @@ return
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
         SetTimer, ChangePause, -0
-        playing_status := 1
+        playing_status = 1
     }
     Sleep, 10  ;prevents the wrong symbol being displayed
 }
@@ -162,13 +161,13 @@ return
 *Numpad6::  ;//ANCHOR Numpad6
 {
     Send, {Media_Next}
-    if playing_status = 0
+    if (playing_status = 0)
     {
-        playing_status := 1
+        playing_status = 1
     }
     GuiControl,, pauseplay, %playingstring%
     SetTimer, ChangeNext, -0
-    if (Found)
+    if (Found = True)
     {
         GoSub, CheckSongName
     }
@@ -188,7 +187,7 @@ return
         SetTimer, ChangeVolUpMaxed, -0
         
     }
-    else if !(favolume = 1)
+    else if (favolume != 1)
     {   
         volume += %volume_increment%
         SetTimer, SetVolume, -0
@@ -210,7 +209,7 @@ return
         Run, %nircmd_dir% setappvolume Spotify.exe %volume%
         SetTimer, ChangeVolDownMaxed, -0
     }
-    else if !(favolume = 0)
+    else if (favolume != 0)
     {
         volume -= %volume_increment%
         SetTimer, SetVolume, -0
@@ -247,7 +246,7 @@ return
 
 F3::  ;//ANCHOR F3
 {
-    Reload
+    reload
 }
 return
 ;##################################################################################
@@ -257,23 +256,23 @@ return
 Ini_Playing:  ;//ANCHOR Ini_Playing
 {
     Ini_Playing_Mod := "On"
-    runnum := 1
+    runnum = 1
     Gui, Font, cFF69B4 s60 q4 bold
     GuiControl, Font, pauseplay
     Gui, Show, NoActivate
     While (playing_status = -1)
     {
-        if runnum = 1
+        if (runnum = 1)
         {
             initial_playing_status := "|"
             runnum += 1
         }
-        else if runnum = 2
+        else if runnum = 2)
         {
             initial_playing_status := "/"
             runnum += 1
         }
-        else if runnum = 3
+        else if (runnum = 3)
         {
             initial_playing_status := "-"
             runnum += 1
@@ -281,7 +280,7 @@ Ini_Playing:  ;//ANCHOR Ini_Playing
         else
         {
             initial_playing_status := "\"
-            runnum := 1 ;return to start
+            runnum = 1 ;return to start
         }
         GuiControl,, pauseplay, %initial_playing_status%
         Sleep, 125
@@ -301,12 +300,12 @@ CheckSongName:  ;//ANCHOR CheckSongName
     }
     if (SongName != prev_SongName) and (SongName = "Spotify")
     {
-        playing_status := 0
+        playing_status = 0
         GuiControl, Move, pauseplay, x102
         GuiControl,, pauseplay, %pausedstring%
         SetTimer, toggle_paused, -0
         Sleep, 10
-        prev_SongName  := SongName
+        prev_SongName := SongName
         SetTimer, ChangePause, -0
     }
     else if (SongName != prev_SongName) and (SongName != "Spotify")
@@ -323,11 +322,11 @@ CheckSongName:  ;//ANCHOR CheckSongName
         SetTimer, ChangeAddedOff, -0
         SetTimer, ChangePause, -0
         prev_SongName  := SongName
-        playing_status := 1
+        playing_status  = 1
 
         if (last_song != SongName)
         {
-            song_time_passed := 0
+            song_time_passed = 0
             GuiControl,, timer, Time: %song_time_passed%
         }
     }
@@ -361,7 +360,7 @@ toggle_paused:  ;//ANCHOR toggle_paused
     GuiControl,, songtitle, %prev_SongName% [PAUSED
     Sleep, %paused_delay%
     GuiControl,, songtitle, %prev_SongName% [PAUSED]
-    was_paused := 1
+    was_paused = 1
 }
 return
 
