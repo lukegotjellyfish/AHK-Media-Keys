@@ -7,41 +7,36 @@ Process, Priority,, High
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
-;//!SECTION
-
-/*
+;//!SECTION options
 ;//SECTION Hotkey list
-"/<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via: 
-  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
-
-
-    #========================================#
-    |                 Hotkeys                |
-    #========================================#
-    |                                        |
-    | [Gui Movement]                         |
-    | PgUp - Move GUI Up screen              |
-    | PgDn - Move GUI Down screen            |
-    | Del  - Move GUI to left of screen      |
-    | End  - Move GUI to right of screen     |
-    |                                        |
-    | [Media Functions]                      |
-    | Numpad4 - Previous song                |
-    | Numpad5 - Pause/Play                   |
-    | Numpad6 - Next song                    |
-    | Numpad8 - Spotify| volume up           |
-    | Numpad2 - Spotify| volume down         |
-    | Numpad3 - Spotify| add to top playlist |
-    |                                        |
-    | [Misc Keys]                            |
-    | F3 - Reload                            |
-    |                                        |
-    #========================================#
-;//!SECTION
-*/
-
-
-
+;"/<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via: 
+;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
+;
+;
+;
+;    #========================================#
+;    |                 Hotkeys                |
+;    #========================================#
+;    |                                        |
+;    | [Gui Movement]                         |
+;    | PgUp - Move GUI Up screen              |
+;    | PgDn - Move GUI Down screen            |
+;    | Del  - Move GUI to left of screen      |
+;    | End  - Move GUI to right of screen     |
+;    |                                        |
+;    | [Media Functions]                      |
+;    | Numpad4 - Previous song                |
+;    | Numpad5 - Pause/Play                   |
+;    | Numpad6 - Next song                    |
+;    | Numpad8 - Spotify| volume up           |
+;    | Numpad2 - Spotify| volume down         |
+;    | Numpad3 - Spotify| add to top playlist |
+;    |                                        |
+;    | [Misc Keys]                            |
+;    | F3 - Reload                            |
+;    |                                        |
+;    #========================================#
+;//!SECTION Hotkey list
 ;//SECTION Vars
 colour_change_delay  = 100  ;remove when done
 control_send_sleep   = 50
@@ -58,8 +53,8 @@ prev                := "⏮"
 next                := "⏭"
 
 nircmd_dir          := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
-;//!SECTION
-
+;//!SECTION Vars
+;//SECTION Get spotify and nircmd
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
@@ -91,9 +86,8 @@ else
 {
     initial_playing_status := "||"
 }
-;##################################################################################
-;                               ;//SECTION GUI                                     
-;##################################################################################
+;//!SECTION
+;//SECTION GUI
 Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
 Gui, Margin, 0, 0
 Gui, Color, Black
@@ -152,9 +146,6 @@ if !(spot_nir_found)
 }
 return
 ;//!SECTION
-;##################################################################################
-;                                  Media keys                                      
-;##################################################################################
 ;//SECTION Hotkeys
 ;//SECTION GUI
 PgUp::  ;//ANCHOR PgUp
@@ -348,9 +339,6 @@ F3::  ;//ANCHOR F3
 }
 return
 ;//!SECTION
-;##################################################################################
-;                                       Subs                                       
-;##################################################################################
 ;//SECTION Labels/Subs, Functions 
 CheckSongName:  ;//ANCHOR CheckSongName
 {
@@ -466,7 +454,6 @@ ChangeAdded(added)  ;//ANCHOR ChangeAdded
 return
 
 ;//!SECTION
-
 /* //NOTE Notices
 ╔════════════════════════════════════════════════════════════════════════════════╗
 ║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
