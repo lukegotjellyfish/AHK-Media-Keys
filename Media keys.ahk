@@ -1,4 +1,5 @@
-﻿#NoEnv
+﻿;//SECTION Options
+#NoEnv
 #SingleInstance, Force
 #Persistent
 #MaxThreadsPerHotkey, 1
@@ -6,8 +7,14 @@ Process, Priority,, High
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
+;//!SECTION
 
 /*
+;//SECTION Hotkey list
+"/<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via: 
+  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
+
+
     #========================================#
     |                 Hotkeys                |
     #========================================#
@@ -30,11 +37,12 @@ CoordMode, Mouse, Client
     | F3 - Reload                            |
     |                                        |
     #========================================#
+;//!SECTION
 */
 
 
 
-;//ANCHOR Vars
+;//SECTION Vars
 colour_change_delay  = 100  ;remove when done
 control_send_sleep   = 50
 song_check_timer     = 200
@@ -50,6 +58,7 @@ prev                := "⏮"
 next                := "⏭"
 
 nircmd_dir          := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
+;//!SECTION
 
 ;##################################################################################
 ;                       Initial process for CheckSongName
@@ -83,7 +92,7 @@ else
     initial_playing_status := "||"
 }
 ;##################################################################################
-;                                    GUI                              ;//ANCHOR GUI                                   
+;                               ;//SECTION GUI                                     
 ;##################################################################################
 Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
 Gui, Margin, 0, 0
@@ -142,12 +151,13 @@ if !(spot_nir_found)
     Gui, Show, x%gui_x% y%gui_y% h110 w300 NoActivate
 }
 return
+;//!SECTION
 ;##################################################################################
 ;                                  Media keys                                      
 ;##################################################################################
-
-;Gui movement
-PgUp::
+;//SECTION Hotkeys
+;//SECTION GUI
+PgUp::  ;//ANCHOR PgUp
 {
     if (gui_y > 0)
     {
@@ -157,7 +167,7 @@ PgUp::
 }
 return
 
-PgDn::
+PgDn::  ;//ANCHOR PgDn
 {
     if (gui_y < 910)
     gui_y += 10
@@ -165,7 +175,7 @@ PgDn::
 }
 return
 
-Del::
+Del::  ;//ANCHOR Del
 {
     if (gui_x > 0)
     {
@@ -175,7 +185,7 @@ Del::
 }
 return
 
-End::
+End::  ;//ANCHOR End
 {
     if (gui_X < 1620)
     {
@@ -184,7 +194,7 @@ End::
     Gui, Show, x%gui_x% NoActivate
 }
 return
-
+;//!SECTION
 
 *NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
@@ -337,6 +347,7 @@ F3::  ;//ANCHOR F3
     Sleep, 100  ;avoids multiple GUIs being created....yeah
 }
 return
+;//!SECTION
 ;##################################################################################
 ;                                       Subs                                       
 ;##################################################################################
@@ -387,7 +398,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
 return
 
 
-ItemActivated(font_colour_two, font_size, control_name, font_colour_one, volume_mode, volume)
+ItemActivated(font_colour_two, font_size, control_name, font_colour_one, volume_mode, volume)  ;/ANCHOR ItemActivated
 {
     if (volume_mode = 0)
     {
@@ -454,6 +465,7 @@ ChangeAdded(added)  ;//ANCHOR ChangeAdded
 }
 return
 
+;//!SECTION
 
 /* //NOTE Notices
 ╔════════════════════════════════════════════════════════════════════════════════╗
