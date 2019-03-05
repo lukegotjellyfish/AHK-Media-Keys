@@ -1,4 +1,7 @@
 {
-    "discord.lowerDetailsEditing": "In [{workspace}]",
-    "discord.largeImage": "{LANG}"
+    "discord.lowerDetailsEditing": "on line {currentline}/{totallines}",
+    "discord.largeImage": "{LANG}",
+    "discord.detailsEditing": "{filename}",
+    "discord.workspaceElapsedTime": true,
+    "discord.lowerDetailsIdle": "{null}"
 }
