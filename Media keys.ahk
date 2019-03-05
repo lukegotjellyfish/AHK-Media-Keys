@@ -439,7 +439,7 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, volume_
         Gui, Font, c%font_colour_one% s14 q4 bold
         GuiControl, Font, %control_name%
     }
-    num := (volume) * 100
+    num := volume * 100
     num := RegExReplace(RegExReplace(num,"(\.\d*?)0*$","$1"),"\.$")
     GuiControl,, volume, %num%`%
 }
