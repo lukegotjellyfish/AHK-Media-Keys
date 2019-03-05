@@ -334,7 +334,7 @@ return
 F3::  ;//ANCHOR F3
 {
     reload
-    Sleep, 100  ;avoids multiple GUIs being created
+    Sleep, 100  ;avoids multiple GUIs being created....yeah
 }
 return
 ;##################################################################################
@@ -396,6 +396,7 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, volume_
         Sleep, 100
         Gui, Font, c%font_colour_one% s%font_size% q4 bold
         GuiControl, Font, %control_name%
+        return
     }
     else if (volume_mode = 1)
     {
