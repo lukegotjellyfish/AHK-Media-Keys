@@ -325,7 +325,7 @@ return
     Sleep, %control_send_sleep%
     ControlSend,, {ENTER}, ahk_id %spotify%,, Left
     Sleep, %control_send_sleep%
-    ControlSend,, {ENTER}, ahk_id %spotify%,, Left  ;dismiss "already added"
+    ControlSend,, {ESC}, ahk_id %spotify%,, Left  ;dismiss "already added"
     Sleep, %control_send_sleep%
     ChangeAdded(1)
 }
