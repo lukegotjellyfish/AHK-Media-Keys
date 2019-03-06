@@ -42,6 +42,7 @@ colour_change_delay  = 100  ;remove when done
 control_send_sleep   = 50
 song_check_timer     = 200
 song_time_passed     = 0
+song_time_passed_m   = 0
 
 gui_x                = 0
 gui_y                = 600
@@ -88,7 +89,7 @@ else
 }
 ;//!SECTION
 ;//SECTION GUI
-Gui, +AlwaysOnTop -Caption +Owner +LastFound +E0x20
+Gui, +AlwaysOnTop +Owner +ToolWindow +LastFound -Caption +E0x20
 Gui, Margin, 0, 0
 Gui, Color, Black
 Gui, Font, c%font_colour_one% s60 q4 bold, Arial
@@ -109,24 +110,24 @@ Gui, Font, s10 q4 bold, Arial
 if (spotify_found)
 {
     Gui, Font, c%font_colour_one% s14 q4 bold, Arial
-    Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
-    Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
+    Gui, Add, Text, x236 y29 vvol_up BackgroundTrans, + %volume_increment%
+    Gui, Add, Text, x236 y58 vvol_down BackgroundTrans, -  %volume_increment%
 
     Gui, Font, c%font_colour_two% s12 q4 bold, Arial
-    Gui, Add, Text, x252 y10 w90 vvolume, 20`%
+    Gui, Add, Text, x252 y10 w90 vvolume BackgroundTrans, 20`%
 
 
-    Gui, Font, c%font_colour_one% s8 q4 bold, Arial
-    Gui, Add, Text, x236 y80 w64 vtimer, Time: 0
+    Gui, Font, c%font_colour_two% s14 q4, Consolas
+    Gui, Add, Text, x252 y80 w64 vtimer BackgroundTrans, `
 
     Gui, Font, c%font_colour_one% s10 q4 bold, Arial
-    Gui, Add, Text, x005 y105, Now Playing:
+    Gui, Add, Text, x005 y105 BackgroundTrans, Now Playing:
 
     Gui, Font, c%font_colour_two%
-    Gui, Add, Text, x005 y121 w288 h50 vsongtitle, `
+    Gui, Add, Text, x005 y121 w288 h50 vsongtitle BackgroundTrans, `
 
     Gui, Font, s10 q4 c%font_colour_one% bold, Arial
-    Gui, Add, Text, x220 y105 vadded, [Not Added]
+    Gui, Add, Text, x220 y105 vadded BackgroundTrans, [Not Added]
 
     WinSet, Transparent, 200
     Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
@@ -193,6 +194,7 @@ return
     Send, {Media_Prev}
     song_time_passed := 0
     ItemActivated(font_colour_two, "60", "prev", font_colour_one, 0, 0)
+    song_Time_m = 0
 
     if (playing_status = 0)
     {
@@ -203,6 +205,7 @@ return
     if (spotify_found)
     {
         SetTimer, CheckSongName, -0
+        SetTimer, CheckSongName, %song_check_timer%
     }
 }
 return
@@ -240,6 +243,7 @@ return
     Send, {Media_Next}
     song_time_passed := 0
     ItemActivated(font_colour_two, "60", "next", font_colour_one, 0, 0)
+    song_Time_m = 0
 
     if (playing_status = 0)
     {
@@ -250,6 +254,7 @@ return
     if (spotify_found)
     {
         SetTimer, CheckSongName, -0
+        SetTimer, CheckSongName, %song_check_timer%
     }
 }
 return
@@ -343,6 +348,11 @@ return
 CheckSongName:  ;//ANCHOR CheckSongName
 {
     WinGetTitle, SongName, ahk_id %spotify%
+    if InStr(SongName, "&")
+    {
+        SongName := RegExReplace(SongName, "&", "and")
+    }
+
     if (SongName != prev_SongName) and (SongName = "Spotify")  ;no song playing
     {
         playing_status = 0
@@ -353,10 +363,6 @@ CheckSongName:  ;//ANCHOR CheckSongName
     }
     else if (SongName != prev_SongName) and (SongName != "Spotify")  ;new song found
     {
-        if InStr(SongName, "&")
-        {
-            SongName := RegExReplace(SongName, "&", "and")
-        }
         GuiControl,, songtitle, %SongName%
         GuiControl, Move, pauseplay, x107
         GuiControl,, pauseplay, %playingstring%
@@ -366,21 +372,35 @@ CheckSongName:  ;//ANCHOR CheckSongName
             was_paused = 0
         }
         ChangeAdded(0)
-        prev_SongName  := SongName
-        playing_status  = 1
+        prev_SongName     := SongName
+        playing_status     = 1
+        song_time_passed_m = 0
 
         if (last_song != SongName)
         {
             song_time_passed = 0
-            GuiControl,, timer, Time: %song_time_passed%
         }
     }
-    else if (SongName = prev_SongName) and (SongName != "Spotify")  ;time the current song
+    if (SongName = prev_SongName) and (SongName != "Spotify")  ;time the current song
     {
-        song_time_passed_t := Round(song_time_passed / 5, 0)
-        last_song        := SongName
+        if (Mod(Round(song_time_passed, 0), 2) = 0)
+        {
+            song_time_passed_t := Round((song_time_passed / 5), 0)
+            if (song_time_passed_t = 60)
+            {
+                song_time_passed_m += 1
+                song_time_passed    = 0
+                song_time_passed_t  = 0
+            }
+            if (song_time_passed_t = 30)  ;sync with actual time, lower than due to calculations
+            {
+                song_time_passed += 1
+            }
+            last_song        := SongName
+            GuiControl,, timer, %song_time_passed_m%:%song_time_passed_t%
+        }
+        counter += 1
         song_time_passed += 1
-        GuiControl,, timer, Time: %song_time_passed_t%
     }
 }
 return
