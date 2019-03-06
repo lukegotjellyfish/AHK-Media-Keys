@@ -93,28 +93,28 @@ Gui, +AlwaysOnTop +Owner +ToolWindow +LastFound -Caption +E0x20
 Gui, Margin, 0, 0
 Gui, Color, Black
 Gui, Font, c%font_colour_one% s60 q4 bold, Arial
-Gui, Add, Text, x034 y00 w54 h80 vprev, %prev%
+Gui, Add, Text, x05 y00 w54 h80 vprev, %prev%
 
 if (spotify_found)
 {
-    Gui, Add, Text, x118 y00 w54 h100 vpauseplay, `
+    Gui, Add, Text, x79 y00 w54 h100 vpauseplay, `
 }
 else
 {
-    Gui, Add, Text, x107 y00 w54 h100 vpauseplay, %initial_playing_status%
+    Gui, Add, Text, x69 y00 w54 h100 vpauseplay, %initial_playing_status%
 }
 
-Gui, Add, Text, x170 y00 w54 h80 vnext, %next%
+Gui, Add, Text, x141 y00 w54 h80 vnext, %next%
 Gui, Font, s10 q4 bold, Arial
 
 if (spotify_found)
 {
     Gui, Font, c%font_colour_one% s14 q4 bold, Arial
-    Gui, Add, Text, x236 y29 vvol_up BackgroundTrans, + %volume_increment%
-    Gui, Add, Text, x236 y58 vvol_down BackgroundTrans, -  %volume_increment%
+    Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
+    Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
 
     Gui, Font, c%font_colour_two% s12 q4 bold, Arial
-    Gui, Add, Text, x252 y10 w90 vvolume BackgroundTrans, 20`%
+    Gui, Add, Text, x252 y10 w90 vvolume, 20`%
 
 
     Gui, Font, c%font_colour_two% s14 q4, Consolas
@@ -219,13 +219,13 @@ return
     if (playing_status = 1)
     {
         playing_status = 0
-        pauseplayx = 102
+        pauseplayx = 69
         playpausestring := pausedstring
     }
     else
     {
         playing_status = 1
-        pauseplayx = 107
+        pauseplayx = 79
         playpausestring := playingstring
     }
 
@@ -356,7 +356,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
     if (SongName != prev_SongName) and (SongName = "Spotify")  ;no song playing
     {
         playing_status = 0
-        GuiControl, Move, pauseplay, x102
+        GuiControl, Move, pauseplay, x69
         GuiControl,, pauseplay, %pausedstring%
         Sleep, 10
         prev_SongName := SongName
@@ -364,7 +364,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
     else if (SongName != prev_SongName) and (SongName != "Spotify")  ;new song found
     {
         GuiControl,, songtitle, %SongName%
-        GuiControl, Move, pauseplay, x107
+        GuiControl, Move, pauseplay, x79
         GuiControl,, pauseplay, %playingstring%
         if (was_paused = 1)
         {
