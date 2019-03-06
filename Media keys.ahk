@@ -386,11 +386,14 @@ CheckSongName:  ;//ANCHOR CheckSongName
         if (Mod(Round(song_time_passed, 0), 2) = 0)
         {
             song_time_passed_t := Round((song_time_passed / 5), 0)
+            if (song_time_passed_t < 10)
+            {
+                song_time_passed_t = 0%song_time_passed_t%
+            }
             if (song_time_passed_t = 60)
             {
                 song_time_passed_m += 1
                 song_time_passed    = 0
-                song_time_passed_t  = 0
             }
             if (song_time_passed_t = 30)  ;sync with actual time, lower than due to calculations
             {
