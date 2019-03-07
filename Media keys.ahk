@@ -193,8 +193,8 @@ return
 {
     Send, {Media_Prev}
     song_time_passed := 0
-    ItemActivated(font_colour_two, "60", "prev", font_colour_one, 0, 0)
     song_Time_m = 0
+    ItemActivated(font_colour_two, "60", "prev", font_colour_one, 0, 0)
 
     if (playing_status = 0)
     {
@@ -242,8 +242,8 @@ return
 {
     Send, {Media_Next}
     song_time_passed := 0
-    ItemActivated(font_colour_two, "60", "next", font_colour_one, 0, 0)
     song_Time_m = 0
+    ItemActivated(font_colour_two, "60", "next", font_colour_one, 0, 0)
 
     if (playing_status = 0)
     {
