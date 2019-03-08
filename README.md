@@ -1,5 +1,5 @@
 # Examples
-### Example while Spotify is running
+### Example while Spotify is running [outdated]
 #### https://youtu.be/whSEENEBa6E
 
 ### Example while Spotify is not running
