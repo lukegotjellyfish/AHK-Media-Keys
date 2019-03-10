@@ -19,10 +19,10 @@ CoordMode, Mouse, Client
 ;    #========================================#
 ;    |                                        |
 ;    | [Gui Movement]                         |
-;    | PgUp - Move GUI Up screen              |
-;    | PgDn - Move GUI Down screen            |
-;    | Del  - Move GUI to left of screen      |
-;    | End  - Move GUI to right of screen     |
+;    | ^PgUp - Move GUI Up screen             |
+;    | ^PgDn - Move GUI Down screen           |
+;    | ^Del  - Move GUI to left of screen     |
+;    | ^End  - Move GUI to right of screen    |
 ;    |                                        |
 ;    | [Media Functions]                      |
 ;    | Numpad4 - Previous song                |
@@ -48,7 +48,7 @@ gui_x                = 0
 gui_y                = 600
 font_colour_one     := "White"
 font_colour_two     := "FF69B4"  ;Hot Pink
-playingstring       := "||"
+playingstring       := "| |"
 pausedstring        := "▶️"
 prev                := "⏮"
 next                := "⏭"
@@ -66,7 +66,7 @@ Loop, %win%
     WinGet, spot_name, ProcessName, %title%
     if (spot_name = "Spotify.exe") ;find window (not other spotify exes) from spotify.exe
     {
-        initial_playing_status := "||"
+        initial_playing_status := "| |"
         WinGet, spotify, ID, %title%
         spotify_found = 1
         break
@@ -85,7 +85,7 @@ if (spotify_found)
 }
 else
 {
-    initial_playing_status := "||"
+    initial_playing_status := "| |"
 }
 ;//!SECTION
 ;//SECTION GUI
@@ -94,15 +94,7 @@ Gui, Margin, 0, 0
 Gui, Color, Black
 Gui, Font, c%font_colour_one% s60 q4 bold, Arial
 Gui, Add, Text, x05 y00 w54 h80 vprev, %prev%
-
-if (spotify_found)
-{
-    Gui, Add, Text, x79 y00 w54 h100 vpauseplay, `
-}
-else
-{
-    Gui, Add, Text, x69 y00 w54 h100 vpauseplay, %initial_playing_status%
-}
+Gui, Add, Text, x69 y00 w66 h100 vpauseplay, `
 
 Gui, Add, Text, x141 y00 w54 h80 vnext, %next%
 Gui, Font, s10 q4 bold, Arial
@@ -149,7 +141,7 @@ return
 ;//!SECTION
 ;//SECTION Hotkeys
 ;//SECTION GUI
-PgUp::  ;//ANCHOR PgUp
+^PgUp::  ;//ANCHOR PgUp
 {
     if (gui_y > 0)
     {
@@ -159,7 +151,7 @@ PgUp::  ;//ANCHOR PgUp
 }
 return
 
-PgDn::  ;//ANCHOR PgDn
+^PgDn::  ;//ANCHOR PgDn
 {
     if (gui_y < 910)
     gui_y += 10
@@ -167,7 +159,7 @@ PgDn::  ;//ANCHOR PgDn
 }
 return
 
-Del::  ;//ANCHOR Del
+^Del::  ;//ANCHOR Del
 {
     if (gui_x > 0)
     {
@@ -177,7 +169,7 @@ Del::  ;//ANCHOR Del
 }
 return
 
-End::  ;//ANCHOR End
+^End::  ;//ANCHOR End
 {
     if (gui_X < 1620)
     {
@@ -219,18 +211,19 @@ return
     if (playing_status = 1)
     {
         playing_status = 0
-        pauseplayx = 69
+        pauseplayx = 79
         playpausestring := pausedstring
     }
     else
     {
         playing_status = 1
-        pauseplayx = 79
+        pauseplayx = 69
         playpausestring := playingstring
     }
 
-    GuiControl, Move, pauseplay, x%pauseplayx%
     GuiControl,, pauseplay, %playpausestring%
+    ;GuiControl, Move, pauseplay, x%pauseplayx%
+    Sleep, 200
     ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one, 0, 0)
     Sleep, 10  ;prevents the wrong symbol being displayed
 }
@@ -356,15 +349,14 @@ CheckSongName:  ;//ANCHOR CheckSongName
     if (SongName != prev_SongName) and (SongName = "Spotify")  ;no song playing
     {
         playing_status = 0
-        GuiControl, Move, pauseplay, x69
+        ;GuiControl, Move, pauseplay, x69
         GuiControl,, pauseplay, %pausedstring%
-        Sleep, 10
         prev_SongName := SongName
     }
     else if (SongName != prev_SongName) and (SongName != "Spotify")  ;new song found
     {
         GuiControl,, songtitle, %SongName%
-        GuiControl, Move, pauseplay, x79
+        ;GuiControl, Move, pauseplay, x79
         GuiControl,, pauseplay, %playingstring%
         if (was_paused = 1)
         {
@@ -394,6 +386,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
             {
                 song_time_passed_m += 1
                 song_time_passed    = 0
+                song_time_passed_t  = 00
             }
             if (song_time_passed_t = 30)  ;sync with actual time, lower than due to calculations
             {
