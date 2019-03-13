@@ -8,7 +8,7 @@
 # Requirements
 ### AHK
 #### https://www.autohotkey.com/
-### For spotify volume change
+### For Spotify volume change:
 #### http://www.nirsoft.net/utils/nircmd.html
 (change nircmd_dir in script)
 # 
