@@ -9,7 +9,7 @@ SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
 ;//!SECTION options
 ;//SECTION Hotkey list
-;"/<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via: 
+;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via: 
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
 ;
@@ -46,9 +46,10 @@ song_time_passed_m   = 0
 
 gui_x                = 0
 gui_y                = 600
+gui_transparency     = 170  ;/255
 font_colour_one     := "White"
 font_colour_two     := "FF69B4"  ;Hot Pink
-playingstring       := "| |"
+playingstring       := "| |"  ;I
 pausedstring        := "▶️"
 prev                := "⏮"
 next                := "⏭"
@@ -64,9 +65,8 @@ Loop, %win%
 {
     WinGetTitle, title, % "ahk_id" . win%A_Index%
     WinGet, spot_name, ProcessName, %title%
-    if (spot_name = "Spotify.exe") ;find window (not other spotify exes) from spotify.exe
+    if (spot_name = "Spotify.exe")  ;find window (not other spotify exe) from spotify.exe
     {
-        initial_playing_status := "| |"
         WinGet, spotify, ID, %title%
         spotify_found = 1
         break
@@ -121,7 +121,7 @@ if (spotify_found)
     Gui, Font, s10 q4 c%font_colour_one% bold, Arial
     Gui, Add, Text, x220 y105 vadded BackgroundTrans, [Not Added]
 
-    WinSet, Transparent, 200
+    WinSet, Transparent, %gui_transparency%
     Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
 
     volume           = 0.2  ;default to max volume on spotify vol mixer
@@ -134,7 +134,7 @@ if !(spot_nir_found)
 {
     Hotkey, *Numpad8, OFF
     Hotkey, *Numpad2, OFF
-    WinSet, Transparent, 200
+    WinSet, Transparent, %gui_transparency%
     Gui, Show, x%gui_x% y%gui_y% h110 w300 NoActivate
 }
 return

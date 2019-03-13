@@ -4,5 +4,13 @@
     "discord.detailsEditing": "{filename}",
     "discord.workspaceElapsedTime": true,
     "discord.lowerDetailsIdle": "{null}",
-    "workbench.colorCustomizations": {}
+    "workbench.colorCustomizations": {},
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ]
 }
