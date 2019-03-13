@@ -53,7 +53,7 @@ pausedstring        := "▶️"
 prev                := "⏮"
 next                := "⏭"
 
-nircmd_dir          := "C:\Users\Luke\Desktop\AHK\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
+nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 ;//!SECTION Vars
 ;//SECTION Get spotify and nircmd
 ;##################################################################################
