@@ -271,14 +271,14 @@ CheckSongName:  ;//ANCHOR CheckSongName
         SongName := RegExReplace(SongName, "&", "and")
     }
 
-    if (SongName != prev_SongName) and (SongName = "foobar2000")  ;no song playing
+    if (SongName != prev_SongName) and (SongName = "foobar2000 v1.4.3")  ;no song playing
     {
         playing_status = 0
         ;GuiControl, Move, pauseplay, x69
         GuiControl,, pauseplay, %pausedstring%
         prev_SongName := SongName
     }
-    else if (SongName != prev_SongName) and (SongName != "foobar2000")  ;new song found
+    else if (SongName != prev_SongName) and (SongName != "foobar2000 v1.4.3")  ;new song found
     {
         GuiControl,, songtitle, %SongName%
         ;GuiControl, Move, pauseplay, x79
