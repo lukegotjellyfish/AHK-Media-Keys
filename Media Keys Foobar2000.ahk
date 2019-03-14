@@ -307,6 +307,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
     WinGetTitle, SongName, ahk_id %foobar2000%
     SongName := StrSplit(SongName, "[foobar2000]")
     SongName := SongName[1]
+
     if InStr(SongName, "&")
     {
         SongName := RegExReplace(SongName, "&", "and")
