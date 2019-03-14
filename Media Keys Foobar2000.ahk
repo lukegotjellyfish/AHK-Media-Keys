@@ -297,7 +297,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
             song_time_passed = 0
         }
     }
-    if (SongName = prev_SongName) and (SongName != "foobar2000")  ;time the current song
+    if (playing_status = 1) and (SongName = prev_SongName) and (SongName != "foobar2000")  ;time the current song
     {
         if (Mod(Round(song_time_passed, 0), 2) = 0)
         {
