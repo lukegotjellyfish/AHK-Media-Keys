@@ -14,8 +14,8 @@
 > Numpad 5: Pause/Play<br>
 > Numpad 6: Skip song<br>
 ## Spotify/Foobar2000 only:
-> Numpad 8: Increase Volume by 0.02<br>
-> Numpad 2: Decrease Volume by 0.02<br>
+> Numpad 8: Increase Volume by default 0.05<br>
+> Numpad 2: Decrease Volume by default 0.05<br>
 > [Spotify] Numpad 3: Add to Top Playlist<br>
 > Displays current song playing<br>
 #
