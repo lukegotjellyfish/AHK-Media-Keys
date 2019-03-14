@@ -110,14 +110,6 @@ WinSet, Transparent, %gui_transparency%
 Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
 
 Run, %nircmd_dir% setappvolume foobar2000.exe %volume%  ;Match with script's volume seting (0.5) to perform on
-
-if !(nir_found)
-{
-    Hotkey, *Numpad8, OFF
-    Hotkey, *Numpad2, OFF
-    WinSet, Transparent, %gui_transparency%
-    Gui, Show, x%gui_x% y%gui_y% h110 w300 NoActivate
-}
 return
 ;//!SECTION
 ;//SECTION Hotkeys
@@ -167,7 +159,6 @@ return
     Send, {Media_Prev}
     song_time_passed := 0
     song_Time_m = 0
-    ItemActivated(font_colour_two, "60", "prev", font_colour_one, 0, 0)
 
     if (playing_status = 0)
     {
@@ -175,11 +166,9 @@ return
         GuiControl,, pauseplay, %playingstring%
     }
 
-    if (foobar2000_found)
-    {
-        SetTimer, CheckSongName, -0
-        SetTimer, CheckSongName, %song_check_timer%
-    }
+    SetTimer, CheckSongName, -0
+    SetTimer, CheckSongName, %song_check_timer%
+    ItemActivated(font_colour_two, "60", "prev", font_colour_one, 0, 0)
 }
 return
 
@@ -204,9 +193,6 @@ return
 
     GuiControl,, pauseplay, %playpausestring%
     ;GuiControl, Move, pauseplay, x%pauseplayx%
-    Sleep, 200
-    ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one, 0, 0)
-    Sleep, 10  ;prevents the wrong symbol being displayed
 }
 return
 
@@ -217,7 +203,6 @@ return
     Send, {Media_Next}
     song_time_passed := 0
     song_Time_m = 0
-    ItemActivated(font_colour_two, "60", "next", font_colour_one, 0, 0)
 
     if (playing_status = 0)
     {
@@ -225,11 +210,9 @@ return
         GuiControl,, pauseplay, %playingstring%
     }
 
-    if (foobar2000_found)
-    {
-        SetTimer, CheckSongName, -0
-        SetTimer, CheckSongName, %song_check_timer%
-    }
+    ItemActivated(font_colour_two, "60", "next", font_colour_one, 0, 0)
+    SetTimer, CheckSongName, -0
+    SetTimer, CheckSongName, %song_check_timer%
 }
 return
 
@@ -383,22 +366,23 @@ CheckSongName:  ;//ANCHOR CheckSongName
 return
 
 
-ItemActivated(font_colour_two, font_size, control_name, font_colour_one, volume_mode, volume)  ;/ANCHOR ItemActivated
+ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, volume)  ;/ANCHOR ItemActivated
 {
-    if (volume_mode = 0)
+    if (mode = 0)
     {
         Gui, Font, c%font_colour_two% s%font_size% q4 bold
         GuiControl, Font, %control_name%
+
         Sleep, 100
+
         Gui, Font, c%font_colour_one% s%font_size% q4 bold
         GuiControl, Font, %control_name%
         return
     }
-    else if (volume_mode = 1)
+    else if (mode = 1)
     {
         Gui, Font, c%font_colour_two% s14 q4 bold
         GuiControl, Font, %control_name%
-        Sleep, 100
 
         if (volume = 0.05)
         {
@@ -413,7 +397,6 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, volume_
     {
         Gui, Font, c%font_colour_two% s14 q4 bold
         GuiControl, Font, %control_name%
-        Sleep, 100
 
         if (volume = 0.95)
         {
