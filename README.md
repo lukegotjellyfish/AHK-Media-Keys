@@ -1,7 +1,7 @@
 # Examples
 ### [Example while Spotify is running [outdated]](https://youtu.be/whSEENEBa6E)
 
-### [Example while Spotify is not running](https://youtu.be/H9BHAGh8GXI)
+### [Example while Spotify is not running [outdated]](https://youtu.be/H9BHAGh8GXI)
 
 # Requirements
 - [AHK](https://www.autohotkey.com/)
