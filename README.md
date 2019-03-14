@@ -5,18 +5,18 @@
 
 # Requirements
 - [AHK](https://www.autohotkey.com/)
-- [Nircmd for Spotify volume change](http://www.nirsoft.net/utils/nircmd.html) 
+- [Nircmd for Spotify volume change](http://www.nirsoft.net/utils/nircmd.html)
 `(change nircmd_dir in script)5`
 
 # Info
-> F3: Reload script
-> Numpad 4: Previous Song
-> Numpad 5: Pause/Play
-> Numpad 6: Skip song
+> F3: Reload script<br>
+> Numpad 4: Previous Song<br>
+> Numpad 5: Pause/Play<br>
+> Numpad 6: Skip song<br>
 ## Spotify only:
-> Numpad 8: Increase Volume by 0.02
-> Numpad 2: Decrease Volume by 0.02
-> Numpad 3: Add to Top Playlist
+> Numpad 8: Increase Volume by 0.02<br>
+> Numpad 2: Decrease Volume by 0.02<br>
+> Numpad 3: Add to Top Playlist<br>
 
 - Displays current song playing
 #

@@ -83,10 +83,6 @@ if (spotify_found)
         volume_increment     = 0.05
     }
 }
-else
-{
-    initial_playing_status := "| |"
-}
 ;//!SECTION
 ;//SECTION GUI
 Gui, +AlwaysOnTop +Owner +ToolWindow +LastFound -Caption +E0x20
@@ -94,7 +90,7 @@ Gui, Margin, 0, 0
 Gui, Color, Black
 Gui, Font, c%font_colour_one% s60 q4 bold, Arial
 Gui, Add, Text, x05 y00 w54 h80 vprev, %prev%
-Gui, Add, Text, x69 y00 w66 h100 vpauseplay, `
+Gui, Add, Text, x69 y00 w66 h100 vpauseplay, %pausedstring%
 
 Gui, Add, Text, x141 y00 w54 h80 vnext, %next%
 Gui, Font, s10 q4 bold, Arial
