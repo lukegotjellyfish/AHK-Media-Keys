@@ -9,7 +9,7 @@ SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
 ;//!SECTION options
 ;//SECTION Hotkey list
-;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via: 
+;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
 ;
@@ -30,7 +30,6 @@ CoordMode, Mouse, Client
 ;    | Numpad6 - Next song                       |
 ;    | Numpad8 - foobar2000| volume up           |
 ;    | Numpad2 - foobar2000| volume down         |
-;    | Numpad3 - foobar2000| add to top playlist |
 ;    |                                           |
 ;    | [Misc Keys]                               |
 ;    | F3 - Reload                               |
@@ -103,8 +102,6 @@ Gui, Add, Text, x005 y105 BackgroundTrans, Now Playing:
 Gui, Font, c%font_colour_two%
 Gui, Add, Text, x005 y121 w288 h50 vsongtitle BackgroundTrans, `
 
-Gui, Font, s10 q4 c%font_colour_one% bold, Arial
-Gui, Add, Text, x220 y105 vadded BackgroundTrans, [Not Added]
 
 WinSet, Transparent, %gui_transparency%
 Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
@@ -255,45 +252,6 @@ return
 return
 
 
-*NumpadPGDN::
-*Numpad3::  ;//ANCHOR Numpad3
-{
-    WinGetPos,,, sw, sh, ahk_id %foobar2000%
-    if (sw != prev_sw) or (sh != prev_sh)
-    {
-        WinWh := sw//10
-        WinHh := sh//1.3
-        WinWw := sw//100
-        WinHw := sh//19
-        spot_song_name_x := WinWh-WinWw
-        spot_song_name_y := WinHh+WinHw
-        prev_sw = sw
-        prev_sh = sh
-    }
-
-    WinGet window_state, MinMax, ahk_id %foobar2000%
-    IfEqual, window_state,-1, WinRestore, ahk_id %foobar2000%
-    Sleep, 100
-
-    ControlClick, x%spot_song_name_x% y%spot_song_name_y%, ahk_id %foobar2000%,, Right
-    Sleep, %control_send_sleep%
-    ControlSend,, {UP}, ahk_id %foobar2000%,, Left
-    Sleep, %control_send_sleep%
-    ControlSend,, {UP}, ahk_id %foobar2000%,, Left
-    Sleep, %control_send_sleep%
-    ControlSend,, {RIGHT}, ahk_id %foobar2000%,, Left
-    Sleep, %control_send_sleep%
-    ControlSend,, {DOWN}, ahk_id %foobar2000%,, Left
-    Sleep, %control_send_sleep%
-    ControlSend,, {ENTER}, ahk_id %foobar2000%,, Left
-    Sleep, %control_send_sleep%
-    ControlSend,, {ESC}, ahk_id %foobar2000%,, Left  ;dismiss "already added"
-    Sleep, %control_send_sleep%
-    ChangeAdded(1)
-}
-return
-
-
 F3::  ;//ANCHOR F3
 {
     reload
@@ -330,7 +288,6 @@ CheckSongName:  ;//ANCHOR CheckSongName
             Sleep, 10
             was_paused = 0
         }
-        ChangeAdded(0)
         prev_SongName     := SongName
         playing_status     = 1
         song_time_passed_m = 0
@@ -416,25 +373,6 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, v
 }
 return
 
-;Add to playlist colour labels
-ChangeAdded(added)  ;//ANCHOR ChangeAdded
-{
-    if (added = 1)
-    {
-        Gui, Font, cFF69B4 s10 q4 bold
-        GuiControl, Move, added, x245
-        GuiControl,, added, [Added]
-        GuiControl, Font, added
-    }
-    else
-    {
-        Gui, Font, cWhite s10 q4 bold
-        GuiControl, Move, added, x220
-        GuiControl,, added, [Not Added]
-        GuiControl, Font, added
-    }
-}
-return
 
 ;//!SECTION
 /* //NOTE Notices
