@@ -1,4 +1,4 @@
-;//SECTION Options
+﻿;//SECTION Options
 #NoEnv
 #SingleInstance, Force
 #Persistent
