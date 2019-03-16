@@ -319,7 +319,6 @@ CheckSongName:  ;//ANCHOR CheckSongName
             last_song        := SongName
             GuiControl,, timer, %song_time_passed_m%:%song_time_passed_t%
         }
-        counter += 1
         song_time_passed += 1
     }
 }
