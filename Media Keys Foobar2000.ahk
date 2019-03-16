@@ -217,13 +217,13 @@ return
 *NumpadUp::
 *Numpad8::  ;//ANCHOR Numpad8
 {
-    favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
-    if (favolume = 0.95)
+    volume := Round(volume, 2)
+    if (volume = 0.95)
     {
         volume = 1
         ItemActivated("808080", "14", "vol_up", "808080", 1, volume)
     }
-    else if (favolume != 1)
+    else if (volume != 1)
     {
         volume += %volume_increment%
         ItemActivated(font_colour_two, "14", "vol_up", font_colour_one, 1, volume)
@@ -236,13 +236,13 @@ return
 *NumpadDown::
 *Numpad2::  ;//ANCHOR Numpad2
 {
-    favolume := RegExReplace(RegExReplace(volume,"(\.\d*?)0*$","$1"),"\.$")
-    if (favolume = 0.05)
+    volume := Round(volume, 2)
+    if (volume = 0.05)
     {
         volume = 0
         ItemActivated("808080", "14", "vol_down", "808080", 2, volume)
     }
-    else if (favolume != 0)
+    else if (volume != 0)
     {
         volume -= %volume_increment%
         ItemActivated(font_colour_two, "14", "vol_down", font_colour_one, 2 , volume)
