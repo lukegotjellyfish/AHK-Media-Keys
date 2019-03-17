@@ -368,7 +368,7 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, v
         GuiControl, Font, %control_name%
     }
     num := volume * 100
-    num := Round(num, 2)
+    num := Round(num, 0)
     GuiControl,, volume, %num%`%
 }
 return
