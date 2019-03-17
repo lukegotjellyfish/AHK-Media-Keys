@@ -193,7 +193,6 @@ return
     }
 
     GuiControl,, pauseplay, %playpausestring%
-    ;GuiControl, Move, pauseplay, x%pauseplayx%
 }
 return
 
@@ -278,14 +277,12 @@ CheckSongName:  ;//ANCHOR CheckSongName
     if (SongName != prev_SongName) and (SongName = idlename)  ;no song playing
     {
         playing_status = 0
-        ;GuiControl, Move, pauseplay, x69
         GuiControl,, pauseplay, %pausedstring%
         prev_SongName := SongName
     }
     else if (SongName != prev_SongName) and (SongName != idlename)  ;new song found
     {
         GuiControl,, songtitle, %SongName%
-        ;GuiControl, Move, pauseplay, x79
         GuiControl,, pauseplay, %playingstring%
         if (was_paused = 1)
         {
@@ -371,7 +368,7 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, v
         GuiControl, Font, %control_name%
     }
     num := volume * 100
-    num := RegExReplace(RegExReplace(num,"(\.\d*?)0*$","$1"),"\.$")
+    num := Round(num, 2)
     GuiControl,, volume, %num%`%
 }
 return
