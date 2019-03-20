@@ -9,7 +9,7 @@ SetWorkingDir %A_ScriptDir%
 CoordMode, Mouse, Client
 ;//!SECTION options
 ;//SECTION Hotkey list
-;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
+;"//(!)<name>" are bookmarks (from a VS Code extension):
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
 ;
@@ -37,9 +37,10 @@ CoordMode, Mouse, Client
 ;    #===========================================#
 ;//!SECTION Hotkey list
 ;//SECTION Vars
-appname  := "foobar2000"
-exename  := "foobar2000.exe"
-idlename := "foobar2000 v1.4.3"
+appname          := "foobar2000"
+exename          := "foobar2000.exe"
+idlename         := "foobar2000 v1.4.3"
+stripsongnameend := "[foobar2000]"  ;Remove textstamp from what will be displayed
 
 colour_change_delay  = 100  ;remove when done
 control_send_sleep   = 50
@@ -266,7 +267,7 @@ return
 CheckSongName:  ;//ANCHOR CheckSongName
 {
     WinGetTitle, SongName, ahk_id %appid%
-    SongName := StrSplit(SongName, "[foobar2000]") ;foobar2000 only (appends to it's title)
+    SongName := StrSplit(SongName, stripsongnameend) ;foobar2000 only (appends to it's title)
     SongName := SongName[1]                        ;handing for ^this^
 
     if InStr(SongName, "&")
