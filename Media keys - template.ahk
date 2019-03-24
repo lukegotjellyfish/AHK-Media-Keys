@@ -354,7 +354,7 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, v
         Gui, Font, c%font_colour_one% s14 q4 bold
         GuiControl, Font, %control_name%
     }
-    else  ;change vol down
+    else if (mode = 2)  ;change vol down
     {
         Gui, Font, c%font_colour_two% s14 q4 bold
         GuiControl, Font, %control_name%
