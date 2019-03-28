@@ -183,13 +183,11 @@ return
     if (playing_status = 1)
     {
         playing_status = 0
-        pauseplayx = 79
         playpausestring := pausedstring
     }
     else
     {
         playing_status = 1
-        pauseplayx = 69
         playpausestring := playingstring
     }
 
@@ -277,9 +275,13 @@ CheckSongName:  ;//ANCHOR CheckSongName
 
     if (SongName != prev_SongName) and (SongName = idlename)  ;no song playing
     {
-        playing_status = 0
-        GuiControl,, pauseplay, %pausedstring%
-        prev_SongName := SongName
+        Sleep, 100
+        if (WinGetTitle, SongName, ahk_id %appid% = idlename)
+        {
+            playing_status = 0
+            GuiControl,, pauseplay, %pausedstring%
+            prev_SongName := SongName
+        }
     }
     else if (SongName != prev_SongName) and (SongName != idlename)  ;new song found
     {
