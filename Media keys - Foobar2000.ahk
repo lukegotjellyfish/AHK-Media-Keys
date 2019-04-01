@@ -4,11 +4,20 @@
 #Persistent
 #MaxThreadsPerHotkey, 1
 Process, Priority,, High
+SetBatchLines, -1
 SendMode Input
 SetWorkingDir %A_ScriptDir%
+SetKeyDelay,-1, 1
+SetControlDelay, -1
+SetMouseDelay, -1
+SetWinDelay,-1
+ListLines, Off
 CoordMode, Mouse, Client
+
 ;//!SECTION options
 ;//SECTION Hotkey list
+; Changing title for Foobar:
+; File/Preferences/Display/Default User Interface (Change Window title's contents to %title%)
 ;"//(!)<name>" are bookmarks (from a VS Code extension):
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
@@ -42,11 +51,10 @@ exename          := "foobar2000.exe"
 idlename         := "foobar2000 v1.4.3"
 stripsongnameend := "[foobar2000]"  ;Remove textstamp from what will be displayed
 
-colour_change_delay  = 100  ;remove when done
+colour_change_delay  = 100
 control_send_sleep   = 50
-song_check_timer     = 200
-song_time_passed     = 0
-song_time_passed_m   = 0
+song_check_timer     = 400
+counter              = 0
 
 gui_x                = 0
 gui_y                = 600
@@ -98,8 +106,8 @@ Gui, Font, c%font_colour_two% s12 q4 bold, Arial
 Gui, Add, Text, x252 y10 w90 vvolume, 50`%
 
 
-Gui, Font, c%font_colour_two% s14 q4, Consolas
-Gui, Add, Text, x252 y80 w64 vtimer BackgroundTrans, `
+Gui, Font, c%font_colour_two% s12 q4, Consolas
+Gui, Add, Text, x140 y90 w190 vtimer BackgroundTrans, `
 
 Gui, Font, c%font_colour_one% s10 q4 bold, Arial
 Gui, Add, Text, x005 y105 BackgroundTrans, Now Playing:
@@ -159,8 +167,6 @@ return
 *Numpad4::  ;//ANCHOR Numpad4
 {
     Send, {Media_Prev}
-    song_time_passed := 0
-    song_Time_m = 0
 
     if (playing_status = 0)
     {
@@ -200,8 +206,6 @@ return
 *Numpad6::  ;//ANCHOR Numpad6
 {
     Send, {Media_Next}
-    song_time_passed := 0
-    song_Time_m = 0
 
     if (playing_status = 0)
     {
@@ -294,36 +298,13 @@ CheckSongName:  ;//ANCHOR CheckSongName
         }
         prev_SongName     := SongName
         playing_status     = 1
-        song_time_passed_m = 0
-
-        if (last_song != SongName)
-        {
-            song_time_passed = 0
-        }
     }
     if (playing_status = 1) and (SongName = prev_SongName) and (SongName != idlename)  ;time the current song
     {
-        if (Mod(Round(song_time_passed, 0), 2) = 0)
-        {
-            song_time_passed_t := Round((song_time_passed / 5), 0)
-            if (song_time_passed_t < 10)
-            {
-                song_time_passed_t = 0%song_time_passed_t%
-            }
-            if (song_time_passed_t = 60)
-            {
-                song_time_passed_m += 1
-                song_time_passed    = 0
-                song_time_passed_t  = 00
-            }
-            if (song_time_passed_t = 30)  ;sync with actual time, lower than due to calculations
-            {
-                song_time_passed += 1
-            }
-            last_song        := SongName
-            GuiControl,, timer, %song_time_passed_m%:%song_time_passed_t%
-        }
-        song_time_passed += 1
+        ControlGetText, controltext, ATL:msctls_statusbar321, ahk_exe foobar2000.exe
+        controltext := StrSplit(controltext, " | ")
+        tempp := controltext[5]
+        GuiControl,, timer, %tempp%
     }
 }
 return
@@ -344,8 +325,6 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, v
     }
     else if (mode = 1)
     {
-        Gui, Font, c%font_colour_two% s14 q4 bold
-        GuiControl, Font, %control_name%
 
         if (volume = 0.05)
         {
@@ -356,11 +335,8 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, v
         Gui, Font, c%font_colour_one% s14 q4 bold
         GuiControl, Font, %control_name%
     }
-    else if (mode = 2)  ;change vol down
+    else  ;change vol down
     {
-        Gui, Font, c%font_colour_two% s14 q4 bold
-        GuiControl, Font, %control_name%
-
         if (volume = 0.95)
         {
             Gui, Font, cWhite s14 q4 bold
@@ -371,7 +347,7 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one, mode, v
         GuiControl, Font, %control_name%
     }
     num := volume * 100
-    num := Round(num, 0)
+    num := Round(Num, 0)
     GuiControl,, volume, %num%`%
 }
 return
