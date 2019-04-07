@@ -123,10 +123,10 @@ Gui, Add, Text, x141 y00 w54 h80 vnext BackgroundTrans, %next%
 
 ;//ANCHOR Volume
 Gui, Font, c%font_colour_one% s14 q4 bold, Arial
-Gui, Add, Text, x236 y32 vvol_up BackgroundTrans, + %volume_increment%
-Gui, Add, Text, x236 y54 vvol_down BackgroundTrans, -  %volume_increment%
+Gui, Add, Text, x236 y32 vvol_up, + %volume_increment%
+Gui, Add, Text, x236 y54 vvol_down, -  %volume_increment%
 Gui, Font, c%font_colour_two% s12 q4 bold, Arial
-Gui, Add, Text, x252 y10 w40 vvolume BackgroundTrans, %volume%`%
+Gui, Add, Text, x252 y10 w40 vvolume, %volume%`%
 
 ;//ANCHOR Timer
 Gui, Font, c%font_colour_two% s14 q4, Consolas
