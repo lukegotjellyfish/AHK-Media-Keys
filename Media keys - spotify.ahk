@@ -46,7 +46,7 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;//!SECTION Hotkey list
 ;//SECTION Vars
 colour_change_delay  = 100
-control_send_sleep   = 50
+control_send_sleep   = 200
 song_check_timer     = 200
 
 song_time            = 0
@@ -65,6 +65,7 @@ next                := "⏭"
 
 nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 ;//!SECTION Vars
+
 ;//SECTION Get spotify and nircmd
 ;##################################################################################
 ;                       Initial process for CheckSongName
@@ -81,77 +82,75 @@ Loop, %win%
     }
 }
 
-SetTimer, CheckSongName, %song_check_timer%
+SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
 
 global volume
 if (FileExist("volume.txt"))
 {
     FileRead, volume, volume.txt
-    if (volume >= 0.05) and (volume < 0.95)
+    if (volume < 0)
     {
-        volume := Round(volume, 2)
+        volume = 0
     }
-    else if (volume <= 0)
+    else if (volume > 100)
     {
-        volume = 0.05
+        volume = 100
     }
-    else if (volume > 0.95)
+    else if (ErrorLevel)
     {
-        volume = 0.95
-    }
-    else
-    {
-        volume = 0.5
+        volume = 50
     }
 }
-else
-{
-    volume    = 0.2
-}
-global volume_increment     = 0.05
-cleanedvol := Round(volume * 100, 0)
+volume_increment = 5
+;//!SECTION Get spotify and nircmd
 
-;//!SECTION
 ;//SECTION GUI
-Gui, +AlwaysOnTop +Owner +ToolWindow +LastFound -Caption +E0x20
+;//ANCHOR GUI settings
+Gui, +AlwaysOnTop +ToolWindow +LastFound -Caption +E0x20
+; +AlwaysOnTop - Keep above windows
+; +ToolWindow  - Don't show in taskbar
+; +LastFound   - For transparency to work
+; -Caption     - Don't include window title
+; +E0x20       - Don't register clicks on window
 Gui, Margin, 0, 0
 Gui, Color, Black
+
+;//ANCHOR Prev-PAUSE-Next
 Gui, Font, c%font_colour_one% s60 q4 bold, Arial
-Gui, Add, Text, x05 y00 w54 h80 vprev, %prev%
-Gui, Add, Text, x69 y00 w66 h100 vpauseplay, %pausedstring%
+Gui, Add, Text, x05 y00 w54 h80 vprev BackgroundTrans, %prev%
+Gui, Add, Text, x69 y00 w66 h100 vpauseplay BackgroundTrans, %pausedstring%
+Gui, Add, Text, x141 y00 w54 h80 vnext BackgroundTrans, %next%
 
-Gui, Add, Text, x141 y00 w54 h80 vnext, %next%
-Gui, Font, s10 q4 bold, Arial
-
+;//ANCHOR Volume
 Gui, Font, c%font_colour_one% s14 q4 bold, Arial
-Gui, Add, Text, x236 y29 vvol_up, + %volume_increment%
-Gui, Add, Text, x236 y58 vvol_down, -  %volume_increment%
-
+Gui, Add, Text, x236 y32 vvol_up BackgroundTrans, + %volume_increment%
+Gui, Add, Text, x236 y54 vvol_down BackgroundTrans, -  %volume_increment%
 Gui, Font, c%font_colour_two% s12 q4 bold, Arial
-Gui, Add, Text, x252 y10 w90 vvolume, %cleanedvol%`%
+Gui, Add, Text, x252 y10 w40 vvolume BackgroundTrans, %volume%`%
 
-
+;//ANCHOR Timer
 Gui, Font, c%font_colour_two% s14 q4, Consolas
 Gui, Add, Text, x226 y80 w70 vtimer BackgroundTrans +border, 0:00
 
+;//ANCHOR Nowplaying status
 Gui, Font, c%font_colour_one% s10 q4 bold, Arial
 Gui, Add, Text, x005 y105 BackgroundTrans, Now Playing:
-
 Gui, Font, c%font_colour_two%
 Gui, Add, Text, x005 y121 w288 h50 vsongtitle BackgroundTrans, `
 
+;//ANCHOR Song-added status
 Gui, Font, s10 q4 c%font_colour_one% bold, Arial
 Gui, Add, Text, x220 y105 vadded BackgroundTrans, [Not Added]
 
 WinSet, Transparent, %gui_transparency%
 Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
 
-Run, %nircmd_dir% setappvolume Spotify.exe %volume%  ;Match with script's volume seting (0.5) to perform on
+div_vol := (volume / 100)
+Run, %nircmd_dir% setappvolume Spotify.exe %div_vol%  ;Match with script's volume seting (0.5) to perform on
 return
-
 ;//!SECTION
+
 ;//SECTION Hotkeys
-;//SECTION GUI
 ^PgUp::  ;//ANCHOR PgUp
 {
     if (gui_y > 0)
@@ -189,7 +188,6 @@ return
     Gui, Show, x%gui_x% NoActivate
 }
 return
-;//!SECTION
 
 *NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
@@ -207,7 +205,7 @@ return
     }
 
     SetTimer, CheckSongName, %song_check_timer%
-    ItemActivated(font_colour_two, "60", "prev", font_colour_one, 0, 0)
+    ItemActivated(font_colour_two, "60", "prev", font_colour_one)
 }
 return
 
@@ -230,7 +228,7 @@ return
     }
 
     GuiControl,, pauseplay, %playpausestring%
-    ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one, 0, 0)
+    ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one)
     Sleep, 10  ;prevents the wrong symbol being displayed
 }
 return
@@ -253,7 +251,7 @@ return
     }
 
     SetTimer, CheckSongName, %song_check_timer%
-    ItemActivated(font_colour_two, "60", "next", font_colour_one, 0, 0)
+    ItemActivated(font_colour_two, "60", "next", font_colour_one)
 }
 return
 
@@ -261,18 +259,18 @@ return
 *NumpadUp::
 *Numpad8::  ;//ANCHOR Numpad8
 {
-    favolume := Round(volume, 2)
-    if (favolume = 0.95)
+    if (volume + volume_increment > 100)
     {
-        volume = 1
-        ItemActivated("808080", "14", "vol_up", "808080", 1, volume)
+        volume = 100
+        GuiControl,, volume, %volume%`%
     }
-    else if (favolume != 1)
+    else
     {
         volume += %volume_increment%
-        ItemActivated(font_colour_two, "14", "vol_up", font_colour_one, 1, volume)
+        GuiControl,, volume, %volume%`%
     }
-    Run, %nircmd_dir% setappvolume Spotify.exe %volume%
+    div_vol := (volume / 100)
+    Run, %nircmd_dir% setappvolume Spotify.exe %div_vol%
 }
 return
 
@@ -280,18 +278,17 @@ return
 *NumpadDown::
 *Numpad2::  ;//ANCHOR Numpad2
 {
-    favolume := Round(volume, 2)
-    if (favolume = 0.05)
+    if (volume - volume_increment < 0)
     {
         volume = 0
-        ItemActivated("808080", "14", "vol_down", "808080", 2, volume)
     }
-    else if (favolume != 0)
+    else
     {
         volume -= %volume_increment%
-        ItemActivated(font_colour_two, "14", "vol_down", font_colour_one, 2 , volume)
     }
-    Run, %nircmd_dir% setappvolume Spotify.exe %volume%
+    div_vol := (volume / 100)
+    GuiControl,, volume, %volume%`%
+    Run, %nircmd_dir% setappvolume Spotify.exe %div_vol%
 }
 return
 
@@ -299,6 +296,9 @@ return
 *NumpadPGDN::
 *Numpad3::  ;//ANCHOR Numpad3
 {
+    WinGet window_state, MinMax, ahk_id %spotify%
+    IfEqual, window_state,-1, WinRestore, ahk_id %spotify%
+
     WinGetPos,,, sw, sh, ahk_id %spotify%
     if (sw != prev_sw) or (sh != prev_sh)
     {
@@ -311,10 +311,6 @@ return
         prev_sw = sw
         prev_sh = sh
     }
-
-    WinGet window_state, MinMax, ahk_id %spotify%
-    IfEqual, window_state,-1, WinRestore, ahk_id %spotify%
-    Sleep, 700
 
     ControlClick, x%spot_song_name_x% y%spot_song_name_y%, ahk_id %spotify%,, Right
     Sleep, %control_send_sleep%
@@ -388,7 +384,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
 }
 return
 
-Record_Time:
+Record_Time:  ;//ANCHOR Timer procedure
 {
     song_time += 1
     song_time_s += 1
@@ -405,48 +401,17 @@ Record_Time:
 }
 return
 
-ItemActivated(font_colour_two, font_size, control_name, font_colour_one, volume_mode, volume)  ;/ANCHOR ItemActivated
+ItemActivated(font_colour_two, font_size, control_name, font_colour_one)  ;/ANCHOR ItemActivated procedure
 {
-    if (volume_mode = 0)
-    {
-        Gui, Font, c%font_colour_two% s%font_size% q4 bold
-        GuiControl, Font, %control_name%
-        Sleep, 100
-        Gui, Font, c%font_colour_one% s%font_size% q4 bold
-        GuiControl, Font, %control_name%
-        return
-    }
-    else if (volume_mode = 1)
-    {
-
-        if (volume = 0.05)
-        {
-            Gui, Font, cWhite s14 q4 bold
-            GuiControl, Font, vol_down
-        }
-
-        Gui, Font, c%font_colour_one% s14 q4 bold
-        GuiControl, Font, %control_name%
-    }
-    else  ;change vol down
-    {
-        if (volume = 0.95)
-        {
-            Gui, Font, cWhite s14 q4 bold
-            GuiControl, Font, vol_up
-        }
-
-        Gui, Font, c%font_colour_one% s14 q4 bold
-        GuiControl, Font, %control_name%
-    }
-    num := volume * 100
-    num := Round(Num, 0)
-    GuiControl,, volume, %num%`%
+    Gui, Font, c%font_colour_two% s%font_size% q4 bold
+    GuiControl, Font, %control_name%
+    Sleep, 100
+    Gui, Font, c%font_colour_one% s%font_size% q4 bold
+    GuiControl, Font, %control_name%
 }
 return
 
-;Add to playlist colour labels
-ChangeAdded(added)  ;//ANCHOR ChangeAdded
+ChangeAdded(added)  ;//ANCHOR ChangeAdded status
 {
     if (added = 1)
     {
@@ -465,17 +430,24 @@ ChangeAdded(added)  ;//ANCHOR ChangeAdded
 }
 return
 
+
+savevol:  ;//ANCHOR SaveVol label
+{
+    FileDelete, volume.txt
+    FileAppend, %volume%, volume.txt
+}
+return
+
 class exitclass
 {
     DoBeforeExit()
     {
-        FileDelete, volume.txt
-        FileAppend, %volume%, volume.txt
+        GoSub, savevol
     }
 }
 
 ;//!SECTION
-/* //NOTE Notices
+/*  //NOTE Notices
 ╔════════════════════════════════════════════════════════════════════════════════╗
 ║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
 ╠════════════════════════════════════════════════════════════════════════════════╣
