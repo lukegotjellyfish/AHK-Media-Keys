@@ -106,7 +106,7 @@ volume_increment = 5
 
 ;//SECTION GUI
 ;//ANCHOR GUI settings
-Gui, +AlwaysOnTop +ToolWindow +LastFound -Caption +E0x20
+Gui, +AlwaysOnTop +ToolWindow +LastFound -Caption +E0x20 ;+hwndGUI_Overlay_hwnd
 ; +AlwaysOnTop - Keep above windows
 ; +ToolWindow  - Don't show in taskbar
 ; +LastFound   - For transparency to work
