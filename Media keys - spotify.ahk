@@ -45,6 +45,9 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;    #========================================#
 ;//!SECTION Hotkey list
 ;//SECTION Vars
+global gui_added_x     = 248
+global gui_not_added_x = 223
+
 colour_change_delay  = 100
 control_send_sleep   = 200
 song_check_timer     = 200
@@ -140,7 +143,7 @@ Gui, Add, Text, x005 y121 w288 h50 vsongtitle BackgroundTrans, `
 
 ;//ANCHOR Song-added status
 Gui, Font, s10 q4 c%font_colour_one% bold, Arial
-Gui, Add, Text, x220 y105 vadded BackgroundTrans, [Not Added]
+Gui, Add, Text, x%gui_not_added_x% y105 vadded BackgroundTrans, [Not Added]
 
 WinSet, Transparent, %gui_transparency%
 Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
@@ -416,14 +419,14 @@ ChangeAdded(added)  ;//ANCHOR ChangeAdded status
     if (added = 1)
     {
         Gui, Font, cFF69B4 s10 q4 bold
-        GuiControl, Move, added, x245
+        GuiControl, Move, added, x%gui_added_x%
         GuiControl,, added, [Added]
         GuiControl, Font, added
     }
     else
     {
         Gui, Font, cWhite s10 q4 bold
-        GuiControl, Move, added, x220
+        GuiControl, Move, added, x%gui_not_added_x%
         GuiControl,, added, [Not Added]
         GuiControl, Font, added
     }
