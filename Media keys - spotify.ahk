@@ -350,7 +350,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
         SongName := RegExReplace(SongName, "&", "and")
     }
 
-    if (SongName != prev_SongName) and (SongName = "Spotify Premium")  ;no song playing
+    if (SongName != prev_SongName) and (SongName = "Spotify Free")  ;no song playing
     {
         playing_status = 0
         GuiControl,, pauseplay, %pausedstring%
@@ -358,7 +358,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
         prev_SongName     := SongName
         SetTimer, Record_Time, OFF
     }
-    else if (SongName != prev_SongName) and (SongName != "Spotify Premium")  ;new song found
+    else if (SongName != prev_SongName) and (SongName != "Spotify Free")  ;new song found
     {
         GuiControl,, songtitle, %SongName%
         GuiControl,, pauseplay, %playingstring%
