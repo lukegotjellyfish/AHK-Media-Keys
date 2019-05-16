@@ -61,10 +61,10 @@ gui_y                = 600
 gui_transparency     = 220  ;/255
 font_colour_one     := "White"
 font_colour_two     := "FF69B4"  ;Hot Pink
-playingstring       := "| |"
+playingstring       := "||"
 pausedstring        := "▶️"
-prev                := "⏮"
-next                := "⏭"
+prev                := "<"
+next                := ">"
 
 nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 ;//!SECTION Vars
@@ -121,7 +121,7 @@ Gui, Color, Black
 ;//ANCHOR Prev-PAUSE-Next
 Gui, Font, c%font_colour_one% s60 q4 bold, Arial
 Gui, Add, Text, x05 y00 w54 h80 vprev BackgroundTrans, %prev%
-Gui, Add, Text, x69 y00 w66 h100 vpauseplay BackgroundTrans, %pausedstring%
+Gui, Add, Text, x69 y-05 w66 h100 vpauseplay BackgroundTrans, %pausedstring%
 Gui, Add, Text, x141 y00 w54 h80 vnext BackgroundTrans, %next%
 
 ;//ANCHOR Volume
