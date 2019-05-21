@@ -19,8 +19,6 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
-;
-;
 ;    #========================================#
 ;    |                 Hotkeys                |
 ;    #========================================#
@@ -30,19 +28,21 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;    | ^PgDn - Move GUI Down screen           |
 ;    | ^Del  - Move GUI to left of screen     |
 ;    | ^End  - Move GUI to right of screen    |
+;    | ^Home - Reset GUI to starting pos      |
 ;    |                                        |
 ;    | [Media Functions]                      |
 ;    | Numpad4 - Previous song                |
 ;    | Numpad5 - Pause/Play                   |
 ;    | Numpad6 - Next song                    |
-;    | Numpad8 - Foobar| volume up           |
-;    | Numpad2 - Foobar| volume down         |
-;    | Numpad3 - Foobar| add to top playlist |
+;    | Numpad8 - Foobar| volume up            |
+;    | Numpad2 - Foobar| volume down          |
+;    | Numpad3 - Foobar| add to top playlist  |
 ;    |                                        |
 ;    | [Misc Keys]                            |
 ;    | F3 - Reload                            |
 ;    |                                        |
 ;    #========================================#
+;
 ;//!SECTION Hotkey list
 ;//SECTION Vars
 global gui_added_x     = 248
@@ -61,11 +61,11 @@ song_time            = 0
 song_time_m          = 0
 song_time_s          = 0
 
-gui_x                = 0
-gui_y                = 600
+global gui_x                = 0
+global gui_y                = 600
 gui_transparency     = 220  ;/255
 font_colour_one     := "White"
-font_colour_two     := "FF69B4"  ;Hot Pink
+font_colour_two     := "FF89F1"  ;pnk
 playingstring       := "||"
 pausedstring        := "▶️"
 prev                := "<"
@@ -95,7 +95,16 @@ SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
 global volume
 if (FileExist(appname . "_volume.txt"))
 {
-    FileRead, volume, % appname . "_volume.txt"
+    FileRead, readfile, % appname . "_volume.txt"
+    readfile := StrSplit(readfile, ",")
+    volume := readfile[1]
+
+    if (readfile[2])
+    {
+        gui_x := readfile[2]
+        gui_y := readfile[3]
+    }
+
     if (volume < 0)
     {
         volume = 0
@@ -159,41 +168,67 @@ return
 ;//!SECTION
 
 ;//SECTION Hotkeys
+^Home::
+{
+    gui_y := 600
+    gui_x := 0
+    Gui, Show, x%gui_x% y%gui_y% NoActivate
+}
+return
+
 ^PgUp::  ;//ANCHOR PgUp
 {
-    if (gui_y > 0)
+    while (GetKeyState("PgUp", "P"))
     {
-        gui_y -= 10
+        if (gui_y > 0)
+        {
+            gui_y -= 10
+        }
+        Gui, Show, y%gui_y% NoActivate
+        Sleep, 10
     }
-    Gui, Show, y%gui_y% NoActivate
 }
 return
 
 ^PgDn::  ;//ANCHOR PgDn
 {
-    if (gui_y < 910)
-    gui_y += 10
-    Gui, Show, y%gui_y% NoActivate
+    while (GetKeyState("PgDn", "P"))
+    {
+        if (gui_y < 910)
+        {
+            gui_y += 10
+        }
+        Gui, Show, y%gui_y% NoActivate
+        Sleep, 10
+    }
 }
 return
 
 ^Del::  ;//ANCHOR Del
 {
-    if (gui_x > 0)
+    while (GetKeyState("Del", "P"))
     {
-        gui_x -= 10
+        if (gui_x > 0)
+        {
+            gui_x -= 10
+        }
+        Gui, Show, x%gui_x% NoActivate
+        Sleep, 10
     }
-    Gui, Show, x%gui_x% NoActivate
 }
 return
 
 ^End::  ;//ANCHOR End
 {
-    if (gui_X < 1620)
+    while (GetKeyState("End", "P"))
     {
-        gui_x += 10
+        if (gui_X < 1620)
+        {
+            gui_x += 10
+        }
+        Gui, Show, x%gui_x% NoActivate
+        Sleep, 10
     }
-    Gui, Show, x%gui_x% NoActivate
 }
 return
 
@@ -408,6 +443,8 @@ savevol:  ;//ANCHOR SaveVol label
 {
     FileDelete, %appname%_volume.txt
     FileAppend, %volume%, %appname%_volume.txt
+    FileAppend, `,%gui_x%, %appname%_volume.txt
+    FileAppend, `,%gui_y%, %appname%_volume.txt
 }
 return
 
