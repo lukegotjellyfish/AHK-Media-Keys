@@ -1,5 +1,5 @@
 # Requirements
-- [AHK](https://www.autohotkey.com/)
+- [AHK v1.1](https://www.autohotkey.com/)
 - [Nircmd for volume change](http://www.nirsoft.net/utils/nircmd.html)
 `(change nircmd_dir in script)`
 
