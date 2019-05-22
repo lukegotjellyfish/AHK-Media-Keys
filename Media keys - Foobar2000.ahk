@@ -15,6 +15,8 @@ ListLines, Off
 CoordMode, Mouse, Client
 OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;//!SECTION options
+
+
 ;//SECTION Hotkey list
 ;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
@@ -36,7 +38,6 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;    | Numpad6 - Next song                    |
 ;    | Numpad8 - Foobar| volume up            |
 ;    | Numpad2 - Foobar| volume down          |
-;    | Numpad3 - Foobar| add to top playlist  |
 ;    |                                        |
 ;    | [Misc Keys]                            |
 ;    | F3 - Reload                            |
@@ -44,10 +45,9 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;    #========================================#
 ;
 ;//!SECTION Hotkey list
-;//SECTION Vars
-global gui_added_x     = 248
-global gui_not_added_x = 223
 
+
+;//SECTION Vars
 appname          := "foobar2000"
 exename          := "foobar2000.exe"
 idlename         := "foobar2000 v1.4.3"
@@ -61,8 +61,6 @@ song_time            = 0
 song_time_m          = 0
 song_time_s          = 0
 
-global gui_x                = 0
-global gui_y                = 600
 gui_transparency     = 220  ;/255
 font_colour_one     := "White"
 font_colour_two     := "FF89F1"  ;pnk
@@ -73,6 +71,7 @@ next                := ">"
 
 nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 ;//!SECTION Vars
+
 
 ;//SECTION Get Foobar and nircmd
 ;##################################################################################
@@ -98,11 +97,17 @@ if (FileExist(appname . "_volume.txt"))
     FileRead, readfile, % appname . "_volume.txt"
     readfile := StrSplit(readfile, ",")
     volume := readfile[1]
+    volume_increment = readfile[2]
 
-    if (readfile[2])
+    if (readfile[3] and readfile[4])
     {
-        gui_x := readfile[2]
-        gui_y := readfile[3]
+        global gui_x := readfile[3]
+        global gui_y := readfile[4]
+    }
+    else
+    {
+        global gui_x = 0
+        global gui_y = 600
     }
 
     if (volume < 0)
@@ -113,13 +118,22 @@ if (FileExist(appname . "_volume.txt"))
     {
         volume = 100
     }
-    else if (ErrorLevel)
+    else if (ErrorLevel) ;corrupted file, set volume to half
     {
         volume = 50
     }
+
+    if (volume_increment < 0)
+    {
+        volume_increment = 5
+    }
+    else if (volume_increment > 100) || (ErrorLevel)
+    {
+        volume_increment = 5
+    }
 }
-volume_increment = 5
 ;//!SECTION Get foobar and nircmd
+
 
 ;//SECTION GUI
 ;//ANCHOR GUI settings
@@ -155,10 +169,7 @@ Gui, Add, Text, x005 y105 BackgroundTrans, Now Playing:
 Gui, Font, c%font_colour_two%
 Gui, Add, Text, x005 y121 w288 h50 vsongtitle BackgroundTrans, `
 
-;//ANCHOR Song-added status
-Gui, Font, s10 q4 c%font_colour_one% bold, Arial
-Gui, Add, Text, x%gui_not_added_x% y105 vadded BackgroundTrans, [Not Added]
-
+;//ANCHOR Gui Show
 WinSet, Transparent, %gui_transparency%
 Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
 
@@ -166,6 +177,7 @@ div_vol := (volume / 100)
 Run, %nircmd_dir% setappvolume %exename% %div_vol%  ;Match with script's volume seting (0.5) to perform on
 return
 ;//!SECTION
+
 
 ;//SECTION Hotkeys
 ^Home::
@@ -183,9 +195,13 @@ return
         if (gui_y > 0)
         {
             gui_y -= 10
+            Gui, Show, y%gui_y% NoActivate
+            Sleep, 10
         }
-        Gui, Show, y%gui_y% NoActivate
-        Sleep, 10
+        else
+        {
+            return
+        }
     }
 }
 return
@@ -197,9 +213,13 @@ return
         if (gui_y < 910)
         {
             gui_y += 10
+            Gui, Show, y%gui_y% NoActivate
+            Sleep, 10
         }
-        Gui, Show, y%gui_y% NoActivate
-        Sleep, 10
+        else
+        {
+            return
+        }
     }
 }
 return
@@ -211,9 +231,13 @@ return
         if (gui_x > 0)
         {
             gui_x -= 10
+            Gui, Show, x%gui_x% NoActivate
+            Sleep, 10
         }
-        Gui, Show, x%gui_x% NoActivate
-        Sleep, 10
+        else
+        {
+            return
+        }
     }
 }
 return
@@ -225,9 +249,13 @@ return
         if (gui_X < 1620)
         {
             gui_x += 10
+            Gui, Show, x%gui_x% NoActivate
+            Sleep, 10
         }
-        Gui, Show, x%gui_x% NoActivate
-        Sleep, 10
+        else
+        {
+            return
+        }
     }
 }
 return
@@ -342,7 +370,11 @@ F3::  ;//ANCHOR F3
     Sleep, 100  ;avoids multiple GUIs being created....yeah
 }
 return
+
+
 ;//!SECTION
+
+
 ;//SECTION Labels/Subs, Functions
 CheckSongName:  ;//ANCHOR CheckSongName
 {
@@ -424,14 +456,14 @@ ChangeAdded(added)  ;//ANCHOR ChangeAdded status
     if (added = 1)
     {
         Gui, Font, cFF69B4 s10 q4 bold
-        GuiControl, Move, added, x%gui_added_x%
+        GuiControl, Move, added, x248
         GuiControl,, added, [Added]
         GuiControl, Font, added
     }
     else
     {
         Gui, Font, cWhite s10 q4 bold
-        GuiControl, Move, added, x%gui_not_added_x%
+        GuiControl, Move, added, x223
         GuiControl,, added, [Not Added]
         GuiControl, Font, added
     }
@@ -443,6 +475,7 @@ savevol:  ;//ANCHOR SaveVol label
 {
     FileDelete, %appname%_volume.txt
     FileAppend, %volume%, %appname%_volume.txt
+    FileAppend, `,%volume_increment%, %appname%_volume.txt
     FileAppend, `,%gui_x%, %appname%_volume.txt
     FileAppend, `,%gui_y%, %appname%_volume.txt
 }
