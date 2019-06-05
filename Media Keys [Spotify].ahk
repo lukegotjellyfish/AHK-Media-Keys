@@ -1,4 +1,4 @@
-;//SECTION Options
+﻿;//SECTION Options
 #NoEnv
 #SingleInstance, Force
 #Persistent
@@ -21,6 +21,8 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
+;
+;
 ;    #========================================#
 ;    |                 Hotkeys                |
 ;    #========================================#
@@ -30,31 +32,23 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;    | ^PgDn - Move GUI Down screen           |
 ;    | ^Del  - Move GUI to left of screen     |
 ;    | ^End  - Move GUI to right of screen    |
-;    | ^Home - Reset GUI to starting pos      |
 ;    |                                        |
 ;    | [Media Functions]                      |
 ;    | Numpad4 - Previous song                |
 ;    | Numpad5 - Pause/Play                   |
 ;    | Numpad6 - Next song                    |
-;    | Numpad8 - Foobar| volume up            |
-;    | Numpad2 - Foobar| volume down          |
+;    | Numpad8 - Spotify| volume up           |
+;    | Numpad2 - Spotify| volume down         |
+;    | Numpad3 - Spotify| add to top playlist |
 ;    |                                        |
 ;    | [Misc Keys]                            |
 ;    | F3 - Reload                            |
 ;    |                                        |
 ;    #========================================#
-;
 ;//!SECTION Hotkey list
 
 
 ;//SECTION Vars
-appname          := "foobar2000"
-exename          := "foobar2000.exe"
-idlename         := "foobar2000 v1.4.3"
-stripsongnameend := "[foobar2000]"  ;Remove textstamp from what will be displayed
-
-global gui_x = 0
-global gui_y = 600
 colour_change_delay  = 100
 control_send_sleep   = 200
 song_check_timer     = 200
@@ -63,6 +57,8 @@ song_time            = 0
 song_time_m          = 0
 song_time_s          = 0
 
+global gui_x = 0
+global gui_y = 600
 gui_transparency     = 220  ;/255
 font_colour_one     := "White"
 font_colour_two     := "FF89F1"  ;pnk
@@ -75,7 +71,7 @@ nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirs
 ;//!SECTION Vars
 
 
-;//SECTION Get Foobar and nircmd
+;//SECTION Get spotify and nircmd
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
@@ -84,9 +80,9 @@ Loop, %win%
 {
     WinGetTitle, title, % "ahk_id" . win%A_Index%
     WinGet, spot_name, ProcessName, %title%
-    if (spot_name = exename)  ;find foobar window
+    if (spot_name = "Spotify.exe")  ;find window (not other spotify exe) from spotify.exe
     {
-        WinGet, foobar, ID, %title%
+        WinGet, spotify, ID, %title%
         break
     }
 }
@@ -94,9 +90,9 @@ Loop, %win%
 SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
 
 global volume
-if (FileExist(appname . "_volume.txt"))
+if (FileExist("spotify_volume.txt"))
 {
-    FileRead, readfile, % appname . "_volume.txt"
+    FileRead, readfile, spotify_volume.txt
     readfile := StrSplit(readfile, ",")
     if (readfile.MaxIndex() = 4)
     {
@@ -128,7 +124,7 @@ if (FileExist(appname . "_volume.txt"))
         volume_increment = 5
     }
 }
-;//!SECTION Get foobar and nircmd
+;//!SECTION Get spotify and nircmd
 
 
 ;//SECTION GUI
@@ -165,12 +161,15 @@ Gui, Add, Text, x005 y105 BackgroundTrans, Now Playing:
 Gui, Font, c%font_colour_two%
 Gui, Add, Text, x005 y121 w288 h50 vsongtitle BackgroundTrans, `
 
-;//ANCHOR Gui Show
+;//ANCHOR Song-added status
+Gui, Font, s10 q4 c%font_colour_one% bold, Arial
+Gui, Add, Text, x223 y105 vadded BackgroundTrans, [Not Added]
+
 WinSet, Transparent, %gui_transparency%
 Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
 
 div_vol := (volume / 100)
-Run, %nircmd_dir% setappvolume %exename% %div_vol%  ;Match with script's volume seting (0.5) to perform on
+Run, %nircmd_dir% setappvolume Spotify.exe %div_vol%  ;Match with script's volume seting (0.5) to perform on
 return
 ;//!SECTION
 
@@ -256,6 +255,7 @@ return
 }
 return
 
+
 *NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
 {
@@ -337,7 +337,7 @@ return
         GuiControl,, volume, %volume%`%
     }
     div_vol := (volume / 100)
-    Run, %nircmd_dir% setappvolume %exename% %div_vol%
+    Run, %nircmd_dir% setappvolume Spotify.exe %div_vol%
 }
 return
 
@@ -355,7 +355,45 @@ return
     }
     div_vol := (volume / 100)
     GuiControl,, volume, %volume%`%
-    Run, %nircmd_dir% setappvolume %exename% %div_vol%
+    Run, %nircmd_dir% setappvolume Spotify.exe %div_vol%
+}
+return
+
+
+*NumpadPGDN::
+*Numpad3::  ;//ANCHOR Numpad3
+{
+    WinGet window_state, MinMax, ahk_id %spotify%
+    IfEqual, window_state,-1, WinRestore, ahk_id %spotify%
+
+    WinGetPos,,, sw, sh, ahk_id %spotify%
+    if (sw != prev_sw) or (sh != prev_sh)
+    {
+        WinWh := sw//10
+        WinHh := sh//1.3
+        WinWw := sw//100
+        WinHw := sh//19
+        spot_song_name_x := WinWh-WinWw
+        spot_song_name_y := WinHh+WinHw
+        prev_sw = sw
+        prev_sh = sh
+    }
+
+    ControlClick, x%spot_song_name_x% y%spot_song_name_y%, ahk_id %spotify%,, Right
+    Sleep, %control_send_sleep%
+    ControlSend,, {UP}, ahk_id %spotify%,, Left
+    Sleep, %control_send_sleep%
+    ControlSend,, {UP}, ahk_id %spotify%,, Left
+    Sleep, %control_send_sleep%
+    ControlSend,, {RIGHT}, ahk_id %spotify%,, Left
+    Sleep, %control_send_sleep%
+    ControlSend,, {DOWN}, ahk_id %spotify%,, Left
+    Sleep, %control_send_sleep%
+    ControlSend,, {ENTER}, ahk_id %spotify%,, Left
+    Sleep, %control_send_sleep%
+    ControlSend,, {ESC}, ahk_id %spotify%,, Left  ;dismiss "already added"
+    Sleep, %control_send_sleep%
+    ChangeAdded(1)
 }
 return
 
@@ -375,16 +413,13 @@ return
 ;//SECTION Labels/Subs, Functions
 CheckSongName:  ;//ANCHOR CheckSongName
 {
-    WinGetTitle, SongName, ahk_id %foobar%
+    WinGetTitle, SongName, ahk_id %spotify%
     if InStr(SongName, "&")
     {
         SongName := RegExReplace(SongName, "&", "and")
     }
 
-    SongName := StrSplit(SongName, stripsongnameend)
-    SongName := SongName[1]
-
-    if (SongName != prev_SongName) and (SongName = idlename)  ;no song playing
+    if (SongName != prev_SongName) and (SongName = "Spotify Free")  ;no song playing
     {
         playing_status = 0
         GuiControl,, pauseplay, %pausedstring%
@@ -392,7 +427,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
         prev_SongName     := SongName
         SetTimer, Record_Time, OFF
     }
-    else if (SongName != prev_SongName) and (SongName != idlename)  ;new song found
+    else if (SongName != prev_SongName) and (SongName != "Spotify Free")  ;new song found
     {
         GuiControl,, songtitle, %SongName%
         GuiControl,, pauseplay, %playingstring%
@@ -470,12 +505,12 @@ return
 
 savevol:  ;//ANCHOR SaveVol label
 {
-    FileDelete, %appname%_volume.txt
-    FileAppend, %volume%, %appname%_volume.txt
-    FileAppend, `,%volume_increment%, %appname%_volume.txt
-    FileAppend, `,%gui_x%, %appname%_volume.txt
-    FileAppend, `,%gui_y%, %appname%_volume.txt
-    FileSetAttrib, +H, %appname%_volume.txt  ;hide file to prevent editing
+    FileDelete, spotify_volume.txt
+    FileAppend, %volume%, spotify_volume.txt
+    FileAppend, `,%volume_increment%, spotify_volume.txt
+    FileAppend, `,%gui_x%, spotify_volume.txt
+    FileAppend, `,%gui_y%, spotify_volume.txt
+    FileSetAttrib, +H, spotify_volume.txt  ;hide file to prevent editing
 }
 return
 
