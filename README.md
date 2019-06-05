@@ -1,5 +1,5 @@
 # Requirements
-- [AHK](https://www.autohotkey.com/)
+- [AHK v1.1](https://www.autohotkey.com/)
 - [Nircmd for volume change](http://www.nirsoft.net/utils/nircmd.html)
 `(change nircmd_dir in script)`
 
@@ -21,7 +21,4 @@
 - Numpad 6: Skip song
 - Numpad 8: Increase Volume by default 0.05
 - Numpad 2: Decrease Volume by default 0.05
-
-## Spotify only:
-
-> [Spotify] Numpad 3: Add to Top Playlist
+- [Spotify] Numpad 3: Add to Top Playlist
