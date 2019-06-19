@@ -176,7 +176,8 @@ return
 
 
 ;//SECTION Hotkeys
-^Home::
+;//SECTION GUI Hotkeys
+^Home::  ;//ANCHOR Ctrl+Home
 {
     gui_y := 600
     gui_x := 0
@@ -184,7 +185,9 @@ return
 }
 return
 
-^PgUp::  ;//ANCHOR PgUp
+
+;//SECTION PgUp
+^PgUp::  ;//ANCHOR Ctrl+PgUp
 {
     while (GetKeyState("PgUp", "P"))
     {
@@ -202,7 +205,26 @@ return
 }
 return
 
-^PgDn::  ;//ANCHOR PgDn
+
++PgUp::  ;//ANCHOR Shift+PgUp
+{
+    if (gui_y > 0)
+    {
+        gui_y -= 10
+        Gui, Show, y%gui_y% NoActivate
+        Sleep, 100
+    }
+    else
+    {
+        return
+    }
+}
+return
+;//!SECTION PgUp
+
+
+;//SECTION PgDn
+^PgDn::  ;//ANCHOR Ctrl+PgDn
 {
     while (GetKeyState("PgDn", "P"))
     {
@@ -220,6 +242,25 @@ return
 }
 return
 
+
++PgDn::  ;//ANCHOR Shift+PgDn
+{
+    if (gui_y < 910)
+    {
+        gui_y += 10
+        Gui, Show, y%gui_y% NoActivate
+        Sleep, 10
+    }
+    else
+    {
+        return
+    }
+}
+return
+;//!SECTION PgDn
+
+
+;//SECTION Del
 ^Del::  ;//ANCHOR Del
 {
     while (GetKeyState("Del", "P"))
@@ -238,6 +279,25 @@ return
 }
 return
 
+
++Del::  ;//ANCHOR Shift+Del
+{
+    if (gui_x > 0)
+    {
+        gui_x -= 10
+        Gui, Show, x%gui_x% NoActivate
+        Sleep, 10
+    }
+    else
+    {
+        return
+    }
+}
+return
+;//!SECTION Del
+
+
+;//SECTION End
 ^End::  ;//ANCHOR End
 {
     while (GetKeyState("End", "P"))
@@ -256,6 +316,25 @@ return
 }
 return
 
+
++End::
+{
+    if (gui_x < 1620)
+    {
+        gui_x += 10
+        Gui, Show, x%gui_x% NoActivate
+        Sleep, 10
+    }
+    else
+    {
+        return
+    }
+}
+return
+;//!SECTION End
+;//!SECTION GUI Hotkeys
+
+
 *NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
 {
@@ -264,13 +343,11 @@ return
     song_time_m = 0
     song_time_s = 0
     GuiControl,, timer, 0:00
-
     if (playing_status = 0)
     {
         playing_status = 1
         GuiControl,, pauseplay, %playingstring%
     }
-
     SetTimer, CheckSongName, %song_check_timer%
     ItemActivated(font_colour_two, "60", "prev", font_colour_one)
 }
@@ -281,7 +358,6 @@ return
 *Numpad5::  ;//ANCHOR Numpad5
 {
     Send, {Media_Play_Pause}
-
     if (playing_status = 1)
     {
         playing_status = 0
@@ -293,7 +369,6 @@ return
         playing_status = 1
         playpausestring := playingstring
     }
-
     GuiControl,, pauseplay, %playpausestring%
     ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one)
     Sleep, 10  ;prevents the wrong symbol being displayed
@@ -309,14 +384,11 @@ return
     song_time_m = 0
     song_time_s = 0
     GuiControl,, timer, 0:00
-
-
     if (playing_status = 0)
     {
         playing_status = 1
         GuiControl,, pauseplay, %playingstring%
     }
-
     SetTimer, CheckSongName, %song_check_timer%
     ItemActivated(font_colour_two, "60", "next", font_colour_one)
 }
@@ -396,10 +468,12 @@ CheckSongName:  ;//ANCHOR CheckSongName
     {
         GuiControl,, songtitle, %SongName%
         GuiControl,, pauseplay, %playingstring%
+
         if (was_paused = 1)
         {
             was_paused = 0
         }
+
         ChangeAdded(0)
         prev_SongName     := SongName
         playing_status     = 1
