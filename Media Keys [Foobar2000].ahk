@@ -13,7 +13,7 @@ SetMouseDelay, -1
 SetWinDelay,-1
 ListLines, Off
 CoordMode, Mouse, Client
-OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
+OnExit DoBeforeExit
 ;//!SECTION options
 
 
@@ -21,11 +21,29 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
+;  SETUP:
+;    Foobar2000
+;    - Preferences
+;      - Components
+;        - Display
+;          - Default User Interface
+;            - Playback state display formatting
+;
+;  Set the following three boxes to:
+;    %title%
+;    %codec% | %bitrate% kbps | %samplerate% Hz | %channels% | %playback_time%[ / %length%]
+;    [%artist% - ]%title%
+;  or alter the value of time_loc to the index of the time in the statusbar
+;
+;
+;
 ;    #========================================#
 ;    |                 Hotkeys                |
 ;    #========================================#
 ;    |                                        |
 ;    | [Gui Movement]                         |
+;    | ^<Gui key> - Fast smooth move          |
+;    | +<Gui key> - Move                      |
 ;    | ^PgUp - Move GUI Up screen             |
 ;    | ^PgDn - Move GUI Down screen           |
 ;    | ^Del  - Move GUI to left of screen     |
@@ -36,13 +54,17 @@ OnExit(ObjBindMethod(exitclass,"DoBeforeExit"))
 ;    | Numpad4 - Previous song                |
 ;    | Numpad5 - Pause/Play                   |
 ;    | Numpad6 - Next song                    |
-;    | Numpad8 - Foobar| volume up            |
-;    | Numpad2 - Foobar| volume down          |
+;    | Numpad8 - Foobar volume up             |
+;    | Numpad2 - Foobar volume down           |
 ;    |                                        |
 ;    | [Misc Keys]                            |
 ;    | F3 - Reload                            |
+;    | ^F3 - Exit
 ;    |                                        |
 ;    #========================================#
+;
+;  ^ = Left Control
+;  + = Shift
 ;
 ;//!SECTION Hotkey list
 
@@ -52,6 +74,7 @@ appname          := "foobar2000"
 exename          := "foobar2000.exe"
 idlename         := "foobar2000 v1.4.3"
 stripsongnameend := "[foobar2000]"  ;Remove textstamp from what will be displayed
+global time_loc  := 5
 
 global gui_x = 0
 global gui_y = 600
@@ -64,8 +87,8 @@ song_time_m          = 0
 song_time_s          = 0
 
 gui_transparency     = 220  ;/255
-font_colour_one     := "White"
-font_colour_two     := "FF89F1"  ;pnk
+font_colour_one     := "FFFFFF"  ;white
+font_colour_two     := "FF89F1"  ;pastel pink
 playingstring       := "||"
 pausedstring        := "▶️"
 prev                := "<"
@@ -79,18 +102,7 @@ nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirs
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
-WinGet, win, List
-Loop, %win%
-{
-    WinGetTitle, title, % "ahk_id" . win%A_Index%
-    WinGet, spot_name, ProcessName, %title%
-    if (spot_name = exename)  ;find foobar window
-    {
-        WinGet, foobar, ID, %title%
-        break
-    }
-}
-
+WinGetClass, foobar_class, ahk_exe %exename%
 SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
 
 global volume
@@ -145,25 +157,22 @@ Gui, Color, Black
 ;//ANCHOR Prev-PAUSE-Next
 Gui, Font, c%font_colour_one% s60 q4 bold, Arial
 Gui, Add, Text, x05 y00 w54 h80 vprev BackgroundTrans, %prev%
-Gui, Add, Text, x69 y-05 w66 h100 vpauseplay BackgroundTrans, %pausedstring%
+Gui, Add, Text, x69 y-05 w66 h100 vpauseplay, %pausedstring%
 Gui, Add, Text, x141 y00 w54 h80 vnext BackgroundTrans, %next%
 
 ;//ANCHOR Volume
-Gui, Font, c%font_colour_one% s14 q4 bold, Arial
-Gui, Add, Text, x236 y32 vvol_up, + %volume_increment%
-Gui, Add, Text, x236 y54 vvol_down, -  %volume_increment%
-Gui, Font, c%font_colour_two% s12 q4 bold, Arial
-Gui, Add, Text, x252 y10 w46 vvolume, %volume%`%
+Gui, Font, c%font_colour_one% s24 q4 bold, Arial
+Gui, Add, Text, x210 y20 w80 vvolume, %volume%`%
 
 ;//ANCHOR Timer
 Gui, Font, c%font_colour_two% s14 q4, Consolas
-Gui, Add, Text, x226 y80 w70 vtimer BackgroundTrans +border, 0:00
+Gui, Add, Text, x212 y60 w73 vtimer, 0:00
 
 ;//ANCHOR Nowplaying status
 Gui, Font, c%font_colour_one% s10 q4 bold, Arial
-Gui, Add, Text, x005 y105 BackgroundTrans, Now Playing:
+Gui, Add, Text, x005 y95 BackgroundTrans, Now Playing:
 Gui, Font, c%font_colour_two%
-Gui, Add, Text, x005 y121 w288 h50 vsongtitle BackgroundTrans, `
+Gui, Add, Text, x005 y111 w288 h50 vsongtitle, `
 
 ;//ANCHOR Gui Show
 WinSet, Transparent, %gui_transparency%
@@ -362,7 +371,6 @@ return
     {
         playing_status = 0
         playpausestring := pausedstring
-        SetTimer, Record_Time, OFF
     }
     else
     {
@@ -447,7 +455,7 @@ return
 ;//SECTION Labels/Subs, Functions
 CheckSongName:  ;//ANCHOR CheckSongName
 {
-    WinGetTitle, SongName, ahk_id %foobar%
+    WinGetTitle, SongName, ahk_class %foobar_class%
     if InStr(SongName, "&")
     {
         SongName := RegExReplace(SongName, "&", "and")
@@ -462,7 +470,7 @@ CheckSongName:  ;//ANCHOR CheckSongName
         GuiControl,, pauseplay, %pausedstring%
         last_song := prev_SongName
         prev_SongName     := SongName
-        SetTimer, Record_Time, OFF
+        SetTimer, Record_Time, On
     }
     else if (SongName != prev_SongName) and (SongName != idlename)  ;new song found
     {
@@ -475,21 +483,16 @@ CheckSongName:  ;//ANCHOR CheckSongName
         }
 
         ChangeAdded(0)
-        prev_SongName     := SongName
-        playing_status     = 1
+        prev_SongName := SongName
+        playing_status = 1
 
         if (SongName != last_song)
         {
-            song_time          = 0
-            song_time_s        = 0
-            song_time_m        = 0
-            timed = 0
+            ControlGetText, controltext, ATL:msctls_statusbar321, ahk_exe foobar2000.exe
+            controltext := StrSplit(controltext, " | ")
+            controltext := StrSplit(controltext[time_loc], "/")[1]
+            GuiControl,, timer, %controltext%
             SetTimer, Record_Time, 1000
-            GuiControl,, timer, %song_time_m%:0%song_time_s%
-        }
-        else
-        {
-            SetTimer, Record_Time, ON
         }
     }
 }
@@ -497,18 +500,10 @@ return
 
 Record_Time:  ;//ANCHOR Timer procedure
 {
-    song_time += 1
-    song_time_s += 1
-    song_time_m := song_time // 60
-    if (song_time_s = 60)
-    {
-        song_time_s = 0
-    }
-    if (song_time_s < 10)
-    {
-        song_time_s := 0 . song_time_s
-    }
-    GuiControl,, timer, %song_time_m%:%song_time_s%
+    ControlGetText, controltext, ATL:msctls_statusbar321, ahk_exe foobar2000.exe
+    controltext := StrSplit(controltext, " | ")
+    controltext := StrSplit(controltext[time_loc], "/")[1]
+    GuiControl,, timer, %controltext%
 }
 return
 
@@ -549,18 +544,18 @@ savevol:  ;//ANCHOR SaveVol label
     FileAppend, `,%volume_increment%, %appname%_volume.txt
     FileAppend, `,%gui_x%, %appname%_volume.txt
     FileAppend, `,%gui_y%, %appname%_volume.txt
-    FileSetAttrib, +H, %appname%_volume.txt  ;hide file to prevent editing
+    FileSetAttrib, +H, %appname%_volume.txt
+    ;+H = hide file to try and prevent editing and take up less visual space
 }
 return
 
-class exitclass
-{
-    DoBeforeExit()
-    {
-        GoSub, savevol
-    }
-}
 
+DoBeforeExit:
+{
+    GoSub, savevol
+    ExitApp
+}
+return
 ;//!SECTION
 /*  //NOTE Notices
 ╔════════════════════════════════════════════════════════════════════════════════╗
