@@ -340,6 +340,7 @@ return
 ;//!SECTION GUI Hotkeys
 
 
+$Media_Prev::
 *NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
 {
@@ -356,6 +357,7 @@ return
 return
 
 
+$Media_Play_Pause::
 *NumpadClear::
 *Numpad5::  ;//ANCHOR Numpad5
 {
@@ -376,7 +378,7 @@ return
 }
 return
 
-
+$Media_Next::
 *NumpadRight::
 *Numpad6::  ;//ANCHOR Numpad6
 {
@@ -458,9 +460,9 @@ CheckSongName:  ;//ANCHOR CheckSongName
     {
         playing_status = 0
         GuiControl,, pauseplay, %pausedstring%
-        last_song := prev_SongName
-        prev_SongName     := SongName
-        SetTimer, Record_Time, On
+        last_song     := prev_SongName
+        prev_SongName := SongName
+        SetTimer, Record_Time, 1000
     }
     else if (SongName != prev_SongName) and (SongName != idlename)  ;new song found
     {
@@ -486,11 +488,11 @@ return
 
 Record_Time:  ;//ANCHOR Timer
 {
-    ControlGetText, controltext, ATL:msctls_statusbar321, %classname%
+    ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
     controltext := StrSplit(controltext, " | ")
     controltext := StrSplit(controltext[time_loc], "/")[1]
 	if (controltext > 0)
-    {
+	{
 		GuiControl,, timer, %controltext%
 	}
 }
