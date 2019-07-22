@@ -432,6 +432,15 @@ return
 return
 
 
+~Media_Stop::
+{
+	controltext := "0:00"
+	GuiControl,, SongTitle, `
+	GuiControl,, Timer, %controltext%
+}
+return
+
+
 F3::  ;//ANCHOR F3
 {
     reload
