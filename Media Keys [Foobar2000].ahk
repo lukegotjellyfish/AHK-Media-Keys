@@ -537,7 +537,7 @@ ChangeAdded(added)  ;//ANCHOR ChangeAdded status
 return
 
 
-savevol:  ;//ANCHOR SaveVol label
+DoBeforeExit:
 {
     FileDelete, %appname%_volume.txt
     FileAppend, %volume%, %appname%_volume.txt
@@ -545,14 +545,7 @@ savevol:  ;//ANCHOR SaveVol label
     FileAppend, `,%gui_x%, %appname%_volume.txt
     FileAppend, `,%gui_y%, %appname%_volume.txt
     FileSetAttrib, +H, %appname%_volume.txt
-    ;+H = hide file to try and prevent editing and take up less visual space
-}
-return
-
-
-DoBeforeExit:
-{
-    GoSub, savevol
+	;+H = hide file to try and prevent editing and take up less visual space
     ExitApp
 }
 return
