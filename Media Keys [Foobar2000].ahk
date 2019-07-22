@@ -73,6 +73,7 @@ OnExit DoBeforeExit
 appname          := "foobar2000"
 exename          := "foobar2000.exe"
 idlename         := "foobar2000 v1.4.3"
+classname        := "{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}"
 stripsongnameend := "[foobar2000]"  ;Remove textstamp from what will be displayed
 global time_loc  := 5
 
@@ -81,10 +82,6 @@ global gui_y = 600
 colour_change_delay  = 100
 control_send_sleep   = 200
 song_check_timer     = 200
-
-song_time            = 0
-song_time_m          = 0
-song_time_s          = 0
 
 gui_transparency     = 220  ;/255
 font_colour_one     := "FFFFFF"  ;white
@@ -102,7 +99,6 @@ nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirs
 ;##################################################################################
 ;                       Initial process for CheckSongName
 ;##################################################################################
-WinGetClass, foobar_class, ahk_exe %exename%
 SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
 
 global volume
@@ -348,9 +344,6 @@ return
 *Numpad4::  ;//ANCHOR Numpad4
 {
     Send, {Media_Prev}
-    song_time := 0
-    song_time_m = 0
-    song_time_s = 0
     GuiControl,, timer, 0:00
     if (playing_status = 0)
     {
@@ -388,9 +381,6 @@ return
 *Numpad6::  ;//ANCHOR Numpad6
 {
     Send, {Media_Next}
-    song_time := 0
-    song_time_m = 0
-    song_time_s = 0
     GuiControl,, timer, 0:00
     if (playing_status = 0)
     {
@@ -455,7 +445,7 @@ return
 ;//SECTION Labels/Subs, Functions
 CheckSongName:  ;//ANCHOR CheckSongName
 {
-    WinGetTitle, SongName, ahk_class %foobar_class%
+    WinGetTitle, SongName, ahk_class %classname%
     if InStr(SongName, "&")
     {
         SongName := RegExReplace(SongName, "&", "and")
@@ -488,22 +478,21 @@ CheckSongName:  ;//ANCHOR CheckSongName
 
         if (SongName != last_song)
         {
-            ControlGetText, controltext, ATL:msctls_statusbar321, ahk_exe foobar2000.exe
-            controltext := StrSplit(controltext, " | ")
-            controltext := StrSplit(controltext[time_loc], "/")[1]
-            GuiControl,, timer, %controltext%
             SetTimer, Record_Time, 1000
         }
     }
 }
 return
 
-Record_Time:  ;//ANCHOR Timer procedure
+Record_Time:  ;//ANCHOR Timer
 {
-    ControlGetText, controltext, ATL:msctls_statusbar321, ahk_exe foobar2000.exe
+    ControlGetText, controltext, ATL:msctls_statusbar321, %classname%
     controltext := StrSplit(controltext, " | ")
     controltext := StrSplit(controltext[time_loc], "/")[1]
-    GuiControl,, timer, %controltext%
+	if (controltext > 0)
+    {
+		GuiControl,, timer, %controltext%
+	}
 }
 return
 
