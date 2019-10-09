@@ -2,12 +2,15 @@
 #NoEnv
 #SingleInstance, Force
 #Persistent
+#InstallKeybdHook
+#InstallMouseHook
+#KeyHistory, 0
 #MaxThreadsPerHotkey, 1
 Process, Priority,, High
 SetBatchLines, -1
 SendMode Input
 SetWorkingDir %A_ScriptDir%
-SetKeyDelay,-1, 1
+SetKeyDelay,5, 1
 SetControlDelay, -1
 SetMouseDelay, -1
 SetWinDelay,-1
@@ -16,6 +19,21 @@ CoordMode, Mouse, Client
 OnExit DoBeforeExit
 ;//!SECTION options
 
+if (A_IsAdmin = 0)
+{
+	try
+	{
+		if (A_IsCompiled)
+		{
+			Run *RunAs "%A_ScriptFullPath%" /restart
+		}
+		else
+		{
+			Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
+		}
+	}
+	ExitApp
+}
 
 ;//SECTION Hotkey list
 ;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
