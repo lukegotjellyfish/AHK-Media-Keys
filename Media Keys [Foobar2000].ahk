@@ -118,6 +118,7 @@ nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirs
 ;                       Initial process for CheckSongName
 ;##################################################################################
 SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
+SetTimer, CheckPlayingStatus, -0
 
 global volume
 if (FileExist(appname . "_volume.txt"))
@@ -362,6 +363,7 @@ $Media_Prev::
 *NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
 {
+	global playingstatuschanged := 1
     Send, {Media_Prev}
     GuiControl,, timer, 0:00
     if (playing_status = 0)
@@ -379,6 +381,7 @@ $Media_Play_Pause::
 *NumpadClear::
 *Numpad5::  ;//ANCHOR Numpad5
 {
+	global playingstatuschanged := 1
     Send, {Media_Play_Pause}
     if (playing_status = 1)
     {
@@ -393,6 +396,7 @@ $Media_Play_Pause::
     GuiControl,, pauseplay, %playpausestring%
     ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one)
     Sleep, 10  ;prevents the wrong symbol being displayed
+	SetTimer, CheckPlayingStatus, -0
 }
 return
 
@@ -400,6 +404,7 @@ $Media_Next::
 *NumpadRight::
 *Numpad6::  ;//ANCHOR Numpad6
 {
+	global playingstatuschanged := 1
     Send, {Media_Next}
     GuiControl,, timer, 0:00
     if (playing_status = 0)
@@ -450,7 +455,7 @@ return
 return
 
 
-~Media_Stop::
+~Media_Stop::  ;//ANCHOR Media_Stop
 {
 	controltext := "0:00"
 	GuiControl,, SongTitle, `
@@ -512,6 +517,65 @@ CheckSongName:  ;//ANCHOR CheckSongName
     }
 }
 return
+
+CheckPlayingStatus:  ;ANCHOR CheckPlayingStatus
+{
+	Loop
+	{
+		timearray := []
+		Loop, 3
+		{
+			ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
+			controltext := StrSplit(controltext, " | ")
+			controltext := StrSplit(controltext[time_loc], "/")[1]
+			timearray.Push(controltext)
+			Sleep, 1000
+		}
+		;for item in timearray
+		;{
+		;	MsgBox % item
+		;}
+		;MsgBox % playingstatuschanged
+		if playingstatuschanged = 1
+		{
+			global playingstatuschanged = 0
+			continue
+		}
+		if ((timearray[1] = timearray[2]) AND (timearray[2] = timearray[3])) ;paused
+		{
+			playing_status = 0
+			GuiControl,, pauseplay, %pausedstring%
+			last_song     := prev_SongName
+			prev_SongName := SongName
+			SetTimer, Record_Time, 1000
+			;MsgBox, paused
+		}
+		else
+		{
+			WinGetTitle, SongName, ahk_class %classname%
+			if InStr(SongName, "&")
+			{
+				SongName := RegExReplace(SongName, "&", "and")
+			}
+
+			SongName := StrSplit(SongName, stripsongnameend)
+			SongName := SongName[1]
+
+			GuiControl,, songtitle, %SongName%
+			GuiControl,, pauseplay, %playingstring%
+			if (was_paused = 1)
+			{
+				was_paused = 0
+			}
+
+			ChangeAdded(0)
+			prev_SongName := SongName
+			playing_status = 1
+			;MsgBox, playing
+		}
+	}
+}
+
 
 Record_Time:  ;//ANCHOR Timer
 {
