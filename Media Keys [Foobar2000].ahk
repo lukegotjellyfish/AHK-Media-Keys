@@ -1,4 +1,4 @@
-﻿;//SECTION Options
+;//SECTION Options
 #NoEnv
 #SingleInstance, Force
 #Persistent
@@ -19,40 +19,50 @@ CoordMode, Mouse, Client
 OnExit DoBeforeExit
 ;//!SECTION options
 
+
 if (A_IsAdmin = 0)
 {
-	try
-	{
-		if (A_IsCompiled)
-		{
-			Run *RunAs "%A_ScriptFullPath%" /restart
-		}
-		else
-		{
-			Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
-		}
-	}
-	ExitApp
+    try
+    {
+        if (A_IsCompiled)
+        {
+            Run *RunAs "%A_ScriptFullPath%" /restart
+        }
+        else
+        {
+            Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
+        }
+    }
+    ExitApp
 }
+
 
 ;//SECTION Hotkey list
 ;"/(!)<name>" are bookmarks (from a VS Code extension) in the code to be navigated with via:
 ;  https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors
 ;
+;
 ;  SETUP:
 ;    Foobar2000
-;    - Preferences
-;      - Components
-;        - Display
-;          - Default User Interface
-;            - Playback state display formatting
+;    \ Preferences
+;      \ Components
+;        \ Display
+;          \ Default User Interface
+;            \ Playback state display formatting
 ;
 ;  Set the following three boxes to:
 ;    %title%
-;    %codec% | %bitrate% kbps | %samplerate% Hz | %channels% | %playback_time%[ / %length%]
+;    %codec% | %bitrate% kbps | %samplerate% Hz | %channels% | %playback_time%[ / %length%] | [%rating_stars_fixed%]
 ;    [%artist% - ]%title%
 ;  or alter the value of time_loc to the index of the time in the statusbar
 ;
+;
+;  Playback Statistics can be found here: (Rating stars)
+;   - foobar2000.org/components/view/foo_playcount
+;
+;
+;  Definitions: ^ = CTRL
+;               + = SHIFT
 ;
 ;
 ;    #========================================#
@@ -77,7 +87,7 @@ if (A_IsAdmin = 0)
 ;    |                                        |
 ;    | [Misc Keys]                            |
 ;    | F3 - Reload                            |
-;    | ^F3 - Exit
+;    | ^F3 - Exit                             |
 ;    |                                        |
 ;    #========================================#
 ;
@@ -88,15 +98,16 @@ if (A_IsAdmin = 0)
 
 
 ;//SECTION Vars
-appname          := "foobar2000"
+global appname   := "foobar2000"
 exename          := "foobar2000.exe"
 idlename         := "foobar2000 v1.4.3"
 classname        := "{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}"
 stripsongnameend := "[foobar2000]"  ;Remove textstamp from what will be displayed
 global time_loc  := 5
+global rat_loc   := 6
 
-global gui_x = 0
-global gui_y = 600
+global gui_x         = 0
+global gui_y         = 600
 colour_change_delay  = 100
 control_send_sleep   = 200
 song_check_timer     = 200
@@ -104,11 +115,10 @@ song_check_timer     = 200
 gui_transparency     = 220  ;/255
 font_colour_one     := "FFFFFF"  ;white
 font_colour_two     := "FF89F1"  ;pastel pink
-playingstring       := "||"
-pausedstring        := "▶️"
+global playingstring       := "()"
+global pausedstring        := "||"
 prev                := "<"
 next                := ">"
-
 nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 ;//!SECTION Vars
 
@@ -119,6 +129,7 @@ nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirs
 ;##################################################################################
 SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
 SetTimer, CheckPlayingStatus, -0
+SetTimer, UpdateRating, 500
 
 global volume
 if (FileExist(appname . "_volume.txt"))
@@ -188,6 +199,11 @@ Gui, Font, c%font_colour_one% s10 q4 bold, Arial
 Gui, Add, Text, x005 y95 BackgroundTrans, Now Playing:
 Gui, Font, c%font_colour_two%
 Gui, Add, Text, x005 y111 w288 h50 vsongtitle, `
+
+;//ANCHOR Rating Status
+Gui, Font, c%font_colour_two% s14 q4, Consolas
+Gui, Add, Text, x197 y80 w70 vrating, uwu
+Gui, Font, c%font_colour_one% s10 q4 bold, Arial
 
 ;//ANCHOR Gui Show
 WinSet, Transparent, %gui_transparency%
@@ -359,11 +375,11 @@ return
 ;//!SECTION GUI Hotkeys
 
 
+;//SECTION Media Functions
 $Media_Prev::
 *NumpadLeft::
 *Numpad4::  ;//ANCHOR Numpad4
 {
-	global playingstatuschanged := 1
     Send, {Media_Prev}
     GuiControl,, timer, 0:00
     if (playing_status = 0)
@@ -381,7 +397,6 @@ $Media_Play_Pause::
 *NumpadClear::
 *Numpad5::  ;//ANCHOR Numpad5
 {
-	global playingstatuschanged := 1
     Send, {Media_Play_Pause}
     if (playing_status = 1)
     {
@@ -396,7 +411,6 @@ $Media_Play_Pause::
     GuiControl,, pauseplay, %playpausestring%
     ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one)
     Sleep, 10  ;prevents the wrong symbol being displayed
-	SetTimer, CheckPlayingStatus, -0
 }
 return
 
@@ -404,7 +418,6 @@ $Media_Next::
 *NumpadRight::
 *Numpad6::  ;//ANCHOR Numpad6
 {
-	global playingstatuschanged := 1
     Send, {Media_Next}
     GuiControl,, timer, 0:00
     if (playing_status = 0)
@@ -421,18 +434,18 @@ return
 *NumpadUp::
 *Numpad8::  ;//ANCHOR Numpad8
 {
-    if (volume + volume_increment > 100)
-    {
-        volume = 100
-        GuiControl,, volume, %volume%`%
-    }
-    else
-    {
-        volume += %volume_increment%
-        GuiControl,, volume, %volume%`%
-    }
-    div_vol := (volume / 100)
-    Run, %nircmd_dir% setappvolume %exename% %div_vol%
+	if (volume + volume_increment > 100)
+	{
+		volume = 100
+		GuiControl,, volume, %volume%`%
+	}
+	else
+	{
+		volume += %volume_increment%
+		GuiControl,, volume, %volume%`%
+	}
+	div_vol := (volume / 100)
+	Run, %nircmd_dir% setappvolume %exename% %div_vol%
 }
 return
 
@@ -457,13 +470,15 @@ return
 
 ~Media_Stop::  ;//ANCHOR Media_Stop
 {
-	controltext := "0:00"
-	GuiControl,, SongTitle, `
-	GuiControl,, Timer, %controltext%
+    controltext := "0:00"
+    GuiControl,, SongTitle, `
+    GuiControl,, Timer, %controltext%
 }
 return
+;//!SECTION Media Functions
 
 
+;//SECTION Misc
 F3::  ;//ANCHOR F3
 {
     reload
@@ -473,7 +488,8 @@ return
 
 
 ^F3::ExitApp  ;//ANCHOR ^F3
-;//!SECTION
+;//!SECTION Misc
+;//!SECTION Hotkeys
 
 
 ;//SECTION Labels/Subs, Functions
@@ -520,60 +536,26 @@ return
 
 CheckPlayingStatus:  ;ANCHOR CheckPlayingStatus
 {
-	Loop
-	{
-		timearray := []
-		Loop, 3
-		{
-			ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
-			controltext := StrSplit(controltext, " | ")
-			controltext := StrSplit(controltext[time_loc], "/")[1]
-			timearray.Push(controltext)
-			Sleep, 1000
-		}
-		;for item in timearray
-		;{
-		;	MsgBox % item
-		;}
-		;MsgBox % playingstatuschanged
-		if playingstatuschanged = 1
-		{
-			global playingstatuschanged = 0
-			continue
-		}
-		if ((timearray[1] = timearray[2]) AND (timearray[2] = timearray[3])) ;paused
-		{
-			playing_status = 0
-			GuiControl,, pauseplay, %pausedstring%
-			last_song     := prev_SongName
-			prev_SongName := SongName
-			SetTimer, Record_Time, 1000
-			;MsgBox, paused
-		}
-		else
-		{
-			WinGetTitle, SongName, ahk_class %classname%
-			if InStr(SongName, "&")
-			{
-				SongName := RegExReplace(SongName, "&", "and")
-			}
+    WinGetTitle, SongName, ahk_class %classname%
+    if InStr(SongName, "&")
+    {
+        SongName := RegExReplace(SongName, "&", "and")
+    }
 
-			SongName := StrSplit(SongName, stripsongnameend)
-			SongName := SongName[1]
+    SongName := StrSplit(SongName, stripsongnameend)
+    SongName := SongName[1]
 
-			GuiControl,, songtitle, %SongName%
-			GuiControl,, pauseplay, %playingstring%
-			if (was_paused = 1)
-			{
-				was_paused = 0
-			}
+    GuiControl,, songtitle, %SongName%
+    GuiControl,, pauseplay, %playingstring%
+    if (was_paused = 1)
+    {
+        was_paused = 0
+    }
 
-			ChangeAdded(0)
-			prev_SongName := SongName
-			playing_status = 1
-			;MsgBox, playing
-		}
-	}
+    ChangeAdded(0)
+    prev_SongName := SongName
+    playing_status = 1
+    ;MsgBox, playing
 }
 
 
@@ -582,14 +564,15 @@ Record_Time:  ;//ANCHOR Timer
     ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
     controltext := StrSplit(controltext, " | ")
     controltext := StrSplit(controltext[time_loc], "/")[1]
-	if (controltext > 0)
-	{
-		GuiControl,, timer, %controltext%
-	}
+    if (controltext > 0)
+    {
+        GuiControl,, timer, %controltext%
+    }
 }
 return
 
-ItemActivated(font_colour_two, font_size, control_name, font_colour_one)  ;/ANCHOR ItemActivated procedure
+
+ItemActivated(font_colour_two, font_size, control_name, font_colour_one)  ;//ANCHOR ItemActivated procedure
 {
     Gui, Font, c%font_colour_two% s%font_size% q4 bold
     GuiControl, Font, %control_name%
@@ -598,6 +581,7 @@ ItemActivated(font_colour_two, font_size, control_name, font_colour_one)  ;/ANCH
     GuiControl, Font, %control_name%
 }
 return
+
 
 ChangeAdded(added)  ;//ANCHOR ChangeAdded status
 {
@@ -619,19 +603,31 @@ ChangeAdded(added)  ;//ANCHOR ChangeAdded status
 return
 
 
+UpdateRating:
+{
+    ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
+    controltext := StrSplit(controltext, " | ")
+    rating_stars := controltext[6]
+    GuiControl,, rating, %rating_stars%
+}
+return
+
 DoBeforeExit:
 {
+    Sleep, 100 ;seems to stop a file "_volume.txt" from being created :thonk:
     FileDelete, %appname%_volume.txt
     FileAppend, %volume%, %appname%_volume.txt
     FileAppend, `,%volume_increment%, %appname%_volume.txt
     FileAppend, `,%gui_x%, %appname%_volume.txt
     FileAppend, `,%gui_y%, %appname%_volume.txt
     FileSetAttrib, +H, %appname%_volume.txt
-	;+H = hide file to try and prevent editing and take up less visual space
+    ;+H = hide file to try and prevent editing and take up less visual space
     ExitApp
 }
 return
 ;//!SECTION
+
+
 /*  //NOTE Notices
 ╔════════════════════════════════════════════════════════════════════════════════╗
 ║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
