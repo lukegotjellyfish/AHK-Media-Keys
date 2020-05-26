@@ -54,7 +54,7 @@ if (A_IsAdmin = 0)
 ;    %title%
 ;    %codec% | %bitrate% kbps | %samplerate% Hz | %channels% | %playback_time%[ / %length%] | [%rating_stars_fixed%]
 ;    [%artist% - ]%title%
-;  or alter the value of time_loc to the index of the time in the statusbar
+;  or alter the value of FOO_TIME_INDEX to the index of the time in the statusbar
 ;
 ;
 ;  Playback Statistics can be found here: (Rating stars)
@@ -91,35 +91,59 @@ if (A_IsAdmin = 0)
 ;    |                                        |
 ;    #========================================#
 ;
-;  ^ = Left Control
-;  + = Shift
-;
 ;//!SECTION Hotkey list
 
 
 ;//SECTION Vars
-global appname   := "foobar2000"
-exename          := "foobar2000.exe"
-idlename         := "foobar2000 v1.4.3"
-classname        := "{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}"
-stripsongnameend := "[foobar2000]"  ;Remove textstamp from what will be displayed
-global time_loc  := 5
-global rat_loc   := 6
+global appname          := "foobar2000"
+exename                 := "foobar2000.exe"
+idlename                := "foobar2000 v1.4.3"
+classname               := "{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}"
+stripsongnameend        := "[foobar2000]"  ;Remove textstamp from what will be displayed
+global FOO_TIME_INDEX   := 5
+global FOO_RATING_INDEX := 6
+nircmd_dir              := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 
-global gui_x         = 0
-global gui_y         = 600
-colour_change_delay  = 100
-control_send_sleep   = 200
-song_check_timer     = 200
+;Delays
+colour_change_delay     := 100
+control_send_sleep      := 200
+song_check_timer        := 200
 
-gui_transparency     = 220  ;/255
-font_colour_one     := "FFFFFF"  ;white
-font_colour_two     := "FF89F1"  ;pastel pink
-global playingstring       := "()"
-global pausedstring        := "||"
-prev                := "<"
-next                := ">"
-nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
+;GUI Coordinate Variables
+GUI_MARGIN_X            := 0
+GUI_MARGIN_Y            := 0 
+global GUI_X            := 0
+global GUI_Y            := 600
+GUI_WIDTH               := 270
+GUI_HEIGHT              := 170
+SCREEN_WIDTH            := 1920
+SCREEN_HEIGHT           := 1080
+GUI_PAUSED_X            := 56
+GUI_RESUME_X            := 64
+
+;GUI Font Settings
+GUI_CONTROLS_SIZE       := 60
+GUI_CONTROLS_FONT       := "Arial"
+GUI_VOLUME_SIZE         := 24
+GUI_VOLUME_FONT         := "Arial"
+GUI_TIMER_SIZE          := 14
+GUI_TIMER_FONT          := "Consolas"
+GUI_RATING_SIZE         := 18
+GUI_RATING_FONT         := "Consolas"
+GUI_NOWPLAYING_SIZE     := "10"
+GUI_NOWPLAYING_FONT     := "Arial"
+GUI_FONT_COLOUR_ONE     := "FFFFFF"  ;white
+GUI_FONT_COLOUR_TWO     := "FF89F1"  ;pastel pink
+
+;GUI Colours
+GUI_TRANSPARENCY        := 220  ;/255
+GUI_COLOUR              := "c000000"
+
+;GUI Strings
+global playingstring    := "()"
+global pausedstring     := "||"
+prev                    := "<"
+next                    := ">"
 ;//!SECTION Vars
 
 
@@ -128,8 +152,10 @@ nircmd_dir          := A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirs
 ;                       Initial process for CheckSongName
 ;##################################################################################
 SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
-SetTimer, CheckPlayingStatus, -0
+SetTimer, CheckPlayingStatus, -50
 SetTimer, UpdateRating, 500
+SetTimer, Record_Time, 1000
+
 
 global volume
 if (FileExist(appname . "_volume.txt"))
@@ -140,8 +166,8 @@ if (FileExist(appname . "_volume.txt"))
     {
         volume           := readfile[1]
         volume_increment := readfile[2]
-        gui_x            := readfile[3]
-        gui_y            := readfile[4]
+        GUI_X            := readfile[3]
+        GUI_Y            := readfile[4]
     }
 
     if (volume < 0)
@@ -152,7 +178,7 @@ if (FileExist(appname . "_volume.txt"))
     {
         volume = 100
     }
-    else if (ErrorLevel) ;corrupted file, set volume to half
+    else if (ErrorLevel) ;error, set volume to half
     {
         volume = 50
     }
@@ -177,37 +203,35 @@ Gui, +AlwaysOnTop +ToolWindow +LastFound -Caption +E0x20 ;+hwndGUI_Overlay_hwnd
 ; +LastFound   - For transparency to work
 ; -Caption     - Don't include window title
 ; +E0x20       - Don't register clicks on window
-Gui, Margin, 0, 0
-Gui, Color, Black
+Gui, Margin, %GUI_MARGIN_X%, %GUI_MARGIN_Y%
+Gui, Color, %GUI_COLOUR%
 
 ;//ANCHOR Prev-PAUSE-Next
-Gui, Font, c%font_colour_one% s60 q4 bold, Arial
-Gui, Add, Text, x05 y00 w54 h80 vprev BackgroundTrans, %prev%
-Gui, Add, Text, x69 y-05 w66 h100 vpauseplay, %pausedstring%
-Gui, Add, Text, x141 y00 w54 h80 vnext BackgroundTrans, %next%
+Gui, Font, c%GUI_FONT_COLOUR_ONE% s%GUI_CONTROLS_SIZE%, %GUI_CONTROLS_FONT%
+Gui, Add, Text, x05  		     y00 w54  h80  BackgroundTrans vprev,      %prev%
+Gui, Add, Text, x%GUI_PAUSED_X%  y-7 w59  h100 BackgroundTrans vpauseplay, %pausedstring%
+Gui, Add, Text, x116 			 y00 w54  h80  BackgroundTrans vnext,      %next%
 
 ;//ANCHOR Volume
-Gui, Font, c%font_colour_one% s24 q4 bold, Arial
-Gui, Add, Text, x210 y20 w80 vvolume, %volume%`%
+Gui, Font, c%GUI_FONT_COLOUR_ONE% s%GUI_VOLUME_SIZE%, %GUI_VOLUME_FONT%
+Gui, Add, Text, x180 y20 w80 vvolume, %volume%`%
 
 ;//ANCHOR Timer
-Gui, Font, c%font_colour_two% s14 q4, Consolas
-Gui, Add, Text, x212 y60 w73 vtimer, 0:00
-
-;//ANCHOR Nowplaying status
-Gui, Font, c%font_colour_one% s10 q4 bold, Arial
-Gui, Add, Text, x005 y95 BackgroundTrans, Now Playing:
-Gui, Font, c%font_colour_two%
-Gui, Add, Text, x005 y111 w288 h50 vsongtitle, `
+Gui, Font, c%GUI_FONT_COLOUR_TWO% s%GUI_TIMER_SIZE%, %GUI_TIMER_FONT%
+Gui, Add, Text, x182 y60 w73 vtimer, 0:00
 
 ;//ANCHOR Rating Status
-Gui, Font, c%font_colour_two% s14 q4, Consolas
-Gui, Add, Text, x197 y80 w70 vrating, uwu
-Gui, Font, c%font_colour_one% s10 q4 bold, Arial
+Gui, Font, c%GUI_FONT_COLOUR_TWO% s%GUI_RATING_SIZE%, %GUI_RATING_FONT%
+Gui, Add, Text, x163 y73 w86 BackgroundTrans vrating, ------
 
+;//ANCHOR Nowplaying status
+Gui, Font, c%GUI_FONT_COLOUR_ONE% s%GUI_NOWPLAYING_SIZE%, %GUI_NOWPLAYING_FONT%
+Gui, Add, Text, x005 y95 BackgroundTrans, [Now Playing]
+Gui, Font, c%GUI_FONT_COLOUR_TWO%
+Gui, Add, Text, x005 y111 w250 h50 BackgroundTrans vsongtitle, `
 ;//ANCHOR Gui Show
-WinSet, Transparent, %gui_transparency%
-Gui, Show, x%gui_x% y%gui_y% h170 w300 NoActivate
+WinSet, Transparent, %GUI_TRANSPARENCY%
+Gui, Show, x%GUI_X% y%GUI_Y% h%GUI_HEIGHT% w%GUI_WIDTH% NoActivate
 
 div_vol := (volume / 100)
 Run, %nircmd_dir% setappvolume %exename% %div_vol%  ;Match with script's volume seting (0.5) to perform on
@@ -219,9 +243,9 @@ return
 ;//SECTION GUI Hotkeys
 ^Home::  ;//ANCHOR Ctrl+Home
 {
-    gui_y := 600
-    gui_x := 0
-    Gui, Show, x%gui_x% y%gui_y% NoActivate
+    GUI_Y := 600
+    GUI_X := 0
+    Gui, Show, x%GUI_X% y%GUI_Y% NoActivate
 }
 return
 
@@ -231,10 +255,10 @@ return
 {
     while (GetKeyState("PgUp", "P"))
     {
-        if (gui_y > 0)
+        if (GUI_Y > 0)
         {
-            gui_y -= 10
-            Gui, Show, y%gui_y% NoActivate
+            GUI_Y -= 10
+            Gui, Show, y%GUI_Y% NoActivate
             Sleep, 10
         }
         else
@@ -248,10 +272,10 @@ return
 
 +PgUp::  ;//ANCHOR Shift+PgUp
 {
-    if (gui_y > 0)
+    if (GUI_Y > 0)
     {
-        gui_y -= 10
-        Gui, Show, y%gui_y% NoActivate
+        GUI_Y -= 10
+        Gui, Show, y%GUI_Y% NoActivate
         Sleep, 100
     }
     else
@@ -268,10 +292,10 @@ return
 {
     while (GetKeyState("PgDn", "P"))
     {
-        if (gui_y < 910)
+        if (GUI_Y < (SCREEN_HEIGHT - GUI_HEIGHT))
         {
-            gui_y += 10
-            Gui, Show, y%gui_y% NoActivate
+            GUI_Y += 10
+            Gui, Show, y%GUI_Y% NoActivate
             Sleep, 10
         }
         else
@@ -285,10 +309,10 @@ return
 
 +PgDn::  ;//ANCHOR Shift+PgDn
 {
-    if (gui_y < 910)
+    if (GUI_Y < (SCREEN_HEIGHT - GUI_HEIGHT))
     {
-        gui_y += 10
-        Gui, Show, y%gui_y% NoActivate
+        GUI_Y += 10
+        Gui, Show, y%GUI_Y% NoActivate
         Sleep, 10
     }
     else
@@ -305,10 +329,10 @@ return
 {
     while (GetKeyState("Del", "P"))
     {
-        if (gui_x > 0)
+        if (GUI_X > 0)
         {
-            gui_x -= 10
-            Gui, Show, x%gui_x% NoActivate
+            GUI_X -= 10
+            Gui, Show, x%GUI_X% NoActivate
             Sleep, 10
         }
         else
@@ -322,10 +346,10 @@ return
 
 +Del::  ;//ANCHOR Shift+Del
 {
-    if (gui_x > 0)
+    if (GUI_X > 0)
     {
-        gui_x -= 10
-        Gui, Show, x%gui_x% NoActivate
+        GUI_X -= 10
+        Gui, Show, x%GUI_X% NoActivate
         Sleep, 10
     }
     else
@@ -342,10 +366,10 @@ return
 {
     while (GetKeyState("End", "P"))
     {
-        if (gui_x < 1620)
+        if (GUI_X < (SCREEN_WIDTH - GUI_WIDTH))
         {
-            gui_x += 10
-            Gui, Show, x%gui_x% NoActivate
+            GUI_X += 10
+            Gui, Show, x%GUI_X% NoActivate
             Sleep, 10
         }
         else
@@ -359,10 +383,10 @@ return
 
 +End::
 {
-    if (gui_x < 1620)
+    if (GUI_X < (SCREEN_WIDTH - GUI_WIDTH))
     {
-        gui_x += 10
-        Gui, Show, x%gui_x% NoActivate
+        GUI_X += 10
+        Gui, Show, x%GUI_X% NoActivate
         Sleep, 10
     }
     else
@@ -386,9 +410,11 @@ $Media_Prev::
     {
         playing_status = 1
         GuiControl,, pauseplay, %playingstring%
+		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
     }
     SetTimer, CheckSongName, %song_check_timer%
-    ItemActivated(font_colour_two, "60", "prev", font_colour_one)
+	SetTimer, UpdateRating, 500
+    ItemActivated(GUI_FONT_COLOUR_TWO, "60", "prev", GUI_FONT_COLOUR_ONE)
 }
 return
 
@@ -402,14 +428,16 @@ $Media_Play_Pause::
     {
         playing_status = 0
         playpausestring := pausedstring
+		GuiControl, Move, pauseplay, x%GUI_RESUME_X%
     }
     else
     {
         playing_status = 1
         playpausestring := playingstring
+		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
     }
-    GuiControl,, pauseplay, %playpausestring%
-    ItemActivated(font_colour_two, "60", "pauseplay", font_colour_one)
+    GuiControl, Text, pauseplay, %playpausestring%
+    ItemActivated(GUI_FONT_COLOUR_TWO, "60", "pauseplay", GUI_FONT_COLOUR_ONE)
     Sleep, 10  ;prevents the wrong symbol being displayed
 }
 return
@@ -424,9 +452,11 @@ $Media_Next::
     {
         playing_status = 1
         GuiControl,, pauseplay, %playingstring%
+		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
     }
     SetTimer, CheckSongName, %song_check_timer%
-    ItemActivated(font_colour_two, "60", "next", font_colour_one)
+	SetTimer, UpdateRating, 500
+    ItemActivated(GUI_FONT_COLOUR_TWO, "60", "next", GUI_FONT_COLOUR_ONE)
 }
 return
 
@@ -498,8 +528,20 @@ CheckSongName:  ;//ANCHOR CheckSongName
     WinGetTitle, SongName, ahk_class %classname%
     if InStr(SongName, "&")
     {
-        SongName := RegExReplace(SongName, "&", "and")
+        SongName := RegExReplace(SongName, "&", "+")
     }
+	if InStr(SongName, "_")
+	{
+		if InStr(SongName, "_",,2)
+		{
+			rule := "|"
+		}
+		else
+		{
+			rule := ""
+		}
+		SongName := RegExReplace(SongName, "_", rule)
+	}
 
     SongName := StrSplit(SongName, stripsongnameend)
     SongName := SongName[1]
@@ -522,7 +564,6 @@ CheckSongName:  ;//ANCHOR CheckSongName
             was_paused = 0
         }
 
-        ChangeAdded(0)
         prev_SongName := SongName
         playing_status = 1
 
@@ -552,7 +593,6 @@ CheckPlayingStatus:  ;ANCHOR CheckPlayingStatus
         was_paused = 0
     }
 
-    ChangeAdded(0)
     prev_SongName := SongName
     playing_status = 1
     ;MsgBox, playing
@@ -563,7 +603,7 @@ Record_Time:  ;//ANCHOR Timer
 {
     ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
     controltext := StrSplit(controltext, " | ")
-    controltext := StrSplit(controltext[time_loc], "/")[1]
+    controltext := StrSplit(controltext[FOO_TIME_INDEX], "/")[1]
     if (controltext > 0)
     {
         GuiControl,, timer, %controltext%
@@ -572,33 +612,13 @@ Record_Time:  ;//ANCHOR Timer
 return
 
 
-ItemActivated(font_colour_two, font_size, control_name, font_colour_one)  ;//ANCHOR ItemActivated procedure
+ItemActivated(GUI_FONT_COLOUR_TWO, font_size, control_name, GUI_FONT_COLOUR_ONE)  ;//ANCHOR ItemActivated procedure
 {
-    Gui, Font, c%font_colour_two% s%font_size% q4 bold
+    Gui, Font, c%GUI_FONT_COLOUR_TWO% s%font_size%
     GuiControl, Font, %control_name%
     Sleep, 100
-    Gui, Font, c%font_colour_one% s%font_size% q4 bold
+    Gui, Font, c%GUI_FONT_COLOUR_ONE% s%font_size%
     GuiControl, Font, %control_name%
-}
-return
-
-
-ChangeAdded(added)  ;//ANCHOR ChangeAdded status
-{
-    if (added = 1)
-    {
-        Gui, Font, cFF69B4 s10 q4 bold
-        GuiControl, Move, added, x248
-        GuiControl,, added, [Added]
-        GuiControl, Font, added
-    }
-    else
-    {
-        Gui, Font, cWhite s10 q4 bold
-        GuiControl, Move, added, x223
-        GuiControl,, added, [Not Added]
-        GuiControl, Font, added
-    }
 }
 return
 
@@ -607,7 +627,7 @@ UpdateRating:
 {
     ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
     controltext := StrSplit(controltext, " | ")
-    rating_stars := controltext[6]
+    rating_stars := controltext[FOO_RATING_INDEX]
     GuiControl,, rating, %rating_stars%
 }
 return
@@ -618,8 +638,8 @@ DoBeforeExit:
     FileDelete, %appname%_volume.txt
     FileAppend, %volume%, %appname%_volume.txt
     FileAppend, `,%volume_increment%, %appname%_volume.txt
-    FileAppend, `,%gui_x%, %appname%_volume.txt
-    FileAppend, `,%gui_y%, %appname%_volume.txt
+    FileAppend, `,%GUI_X%, %appname%_volume.txt
+    FileAppend, `,%GUI_Y%, %appname%_volume.txt
     FileSetAttrib, +H, %appname%_volume.txt
     ;+H = hide file to try and prevent editing and take up less visual space
     ExitApp
