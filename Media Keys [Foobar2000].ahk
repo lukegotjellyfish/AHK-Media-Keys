@@ -452,8 +452,12 @@ $Media_Next::
     {
         playing_status = 1
         GuiControl,, pauseplay, %playingstring%
-		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+		GuiControl, Move, pauseplay, x%GUI_RESUME_X%
     }
+	else
+	{
+		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+	}
     SetTimer, CheckSongName, %song_check_timer%
 	SetTimer, UpdateRating, 500
     ItemActivated(GUI_FONT_COLOUR_TWO, "60", "next", GUI_FONT_COLOUR_ONE)
