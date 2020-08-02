@@ -104,7 +104,7 @@ global FOO_RATING_INDEX := 6
 global rating_stars 	:= ""
 nircmd_dir				:= A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 
-;Delays
+;Delays (ms)
 colour_change_delay 	:= 100
 control_send_sleep		:= 200
 song_check_timer		:= 200
@@ -118,8 +118,8 @@ GUI_WIDTH				:= 270
 GUI_HEIGHT				:= 170
 SCREEN_WIDTH			:= 1920
 SCREEN_HEIGHT			:= 1080
-GUI_PAUSED_X			:= 56
-GUI_RESUME_X			:= 64
+GUI_PAUSED_X			:= 56   ;x-position for pause/play symbol when paused
+GUI_RESUME_X			:= 64   ;x-position for pause/play symbol when resume
 
 ;GUI Font Settings
 GUI_CONTROLS_SIZE		:= 60
@@ -152,7 +152,7 @@ next					:= ">"
 ;						Initial process for CheckSongName
 ;##################################################################################
 SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
-SetTimer, CheckPlayingStatus, -50
+SetTimer, CheckPlayingStatus, -200
 SetTimer, UpdateRating, 500
 SetTimer, Record_Time, 1000
 
@@ -229,6 +229,7 @@ Gui, Font, c%GUI_FONT_COLOUR_ONE% s%GUI_NOWPLAYING_SIZE%, %GUI_NOWPLAYING_FONT%
 Gui, Add, Text, x005 y95, [Now Playing]
 Gui, Font, c%GUI_FONT_COLOUR_TWO%
 Gui, Add, Text, x005 y111 w250 h50 vsongtitle, `
+
 ;//ANCHOR Gui Show
 WinSet, Transparent, %GUI_TRANSPARENCY%
 Gui, Show, x%GUI_X% y%GUI_Y% h%GUI_HEIGHT% w%GUI_WIDTH% NoActivate
@@ -430,6 +431,7 @@ $Media_Play_Pause::
 		playing_status = 0
 		playpausestring := pausedstring
 		GuiControl, Move, pauseplay, x%GUI_RESUME_X%
+		GuiControl,, xval, %GUI_RESUME_X%
 	}
 	else
 	{
@@ -453,10 +455,6 @@ $Media_Next::
 	{
 		playing_status = 1
 		GuiControl,, pauseplay, %playingstring%
-		GuiControl, Move, pauseplay, x%GUI_RESUME_X%
-	}
-	else
-	{
 		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
 	}
 	SetTimer, CheckSongName, %song_check_timer%
