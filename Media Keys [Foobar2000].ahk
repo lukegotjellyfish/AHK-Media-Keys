@@ -562,13 +562,14 @@ CheckSongName:	;//ANCHOR CheckSongName
 		GuiControl,, songtitle, %SongName%
 		GuiControl,, pauseplay, %playingstring%
 
-		if (was_paused = 1)
-		{
-			was_paused = 0
-		}
-
 		prev_SongName := SongName
-		playing_status = 1
+
+		if (playing_status = 0)
+		{
+			playing_status = 1
+			GuiControl,, pauseplay, %playingstring%
+			GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+		}
 
 		if (SongName != last_song)
 		{
@@ -591,14 +592,15 @@ CheckPlayingStatus:  ;ANCHOR CheckPlayingStatus
 
 	GuiControl,, songtitle, %SongName%
 	GuiControl,, pauseplay, %playingstring%
-	if (was_paused = 1)
-	{
-		was_paused = 0
-	}
 
 	prev_SongName := SongName
-	playing_status = 1
-	;MsgBox, playing
+
+	if (playing_status = 0)
+	{
+		playing_status = 1
+		GuiControl,, pauseplay, %playingstring%
+		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+	}
 }
 
 
