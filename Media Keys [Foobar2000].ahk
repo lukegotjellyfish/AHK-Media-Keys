@@ -512,7 +512,7 @@ return
 
 ;My keybinds for rating in Foobar with the Playback Statistics plugin:
 ;  Playback Statistics / Rating / -
-Numpad7::  ;//ANCHOR Numpad7
+*Numpad7::  ;//ANCHOR Numpad7
 {
 	ControlSend,, {NUMPAD7}, AHK_EXE %exename%
 }
@@ -520,7 +520,7 @@ return
 
 
 ;  Playback Statistics / Rating / +
-Numpad9::  ;//ANCHOR Numpad9
+*Numpad9::  ;//ANCHOR Numpad9
 {
 	ControlSend,, {NUMPAD9}, AHK_EXE %exename%
 }
