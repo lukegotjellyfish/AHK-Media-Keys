@@ -22,3 +22,5 @@
 - Numpad 8: Increase Volume by default 0.05
 - Numpad 2: Decrease Volume by default 0.05
 - [Spotify] Numpad 3: Add to Top Playlist
+- Numpad 7: Foobar rating down
+- Numpad 9: Foobar rating up
