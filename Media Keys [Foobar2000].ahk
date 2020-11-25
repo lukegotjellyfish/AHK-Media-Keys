@@ -649,13 +649,20 @@ UpdateRating:
 {
 	ControlGetText, controltext, ATL:msctls_statusbar321, ahk_class %classname%
 	controltext := StrSplit(controltext, " | ")
-	
+
 	if (controltext[FOO_RATING_INDEX] = previousrating)
 	{
 		return
 	}
-	
-	rating_stars := controltext[FOO_RATING_INDEX]
+	else if (controltext[FOO_RATING_INDEX] = "")
+	{
+		rating_stars := "-----"
+	}
+	else
+	{
+		rating_stars := controltext[FOO_RATING_INDEX]
+	}
+
 	previousrating := rating_stars
 	GuiControl,, rating, %rating_stars%
 }
