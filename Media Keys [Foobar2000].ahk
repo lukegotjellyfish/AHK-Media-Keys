@@ -83,6 +83,8 @@ if (A_IsAdmin = 0)
 ;	 | Numpad6 - Next song					  |
 ;	 | Numpad8 - Foobar volume up			  |
 ;	 | Numpad2 - Foobar volume down 		  |
+;    | Numpad7 - Foobar rating down           |
+;    | Numpad9 - Foobar rating up             |
 ;	 |										  |
 ;	 | [Misc Keys]							  |
 ;	 | F3 - Reload							  |
