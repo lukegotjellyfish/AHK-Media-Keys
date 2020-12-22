@@ -51,7 +51,7 @@ if (A_IsAdmin = 0)
 ;
 ;  Set the following three boxes to:
 ;	 %title%
-;	 %codec% | %bitrate% kbps | %samplerate% Hz | %channels% | %playback_time%[ / %length%] | [%rating_stars_fixed%]
+;	 %codec% | %bitrate% kbps | %samplerate% Hz | %channels% | %playback_time%[ / %length%] | [%RATING_STARS_fixed%]
 ;	 [%artist% - ]%title%
 ;  or alter the value of FOO_TIME_INDEX to the index of the time in the statusbar
 ;
@@ -103,13 +103,12 @@ classname				:= "{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}"
 stripsongnameend		:= "[foobar2000]"  ;Remove textstamp from what will be displayed
 global FOO_TIME_INDEX	:= 5
 global FOO_RATING_INDEX := 6
-global rating_stars 	:= "-----"
+global RATING_STARS 	:= "-----"
 nircmd_dir				:= A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 
 ;Delays (ms)
-colour_change_delay 	:= 100
-control_send_sleep		:= 200
-song_check_timer		:= 200
+global COLOUR_CHANGE_DELAY := 200
+SONG_CHECK_TIMER		   := 200
 ;//SECTION GUI Position and Size Settings
 
 ;//ANCHOR GUI Coordinate Variables
@@ -206,7 +205,7 @@ next				 := ">"
 ;##################################################################################
 ;						Initial process for CheckSongName
 ;##################################################################################
-SetTimer, CheckSongName, %song_check_timer%  ;Find if a song is already playing
+SetTimer, CheckSongName, %SONG_CHECK_TIMER%  ;Find if a song is already playing
 SetTimer, CheckPlayingStatus, -200
 SetTimer, UpdateRating, 500
 SetTimer, Record_Time, 1000
@@ -468,7 +467,7 @@ $Media_Prev::
 		GuiControl,, pauseplay, %playingstring%
 		GuiControl, Move, pauseplay, x%GUI_PAUSE_X%
 	}
-	SetTimer, CheckSongName, %song_check_timer%
+	SetTimer, CheckSongName, %SONG_CHECK_TIMER%
 	SetTimer, UpdateRating, 500
 	ItemActivated(GUI_FONT_COLOUR_TWO, GUI_CONTROLS_SIZE, "prev", GUI_FONT_COLOUR_ONE)
 }
@@ -512,7 +511,7 @@ $Media_Next::
 		GuiControl,, pauseplay, %playingstring%
 		GuiControl, Move, pauseplay, x%GUI_PAUSE_X%
 	}
-	SetTimer, CheckSongName, %song_check_timer%
+	SetTimer, CheckSongName, %SONG_CHECK_TIMER%
 	SetTimer, UpdateRating, 500
 	ItemActivated(GUI_FONT_COLOUR_TWO, GUI_CONTROLS_SIZE, "next", GUI_FONT_COLOUR_ONE)
 }
@@ -693,7 +692,7 @@ ItemActivated(GUI_FONT_COLOUR_TWO, font_size, control_name, GUI_FONT_COLOUR_ONE)
 {
 	Gui, Font, c%GUI_FONT_COLOUR_TWO% s%font_size%
 	GuiControl, Font, %control_name%
-	Sleep, 100
+	Sleep, %COLOUR_CHANGE_DELAY%
 	Gui, Font, c%GUI_FONT_COLOUR_ONE% s%font_size%
 	GuiControl, Font, %control_name%
 }
@@ -711,21 +710,21 @@ UpdateRating:
 	}
 	else if (controltext[FOO_RATING_INDEX] = "")
 	{
-		rating_stars := "-----"
+		RATING_STARS := "-----"
 	}
 	else
 	{
-		rating_stars := controltext[FOO_RATING_INDEX]
+		RATING_STARS := controltext[FOO_RATING_INDEX]
 	}
 
-	previousrating := rating_stars
-	GuiControl,, rating, %rating_stars%
+	previousrating := RATING_STARS
+	GuiControl,, rating, %RATING_STARS%
 }
 return
 
 DoBeforeExit:
 {
-	Sleep, 100 ;seems to stop a file "_volume.txt" from being created :thonk:
+	Sleep, 500 ;seems to stop a file "_volume.txt" from being created :thonk:
 	FileDelete, 					  %appname%_volume.txt
 	FileAppend, %volume%,			  %appname%_volume.txt
 	FileAppend, `,%volume_increment%, %appname%_volume.txt
