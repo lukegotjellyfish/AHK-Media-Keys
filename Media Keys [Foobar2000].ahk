@@ -112,7 +112,7 @@ SONG_CHECK_TIMER		   := 200
 ;//SECTION GUI Position and Size Settings
 
 ;//ANCHOR GUI Coordinate Variables
-SCALE_FACTOR  := 3 ;Scale modifier for GUI elements (I use for second monitor)
+SCALE_FACTOR  := 5 ;Scale modifier for GUI elements (I use for second monitor)
 
 GUI_MARGIN_X  := 0
 GUI_MARGIN_Y  := 0
@@ -163,7 +163,7 @@ GUI_RATING_H := 24	* SCALE_FACTOR
 ;//ANCHOR NowPlaying Status
 GUI_NP_X	 := 005 * SCALE_FACTOR
 GUI_NP_Y	 := 95	* SCALE_FACTOR
-GUI_NP_W	 := 80	* SCALE_FACTOR
+GUI_NP_W	 := 90	* SCALE_FACTOR
 GUI_NP_H	 := 15	* SCALE_FACTOR
 
 ;//ANCHOR Song Title
