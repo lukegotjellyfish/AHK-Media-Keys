@@ -83,8 +83,8 @@ if (A_IsAdmin = 0)
 ;	 | Numpad6 - Next song					  |
 ;	 | Numpad8 - Foobar volume up			  |
 ;	 | Numpad2 - Foobar volume down 		  |
-;    | Numpad7 - Foobar rating down           |
-;    | Numpad9 - Foobar rating up             |
+;	 | Numpad7 - Foobar rating down 		  |
+;	 | Numpad9 - Foobar rating up			  |
 ;	 |										  |
 ;	 | [Misc Keys]							  |
 ;	 | F3 - Reload							  |
@@ -98,54 +98,107 @@ if (A_IsAdmin = 0)
 ;//SECTION Vars
 global appname			:= "foobar2000"
 exename 				:= "foobar2000.exe"
-idlename				:= "foobar2000 v1.4.3"
+idlename				:= "foobar2000 v1.6.2" ;Original script was designed for foobar2000 v1.4.3
 classname				:= "{97E27FAA-C0B3-4b8e-A693-ED7881E99FC1}"
 stripsongnameend		:= "[foobar2000]"  ;Remove textstamp from what will be displayed
 global FOO_TIME_INDEX	:= 5
 global FOO_RATING_INDEX := 6
-global rating_stars 	:= ""
+global rating_stars 	:= "-----"
 nircmd_dir				:= A_ScriptDir . "\nircmd\nircmd.exe"  ;Get: http://www.nirsoft.net/utils/nircmd.html
 
 ;Delays (ms)
 colour_change_delay 	:= 100
 control_send_sleep		:= 200
 song_check_timer		:= 200
+;//SECTION GUI Position and Size Settings
 
-;GUI Coordinate Variables
-GUI_MARGIN_X			:= 0
-GUI_MARGIN_Y			:= 0
-global GUI_X			:= 0
-global GUI_Y			:= 600
-GUI_WIDTH				:= 270
-GUI_HEIGHT				:= 170
-SCREEN_WIDTH			:= 1920
-SCREEN_HEIGHT			:= 1080
-GUI_PAUSED_X			:= 56   ;x-position for pause/play symbol when paused
-GUI_RESUME_X			:= 64   ;x-position for pause/play symbol when resume
+;//ANCHOR GUI Coordinate Variables
+SCALE_FACTOR  := 3 ;Scale modifier for GUI elements (I use for second monitor)
 
-;GUI Font Settings
-GUI_CONTROLS_SIZE		:= 60
-GUI_CONTROLS_FONT		:= "Arial"
-GUI_VOLUME_SIZE 		:= 24
-GUI_VOLUME_FONT 		:= "Arial"
-GUI_TIMER_SIZE			:= 14
-GUI_TIMER_FONT			:= "Consolas"
-GUI_RATING_SIZE 		:= 18
-GUI_RATING_FONT 		:= "Consolas"
-GUI_NOWPLAYING_SIZE 	:= "10"
-GUI_NOWPLAYING_FONT 	:= "Arial"
-GUI_FONT_COLOUR_ONE 	:= "FFFFFF"  ;white
-GUI_FONT_COLOUR_TWO 	:= "FF89F1"  ;pastel pink
+GUI_MARGIN_X  := 0
+GUI_MARGIN_Y  := 0
+global GUI_X  := 0
+global GUI_Y  := 600
+GUI_WIDTH	  := 270 * SCALE_FACTOR
+GUI_HEIGHT	  := 170 * SCALE_FACTOR
+SCREEN_WIDTH  := 3840 ;1920
+SCREEN_HEIGHT := 1080
 
-;GUI Colours
-GUI_TRANSPARENCY		:= 220	;/255
-GUI_COLOUR				:= "c000000"
+;//ANCHOR PREV
+GUI_PREV_X	 := 05	* SCALE_FACTOR
+GUI_PREV_Y	 := 00	* SCALE_FACTOR
+GUI_PREV_W	 := 54	* SCALE_FACTOR
+GUI_PREV_H	 := 80	* SCALE_FACTOR
 
-;GUI Strings
-global playingstring	:= "()"
-global pausedstring 	:= "||"
-prev					:= "<"
-next					:= ">"
+;//ANCHOR Pause/Resume
+GUI_PAUSE_X  := 56	* SCALE_FACTOR	;x-position for pause/play symbol when paused
+GUI_PAUSE_Y  := -7	* SCALE_FACTOR
+GUI_PAUSE_W  := 50	* SCALE_FACTOR
+GUI_PAUSE_H  := 100 * SCALE_FACTOR
+GUI_RESUME_X := 64	* SCALE_FACTOR ;x-position for pause/play symbol when resume
+
+;//ANCHOR Next
+GUI_NEXT_X	 := 116 * SCALE_FACTOR
+GUI_NEXT_Y	 := 00	* SCALE_FACTOR
+GUI_NEXT_W	 := 54	* SCALE_FACTOR
+GUI_NEXT_H	 := 80	* SCALE_FACTOR
+
+;//ANCHOR Volume
+GUI_VOL_X	 := 175 * SCALE_FACTOR
+GUI_VOL_Y	 := 20	* SCALE_FACTOR
+GUI_VOL_W	 := 80	* SCALE_FACTOR
+GUI_VOL_H	 := 30	* SCALE_FACTOR
+
+;//ANCHOR Timer
+GUI_TIMER_X  := 182 * SCALE_FACTOR
+GUI_TIMER_Y  := 60	* SCALE_FACTOR
+GUI_TIMER_W  := 80	* SCALE_FACTOR
+GUI_TIMER_H  := 18	* SCALE_FACTOR
+
+;//ANCHOR Rating Status
+GUI_RATING_X := 175 * SCALE_FACTOR
+GUI_RATING_Y := 80	* SCALE_FACTOR
+GUI_RATING_W := 85	* SCALE_FACTOR
+GUI_RATING_H := 24	* SCALE_FACTOR
+
+;//ANCHOR NowPlaying Status
+GUI_NP_X	 := 005 * SCALE_FACTOR
+GUI_NP_Y	 := 95	* SCALE_FACTOR
+GUI_NP_W	 := 80	* SCALE_FACTOR
+GUI_NP_H	 := 15	* SCALE_FACTOR
+
+;//ANCHOR Song Title
+GUI_SONG_X	 := 005 * SCALE_FACTOR
+GUI_SONG_Y	 := 111 * SCALE_FACTOR
+GUI_SONG_W	 := 250 * SCALE_FACTOR
+GUI_SONG_H	 := 50	* SCALE_FACTOR
+
+
+;//!SECTION GUI Position and Size Settings
+
+;//ANCHOR GUI Font Settings
+GUI_CONTROLS_SIZE	 := 60 * SCALE_FACTOR
+GUI_CONTROLS_FONT	 := "Arial"
+GUI_VOLUME_SIZE 	 := 24 * SCALE_FACTOR
+GUI_VOLUME_FONT 	 := "Arial"
+GUI_TIMER_SIZE		 := 14 * SCALE_FACTOR
+GUI_TIMER_FONT		 := "Consolas"
+GUI_RATING_SIZE 	 := 18 * SCALE_FACTOR
+GUI_RATING_FONT 	 := "Consolas"
+GUI_NOWPLAYING_SIZE  := 10 * SCALE_FACTOR
+GUI_NOWPLAYING_FONT  := "Arial"
+GUI_FONT_COLOUR_ONE  := "FFFFFF"  ;white
+GUI_FONT_COLOUR_TWO  := "FF89F1"  ;pastel pink
+
+;//ANCHOR GUI Colours
+GUI_TRANSPARENCY	 := 220  ;/255
+GUI_COLOUR			 := "c000000"
+
+;//ANCHOR GUI Strings
+global playingstring := "()"
+global pausedstring  := "||"
+prev				 := "<"
+next				 := ">"
 ;//!SECTION Vars
 
 
@@ -210,27 +263,27 @@ Gui, Color, %GUI_COLOUR%
 
 ;//ANCHOR Prev-PAUSE-Next
 Gui, Font, c%GUI_FONT_COLOUR_ONE% s%GUI_CONTROLS_SIZE% q4, %GUI_CONTROLS_FONT%
-Gui, Add, Text, x05 			 y00 w54  h80	vprev,		%prev%
-Gui, Add, Text, x%GUI_PAUSED_X%  y-7 w50  h100	vpauseplay, %pausedstring%
-Gui, Add, Text, x116			 y00 w54  h80	vnext,		%next%
+Gui, Add, Text, x%GUI_PREV_X%  y%GUI_PREV_Y%  w%GUI_PREV_W%  h%GUI_PREV_H%	vprev, %prev%
+Gui, Add, Text, x%GUI_PAUSE_X% y%GUI_PAUSE_Y% w%GUI_PAUSE_W% h%GUI_PAUSE_H% vpauseplay, %pausedstring%
+Gui, Add, Text, x%GUI_NEXT_X%  y%GUI_NEXT_Y%  w%GUI_NEXT_W%  h%GUI_NEXT_H%	vnext, %next%
 
 ;//ANCHOR Volume
 Gui, Font, c%GUI_FONT_COLOUR_ONE% s%GUI_VOLUME_SIZE%, %GUI_VOLUME_FONT%
-Gui, Add, Text, x180 y20 w80 vvolume, %volume%`%
+Gui, Add, Text, x%GUI_VOL_X% y%GUI_VOL_Y% w%GUI_VOL_W% h%GUI_VOL_H% vvolume, %volume%`%
 
 ;//ANCHOR Timer
 Gui, Font, c%GUI_FONT_COLOUR_TWO% s%GUI_TIMER_SIZE%, %GUI_TIMER_FONT%
-Gui, Add, Text, x182 y60 h20 w73 vtimer, 0:00
+Gui, Add, Text, x%GUI_TIMER_X% y%GUI_TIMER_Y% h%GUI_TIMER_H% w%GUI_TIMER_W% vtimer, 0:00
 
 ;//ANCHOR Rating Status
 Gui, Font, c%GUI_FONT_COLOUR_TWO% s%GUI_RATING_SIZE%, %GUI_RATING_FONT%
-Gui, Add, Text, x163 y80 h30 w86 vrating, ------
+Gui, Add, Text, x%GUI_RATING_X% y%GUI_RATING_Y% h%GUI_RATING_H% w%GUI_RATING_W% vrating, ------
 
 ;//ANCHOR Nowplaying status
 Gui, Font, c%GUI_FONT_COLOUR_ONE% s%GUI_NOWPLAYING_SIZE%, %GUI_NOWPLAYING_FONT%
-Gui, Add, Text, x005 y95, [Now Playing]
+Gui, Add, Text, x%GUI_NP_X% y%GUI_NP_Y% w%GUI_NP_W% h%GUI_NP_H%, [Now Playing]
 Gui, Font, c%GUI_FONT_COLOUR_TWO%
-Gui, Add, Text, x005 y111 w250 h50 vsongtitle, `
+Gui, Add, Text, x%GUI_SONG_X% y%GUI_SONG_Y% w%GUI_SONG_W% h%GUI_SONG_H% vsongtitle, `
 
 ;//ANCHOR Gui Show
 WinSet, Transparent, %GUI_TRANSPARENCY%
@@ -413,11 +466,11 @@ $Media_Prev::
 	{
 		playing_status = 1
 		GuiControl,, pauseplay, %playingstring%
-		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+		GuiControl, Move, pauseplay, x%GUI_PAUSE_X%
 	}
 	SetTimer, CheckSongName, %song_check_timer%
 	SetTimer, UpdateRating, 500
-	ItemActivated(GUI_FONT_COLOUR_TWO, "60", "prev", GUI_FONT_COLOUR_ONE)
+	ItemActivated(GUI_FONT_COLOUR_TWO, GUI_CONTROLS_SIZE, "prev", GUI_FONT_COLOUR_ONE)
 }
 return
 
@@ -427,7 +480,7 @@ $Media_Play_Pause::
 *Numpad5::	;//ANCHOR Numpad5
 {
 	Send, {Media_Play_Pause}
-    Sleep, 50
+	Sleep, 50
 	if (playing_status = 1)
 	{
 		playing_status = 0
@@ -439,7 +492,7 @@ $Media_Play_Pause::
 	{
 		playing_status = 1
 		playpausestring := playingstring
-		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+		GuiControl, Move, pauseplay, x%GUI_PAUSE_X%
 	}
 	GuiControl, Text, pauseplay, %playpausestring%
 	;ItemActivated(GUI_FONT_COLOUR_TWO, "60", "pauseplay", GUI_FONT_COLOUR_ONE)
@@ -457,11 +510,11 @@ $Media_Next::
 	{
 		playing_status = 1
 		GuiControl,, pauseplay, %playingstring%
-		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+		GuiControl, Move, pauseplay, x%GUI_PAUSE_X%
 	}
 	SetTimer, CheckSongName, %song_check_timer%
 	SetTimer, UpdateRating, 500
-	ItemActivated(GUI_FONT_COLOUR_TWO, "60", "next", GUI_FONT_COLOUR_ONE)
+	ItemActivated(GUI_FONT_COLOUR_TWO, GUI_CONTROLS_SIZE, "next", GUI_FONT_COLOUR_ONE)
 }
 return
 
@@ -514,7 +567,7 @@ return
 
 ;My keybinds for rating in Foobar with the Playback Statistics plugin:
 ;  Playback Statistics / Rating / -
-*Numpad7::  ;//ANCHOR Numpad7
+*Numpad7::	;//ANCHOR Numpad7
 {
 	ControlSend,, {NUMPAD7}, AHK_EXE %exename%
 }
@@ -522,7 +575,7 @@ return
 
 
 ;  Playback Statistics / Rating / +
-*Numpad9::  ;//ANCHOR Numpad9
+*Numpad9::	;//ANCHOR Numpad9
 {
 	ControlSend,, {NUMPAD9}, AHK_EXE %exename%
 }
@@ -587,7 +640,7 @@ CheckSongName:	;//ANCHOR CheckSongName
 		{
 			playing_status = 1
 			GuiControl,, pauseplay, %playingstring%
-			GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+			GuiControl, Move, pauseplay, x%GUI_PAUSE_X%
 		}
 
 		if (SongName != last_song)
@@ -618,7 +671,7 @@ CheckPlayingStatus:  ;ANCHOR CheckPlayingStatus
 	{
 		playing_status = 1
 		GuiControl,, pauseplay, %playingstring%
-		GuiControl, Move, pauseplay, x%GUI_PAUSED_X%
+		GuiControl, Move, pauseplay, x%GUI_PAUSE_X%
 	}
 }
 
@@ -690,8 +743,8 @@ return
 ╔════════════════════════════════════════════════════════════════════════════════╗
 ║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
 ╠════════════════════════════════════════════════════════════════════════════════╣
-║	 My Discord: Lukegotjellyfish#0473											 ║
-║	 GitHub rep: https://github.com/lukegotjellyfish/Media-Keys 				 ║
-║	 Copyright (C) 2019  Luke Roper 											 ║
+║	My Discord: Lukegotjellyfish#0473											║
+║	GitHub rep: https://github.com/lukegotjellyfish/Media-Keys					║
+║	Copyright (C) 2019	Luke Roper												║
 ╚════════════════════════════════════════════════════════════════════════════════╝
 */
