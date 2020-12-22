@@ -743,8 +743,8 @@ return
 ╔════════════════════════════════════════════════════════════════════════════════╗
 ║╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳╳║
 ╠════════════════════════════════════════════════════════════════════════════════╣
-║	My Discord: Lukegotjellyfish#0473											║
-║	GitHub rep: https://github.com/lukegotjellyfish/Media-Keys					║
-║	Copyright (C) 2019	Luke Roper												║
+║	My Discord: Lukegotjellyfish#0473											 ║
+║	GitHub rep: https://github.com/lukegotjellyfish/Media-Keys					 ║
+║	Copyright (C) 2020	Luke Roper												 ║
 ╚════════════════════════════════════════════════════════════════════════════════╝
 */
