@@ -239,11 +239,11 @@ if (FileExist(appname . "_volume.txt"))
 
 	if (volume_increment < 0)
 	{
-		volume_increment = 5
+		volume_increment = 2
 	}
 	else if ((volume_increment > 100) or (ErrorLevel))
 	{
-		volume_increment = 5
+		volume_increment = 2
 	}
 }
 ;//!SECTION Get foobar and nircmd
