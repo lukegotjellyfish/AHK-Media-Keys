@@ -113,6 +113,7 @@ SONG_CHECK_TIMER		   := 200
 
 ;//ANCHOR GUI Coordinate Variables
 SCALE_FACTOR  := 1 ;Scale modifier for GUI elements (I use for second monitor)
+FONT_SCALE_FACTOR := 1 ;Scale modifier for "Now Playing" song tigle text
 
 GUI_MARGIN_X  := 0
 GUI_MARGIN_Y  := 0
@@ -184,7 +185,7 @@ GUI_TIMER_SIZE		 := 14 * SCALE_FACTOR
 GUI_TIMER_FONT		 := "Consolas"
 GUI_RATING_SIZE 	 := 18 * SCALE_FACTOR
 GUI_RATING_FONT 	 := "Consolas"
-GUI_NOWPLAYING_SIZE  := 10 * SCALE_FACTOR
+GUI_NOWPLAYING_SIZE  := 10 * SCALE_FACTOR * FONT_SCALE_FACTOR
 GUI_NOWPLAYING_FONT  := "Arial"
 GUI_FONT_COLOUR_ONE  := "FFFFFF"  ;white
 GUI_FONT_COLOUR_TWO  := "FF89F1"  ;pastel pink
