@@ -87,8 +87,8 @@ if (A_IsAdmin = 0)
 ;	 | Numpad9 - Foobar rating up			  |
 ;	 |										  |
 ;	 | [Misc Keys]							  |
-;	 | F3 - Reload							  |
-;	 | ^F3 - Exit							  |
+;	 | F6 - Reload							  |
+;	 | ^F6 - Exit							  |
 ;	 |										  |
 ;	 #========================================#
 ;
@@ -584,7 +584,7 @@ return
 
 
 ;//SECTION Misc
-F3::  ;//ANCHOR F3
+F6::  ;//ANCHOR F6
 {
 	reload
 	Sleep, 100	;avoids multiple GUIs being created....yeah
@@ -592,7 +592,7 @@ F3::  ;//ANCHOR F3
 return
 
 
-^F3::ExitApp  ;//ANCHOR ^F3
+^F6::ExitApp  ;//ANCHOR ^F6
 ;//!SECTION Misc
 ;//!SECTION Hotkeys
 
